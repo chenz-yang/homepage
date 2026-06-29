@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Wild West Duel - Cheats</title>
+    <style>
+        body {
+            background-color: #1a0f0a;
+            color: #f7e6d4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 2rem;
+            margin: 0;
+        }
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: rgba(30, 18, 12, 0.9);
+            border: 3px solid #6e4313;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        h1 {
+            color: #e5a93b;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            color: #bfa17c;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .cheat-card {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(110, 67, 19, 0.4);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+        }
+        .cheat-title {
+            font-weight: bold;
+            color: #ffd700;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        .code-box {
+            background: #000;
+            color: #4cd964;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 0.5rem;
+            border-radius: 4px;
+            text-align: left;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid #333;
+            white-space: nowrap;
+        }
+        .copy-btn {
+            background: #e5a93b;
+            color: #1a0f0a;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            align-self: flex-end;
+            font-size: 0.85rem;
+        }
+        .copy-btn:hover {
+            background: #ffd700;
+            transform: scale(1.03);
+        }
+        .copy-btn.copied {
+            background: #4cd964;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤠 Wild West Duel Cheats 🏆</h1>
+        <div class="subtitle">Klicke auf den Button, um den Cheatcode direkt zu kopieren und in der F12-Konsole einzufügen!</div>
+        
+        <div class="cheat-card">
+            <div class="cheat-title">1. Münzen auf 1000 setzen (Im Hauptmenü einfügen):</div>
+            <div class="code-box" id="code1">localStorage.setItem('wild_west_coins', '1000'); window.location.reload();</div>
+            <button class="copy-btn" onclick="copyCode('code1', this)">Code kopieren</button>
+        </div>
+
+        <div class="cheat-card">
+            <div class="cheat-title">2. Prestige-Countdown überspringen (Im Hauptmenü einfügen):</div>
+            <div class="code-box" id="code2">game.lastPrestigeChoiceTime = Date.now() - 11 * 60 * 1000;</div>
+            <button class="copy-btn" onclick="copyCode('code2', this)">Code kopieren</button>
+        </div>
+
+        <div class="cheat-card">
+            <div class="cheat-title">3. Unsterblichkeit / 99 LP erhalten (Während des Duells einfügen):</div>
+            <div class="code-box" id="code3">game.player1.health = 99; game.updateHUD();</div>
+            <button class="copy-btn" onclick="copyCode('code3', this)">Code kopieren</button>
+        </div>
+
+        <div class="cheat-card">
+            <div class="cheat-title">4. Gegner mit 1 Schuss besiegen (Während des Duells einfügen):</div>
+            <div class="code-box" id="code4">game.player2.health = 1;</div>
+            <button class="copy-btn" onclick="copyCode('code4', this)">Code kopieren</button>
+        </div>
+
+        <div class="cheat-card">
+            <div class="cheat-title">5. Alle Doppelgänger-HP auf 99 setzen (Während des Duells einfügen):</div>
+            <div class="code-box" id="code5">game.helperAIs.forEach(h => { h.health = 99; });</div>
+            <button class="copy-btn" onclick="copyCode('code5', this)">Code kopieren</button>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId, button) {
+            const codeText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                button.innerText = "Kopiert!";
+                button.classList.add("copied");
+                setTimeout(() => {
+                    button.innerText = "Code kopieren";
+                    button.classList.remove("copied");
+                }, 1500);
+            }).catch(err => {
+                console.error("Fehler beim Kopieren: ", err);
+            });
+        }
+    </script>
+</body>
+</html>

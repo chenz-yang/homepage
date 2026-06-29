@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild West Duel</title>
+    <!-- Google Fonts for Western typography and clean UI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Language Selector -->
+        <div id="language-selector">
+            <button id="lang-btn-original" class="btn btn-small btn-primary lang-btn selected" data-i18n="lang-original">ORIGINAL</button>
+            <button id="lang-btn-chinese" class="btn btn-small btn-primary lang-btn" data-i18n="lang-chinese">CHINESISCH</button>
+        </div>
+
+        <!-- Background Dust Particles (Canvas overlay or pure CSS) -->
+        <div id="dust-particles"></div>
+
+        <!-- MAIN MENU -->
+        <div id="main-menu" class="screen active">
+            <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
+            <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
+
+            <!-- Prestige Reset Panel -->
+            <div id="prestige-panel" class="prestige-panel hidden">
+                <div class="prestige-info">
+                    <div class="prestige-title" data-i18n="prestige-title">🏆 Saloon-Legende</div>
+                    <div class="prestige-desc" data-i18n="prestige-desc">Alles freigeschaltet! Nächste Entscheidung in:</div>
+                </div>
+                <div id="prestige-timer" class="prestige-timer">10:00</div>
+                <div class="prestige-buttons">
+                    <button id="prestige-keep-btn" class="btn btn-gold btn-small" data-i18n="prestige-keep-btn" disabled>Behalten</button>
+                    <button id="prestige-reset-btn" class="btn btn-danger btn-prestige-reset btn-small" data-i18n="prestige-reset-btn" disabled>Von vorne</button>
+                </div>
+            </div>
+
+            <div class="menu-sections">
+                <div class="menu-section game-modes">
+                    <h2 data-i18n="mode-title">1. Spielmodus</h2>
+                    <button class="btn btn-primary mode-btn" data-mode="pve">
+                        <span class="btn-icon">🤠</span>
+                        <span data-i18n="mode-pve-text">1 Spieler (vs. Bandit-KI)</span>
+                    </button>
+                    <button class="btn btn-primary mode-btn" data-mode="pvp">
+                        <span class="btn-icon">👥</span>
+                        <span data-i18n="mode-pvp-text">2 Spieler (Lokales Duell)</span>
+                    </button>
+                </div>
+
+                <div class="menu-section player-names">
+                    <h2 data-i18n="names-title">Namen eingeben</h2>
+                    <div class="name-inputs">
+                        <div class="input-group">
+                            <label for="p1-name-input" data-i18n="label-p1-name">P1 (Weiß):</label>
+                            <input type="text" id="p1-name-input" value="Spieler 1" maxlength="12">
+                        </div>
+                        <div class="input-group">
+                            <label for="p2-name-input" id="p2-name-label" data-i18n="label-p2-name-ki">Gegner (KI):</label>
+                            <input type="text" id="p2-name-input" value="Bandit" maxlength="12">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-section weapon-select">
+                    <h2 data-i18n="weapon-title">2. Waffe wählen</h2>
+                    <div class="weapon-selections-container">
+                        <div class="weapon-select-col">
+                            <h3 data-i18n="weapon-p1-label">P1 (Weiß)</h3>
+                            <div class="weapon-grid">
+                                <button class="btn btn-primary weapon-btn p1-wep-active" data-player="p1" data-weapon="rapid">
+                                    <span class="wep-name" data-i18n="wep-rapid">Schnell</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
+                                </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p1" data-weapon="heavy">
+                                    <span class="wep-name" data-i18n="wep-heavy">Langsam</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
+                                </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p1" data-weapon="bomb">
+                                    <span class="wep-name" data-i18n="wep-bomb">Bombe</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
+                                </button>
+                                <button id="p1-wep-laser" class="btn btn-primary weapon-btn" data-player="p1" data-weapon="laser" disabled>
+                                    <span class="wep-name" data-i18n="wep-laser-locked">Lasergun 🔒</span><span class="wep-pts" data-i18n="wep-pts-3">3 Pkt</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="weapon-select-col">
+                            <h3 id="p2-weapon-title" data-i18n="weapon-p2-label-ki">KI (Schwarz)</h3>
+                            <div class="weapon-grid">
+                                <button class="btn btn-primary weapon-btn p2-wep-active" data-player="p2" data-weapon="rapid">
+                                    <span class="wep-name" data-i18n="wep-rapid">Schnell</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
+                                </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p2" data-weapon="heavy">
+                                    <span class="wep-name" data-i18n="wep-heavy">Langsam</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
+                                </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p2" data-weapon="bomb">
+                                    <span class="wep-name" data-i18n="wep-bomb">Bombe</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
+                                </button>
+                                <button id="p2-wep-laser" class="btn btn-primary weapon-btn" data-player="p2" data-weapon="laser" disabled>
+                                    <span class="wep-name" data-i18n="wep-laser-locked">Lasergun 🔒</span><span class="wep-pts" data-i18n="wep-pts-3">3 Pkt</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="menu-section level-select">
+                    <h2 data-i18n="level-title">3. Level einstellen</h2>
+                    <div class="level-grid">
+                        <button class="level-card active" data-level="1">
+                            <div class="level-num">I</div>
+                            <div class="level-name" data-i18n="level-1-name">Sunny Prairie</div>
+                            <div class="level-desc" data-i18n="level-1-desc">Einfaches Feld, keine Gefahren.</div>
+                        </button>
+                        <button class="level-card" data-level="2">
+                            <div class="level-num">II</div>
+                            <div class="level-name" data-i18n="level-2-name">Cactus Canyon</div>
+                            <div class="level-desc" data-i18n="level-2-desc">Kakteen blockieren Schüsse.</div>
+                        </button>
+                        <button class="level-card" data-level="3">
+                            <div class="level-num">III</div>
+                            <div class="level-name" data-i18n="level-3-name">Windy Valley</div>
+                            <div class="level-desc" data-i18n="level-3-desc">Wind krümmt die Patronen!</div>
+                        </button>
+                        <button class="level-card" data-level="4">
+                            <div class="level-num">IV</div>
+                            <div class="level-name" data-i18n="level-4-name">Dynamite Junction</div>
+                            <div class="level-desc" data-i18n="level-4-desc">Explosive Dynamitfässer.</div>
+                        </button>
+                        <button class="level-card" data-level="5">
+                            <div class="level-num">V</div>
+                            <div class="level-name" data-i18n="level-5-name">Tombstone Showdown</div>
+                            <div class="level-desc" data-i18n="level-5-desc">Volles Chaos: Wind, TNT & Tumbleweed!</div>
+                        </button>
+                        <button class="level-card" data-level="6">
+                            <div class="level-num">VI</div>
+                            <div class="level-name" data-i18n="level-6-name">Desert Fortress</div>
+                            <div class="level-desc" data-i18n="level-6-desc">Barrikaden blockieren Schüsse. Rote Bodenspikes!</div>
+                        </button>
+                        <button class="level-card" data-level="7">
+                            <div class="level-num">VII</div>
+                            <div class="level-name" data-i18n="level-7-name">Windstorm Ruins</div>
+                            <div class="level-desc" data-i18n="level-7-desc">Starker Sandsturm, Mauern & Bodenspikes.</div>
+                        </button>
+                        <button class="level-card" data-level="8">
+                            <div class="level-num">VIII</div>
+                            <div class="level-name" data-i18n="level-8-name">TNT Minefield</div>
+                            <div class="level-desc" data-i18n="level-8-desc">Überall Dynamit & gefährliche Bodenspikes.</div>
+                        </button>
+                        <button class="level-card" data-level="9">
+                            <div class="level-num">IX</div>
+                            <div class="level-name" data-i18n="level-9-name">Tumbleweed Alley</div>
+                            <div class="level-desc" data-i18n="level-9-desc">Tumbleweeds und Bodenspikes füllen das Feld.</div>
+                        </button>
+                        <button class="level-card" data-level="10">
+                            <div class="level-num">X</div>
+                            <div class="level-name" data-i18n="level-10-name">Armageddon Duel</div>
+                            <div class="level-desc" data-i18n="level-10-desc">Ultimatives Chaos: Alles inklusive Bodenspikes!</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="menu-section upgrade-shop">
+                    <h2 data-i18n="shop-title">4. Shop & Upgrades</h2>
+                    <div class="shop-coins-header">
+                        <span data-i18n="shop-balance">Saldo:</span> <span id="shop-coins-val">0</span> <span class="shop-coin-symbol">🪙</span>
+                    </div>
+                    <div class="shop-list">
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-hp-title">+1 Start-Leben</div>
+                                <div class="shop-item-desc" id="shop-hp-desc-container">Käufe: +<span id="shop-hp-lvl">0</span> LP (Max 10) <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span></div>
+                                <button id="toggle-hp-btn" class="btn btn-primary btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
+                            </div>
+                            <button id="buy-hp-btn" class="btn btn-gold btn-shop">10 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-doppel-title">Doppelgänger (Anzahl)</div>
+                                <div class="shop-item-desc" id="shop-doppel-count-container">Helfer: <span id="shop-doppel-count-val">0</span> / 3 <span id="shop-doppel-status" class="status-inactive"></span></div>
+                                <button id="toggle-doppel-btn" class="btn btn-primary btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
+                            </div>
+                            <button id="buy-doppel-count-btn" class="btn btn-gold btn-shop">30 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-doppel-lvl-title">Doppelgänger-Stufe</div>
+                                <div class="shop-item-desc" id="shop-doppel-lvl-container">HP: <span id="shop-doppel-hp-val">3</span> | CD-R: <span id="shop-doppel-cdr-val">0%</span> (Stufe <span id="shop-doppel-lvl-val">0</span>/5)</div>
+                            </div>
+                            <button id="buy-doppel-lvl-btn" class="btn btn-gold btn-shop">30 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-laser-title">Lasergun</div>
+                                <div class="shop-item-desc" id="shop-laser-desc-container">Neon-Laser (Lvl <span id="shop-laser-lvl">0</span>): <span id="shop-laser-status" class="status-inactive">Gesperrt</span></div>
+                            </div>
+                            <button id="buy-laser-btn" class="btn btn-gold btn-shop">50 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-rapid-title">Schnell-Pistole</div>
+                                <div class="shop-item-desc" id="shop-rapid-desc-container">Schaden: <span id="shop-rapid-dmg">1</span> | CD: <span id="shop-rapid-cd">250</span>ms (Lvl <span id="shop-rapid-lvl">1</span>)</div>
+                            </div>
+                            <button id="buy-rapid-btn" class="btn btn-gold btn-shop">10 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-heavy-title">Langsam-Pistole</div>
+                                <div class="shop-item-desc" id="shop-heavy-desc-container">Schaden: <span id="shop-heavy-dmg">2</span> | CD: <span id="shop-heavy-cd">1500</span>ms (Lvl <span id="shop-heavy-lvl">1</span>)</div>
+                            </div>
+                            <button id="buy-heavy-btn" class="btn btn-gold btn-shop">10 🪙</button>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-item-info">
+                                <div class="shop-item-title" data-i18n="shop-bomb-title">Bomben-Pistole</div>
+                                <div class="shop-item-desc" id="shop-bomb-desc-container">Schaden: <span id="shop-bomb-dmg">2</span> | CD: <span id="shop-bomb-cd">2000</span>ms (Lvl <span id="shop-bomb-lvl">1</span>)</div>
+                            </div>
+                            <button id="buy-bomb-btn" class="btn btn-gold btn-shop">10 🪙</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-cheat-sheet-compact">
+                <span data-i18n="cheat-sheet-p1">🤠 P1: <strong>WASD</strong> (Bewegen) | <strong>Q/E</strong> (Zielen) | <strong>Leertaste</strong> (Schießen)</span>
+                <span class="sheet-divider">|</span>
+                <span data-i18n="cheat-sheet-p2">💀 P2/KI: <strong>Pfeiltasten</strong> (Bewegen) | <strong>U/O</strong> (Zielen) | <strong>Eingabe</strong> (Schießen)</span>
+            </div>
+
+            <button id="start-game-btn" class="btn btn-gold btn-large" data-i18n="start-duel-btn">Duell Starten!</button>
+        </div>
+
+        <!-- GAMEPLAY SCREEN -->
+        <div id="game-screen" class="screen">
+            <!-- HUD -->
+            <div id="hud">
+                <div class="hud-player p1-hud">
+                    <div class="player-label"><span class="avatar">🤠</span> <span id="p1-label-text">Spieler 1 (Weiß)</span></div>
+                    <div class="hearts" id="p1-hearts"></div>
+                </div>
+
+                <div id="level-display">
+                    <span id="level-display-name">Sunny Prairie</span>
+                    <div id="wind-indicator" class="hidden">
+                        <span id="wind-arrow">➔</span> <span id="wind-text">Wind: 0 km/h</span>
+                    </div>
+                </div>
+
+                <div class="hud-player p2-hud">
+                    <div class="hearts" id="p2-hearts"></div>
+                    <div class="player-label"><span class="avatar">🤠</span> <span id="p2-label-text">Bandit (KI)</span></div>
+                </div>
+            </div>
+
+            <div id="canvas-wrapper">
+                <canvas id="game-canvas" width="1200" height="800"></canvas>
+            </div>
+
+            <div id="game-controls-bar">
+                <button id="pause-btn" class="btn btn-small" data-i18n="hud-pause-btn">Pause</button>
+                <button id="mute-btn" class="btn btn-small">Ton: An</button>
+                <button id="exit-game-btn" class="btn btn-small btn-danger" data-i18n="hud-forfeit-btn">Aufgeben</button>
+            </div>
+        </div>
+
+        <!-- GAME OVER OVERLAY -->
+        <div id="game-over-screen" class="screen">
+            <h1 class="victory-title" id="victory-title">Spieler 1 gewinnt!</h1>
+            <p id="victory-subtitle" class="subtitle">Schnellster Finger im Wilden Westen</p>
+            <div id="coins-reward-banner" class="coins-reward-banner hidden" data-i18n="go-reward-banner">
+                🪙 +3 Münzen erhalten!
+            </div>
+
+            <div class="game-over-buttons">
+                <button id="rematch-btn" class="btn btn-gold btn-large" data-i18n="go-rematch-btn">Revanche</button>
+                <button id="menu-btn" class="btn btn-primary btn-large" data-i18n="go-menu-btn">Hauptmenü</button>
+            </div>
+        </div>
+
+        <!-- PAUSE SCREEN OVERLAY -->
+        <div id="pause-screen" class="screen">
+            <h1 class="western-title" data-i18n="pause-title">Pause</h1>
+            <p class="subtitle" data-i18n="pause-subtitle">Das Duell ruht...</p>
+            <div class="pause-buttons">
+                <button id="resume-btn" class="btn btn-gold btn-large" data-i18n="pause-resume-btn">Weiter</button>
+                <button id="pause-menu-btn" class="btn btn-primary btn-large" data-i18n="pause-menu-btn">Hauptmenü</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Files as Modules -->
+    <script type="module" src="game.js?v=4"></script>
+</body>
+</html>
