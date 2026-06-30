@@ -238,7 +238,7 @@ export class Bullet {
             ctx.stroke();
             
             // Spark
-            ctx.fillStyle = '#ffd700';
+            ctx.fillStyle = '#ff7f32';
             ctx.beginPath();
             ctx.arc(4, -this.radius - 3, 2 + Math.random() * 2, 0, Math.PI * 2);
             ctx.fill();

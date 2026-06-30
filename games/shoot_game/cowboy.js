@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=18';
-import { audio } from './audio.js?v=18';
+import { Bullet } from './bullet.js?v=19';
+import { audio } from './audio.js?v=19';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid') {
@@ -868,7 +868,7 @@ export class Cowboy {
         ctx.stroke();
 
         // Hat Ribbon
-        ctx.fillStyle = (this.role === 'player1' || this.role === 'helper_ai') ? '#ffd700' : '#d90429'; // Gold ribbon for black hat, Red ribbon for white hat
+        ctx.fillStyle = (this.role === 'player1' || this.role === 'helper_ai') ? '#ff7f32' : '#d90429'; // Gold ribbon for black hat, Red ribbon for white hat
         ctx.fillRect(-8, -4, 16, 4);
 
         // Hat Crown

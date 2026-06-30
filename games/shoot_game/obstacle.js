@@ -229,12 +229,12 @@ export class Obstacle {
         ctx.stroke();
 
         // Golden structural bands
-        ctx.fillStyle = '#d4af37'; // gold
+        ctx.fillStyle = '#e65c00'; // gold
         ctx.fillRect(-15, -20, 4, 36);
         ctx.fillRect(11, -20, 4, 36);
 
         // Lock panel
-        ctx.fillStyle = '#ffd700';
+        ctx.fillStyle = '#ff7f32';
         ctx.strokeStyle = '#8b7500';
         ctx.lineWidth = 1.2;
         ctx.beginPath();
@@ -264,9 +264,9 @@ export class Obstacle {
             ctx.beginPath();
             ctx.arc(startX + i * spacing, 0, 3, 0, Math.PI * 2);
             if (i < this.health) {
-                ctx.fillStyle = '#ffd700';
+                ctx.fillStyle = '#ff7f32';
                 ctx.shadowBlur = 4;
-                ctx.shadowColor = '#ffd700';
+                ctx.shadowColor = '#ff7f32';
             } else {
                 ctx.fillStyle = 'rgba(60, 40, 30, 0.4)';
             }
@@ -332,7 +332,7 @@ export class Obstacle {
                             vx: Math.cos(angle) * speed,
                             vy: Math.sin(angle) * speed - 1.5,
                             radius: 3.5 + Math.random() * 4.0,
-                            color: '#ffd700', // Sparkling Gold stars
+                            color: '#ff7f32', // Sparkling Gold stars
                             alpha: 1.0,
                             decay: 0.012 + Math.random() * 0.015,
                             gravity: -0.03 // float upwards
