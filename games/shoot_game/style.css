@@ -871,12 +871,10 @@ body {
     user-select: none;
 }
 
-/* Lock body scroll and layout shifts on touch devices */
+/* Lock body scroll on touch devices without breaking the background */
 body.touch-device {
     overflow: hidden !important;
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
+    height: 100%;
 }
 
 /* Hide mobile controls by default on non-touch devices */
