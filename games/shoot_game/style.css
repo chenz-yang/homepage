@@ -57,6 +57,10 @@ body {
     z-index: 2;
     animation: fadeIn 0.4s ease-out forwards;
     margin: auto; /* Vertically and horizontally center screens, safely handling overflow */
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
 }
 
 .screen.active {
@@ -125,7 +129,10 @@ body {
     text-transform: uppercase;
     letter-spacing: 1px;
     will-change: transform;
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     -webkit-appearance: none;
     appearance: none;
     -webkit-tap-highlight-color: transparent;
@@ -336,7 +343,10 @@ body {
     gap: 0.5rem;
     color: #f7e6d4;
     will-change: transform;
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
     -webkit-appearance: none;
     appearance: none;
     -webkit-tap-highlight-color: transparent;
