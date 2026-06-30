@@ -889,18 +889,23 @@ class Game {
             // Ignore touches on HUD/menu buttons (e.g., Pause, Mute, Exit)
             if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
 
+            const rect = gameScreen.getBoundingClientRect();
+
             for (let i = 0; i < e.changedTouches.length; i++) {
                 const touch = e.changedTouches[i];
+                const touchX = touch.clientX - rect.left;
+                const touchY = touch.clientY - rect.top;
+
                 // Left half of screen: Movement Joystick
-                if (touch.clientX < window.innerWidth / 2 && this.moveTouchId === null) {
+                if (touchX < rect.width / 2 && this.moveTouchId === null) {
                     this.moveTouchId = touch.identifier;
-                    this.moveBaseX = touch.clientX;
-                    this.moveBaseY = touch.clientY;
+                    this.moveBaseX = touchX;
+                    this.moveBaseY = touchY;
                     
                     const moveJoy = document.getElementById('joystick-move');
                     if (moveJoy) {
-                        moveJoy.style.left = `${touch.clientX}px`;
-                        moveJoy.style.top = `${touch.clientY}px`;
+                        moveJoy.style.left = `${touchX}px`;
+                        moveJoy.style.top = `${touchY}px`;
                         moveJoy.style.display = 'block';
                         const knob = moveJoy.querySelector('.joystick-knob');
                         if (knob) knob.style.transform = 'translate(-50%, -50%)';
@@ -909,15 +914,15 @@ class Game {
                     this.joystickMove = { x: 0, y: 0, active: true };
                 }
                 // Right half of screen: Aiming/Shooting Joystick
-                else if (touch.clientX >= window.innerWidth / 2 && this.aimTouchId === null) {
+                else if (touchX >= rect.width / 2 && this.aimTouchId === null) {
                     this.aimTouchId = touch.identifier;
-                    this.aimBaseX = touch.clientX;
-                    this.aimBaseY = touch.clientY;
+                    this.aimBaseX = touchX;
+                    this.aimBaseY = touchY;
                     
                     const aimJoy = document.getElementById('joystick-aim');
                     if (aimJoy) {
-                        aimJoy.style.left = `${touch.clientX}px`;
-                        aimJoy.style.top = `${touch.clientY}px`;
+                        aimJoy.style.left = `${touchX}px`;
+                        aimJoy.style.top = `${touchY}px`;
                         aimJoy.style.display = 'block';
                         const knob = aimJoy.querySelector('.joystick-knob');
                         if (knob) knob.style.transform = 'translate(-50%, -50%)';
@@ -932,13 +937,18 @@ class Game {
             if (this.state !== 'playing') return;
             e.preventDefault(); // Prevent page scroll/zoom gestures during gameplay
 
+            const rect = gameScreen.getBoundingClientRect();
+
             for (let i = 0; i < e.changedTouches.length; i++) {
                 const touch = e.changedTouches[i];
                 const maxR = 50; // Max drag radius in pixels
 
+                const touchX = touch.clientX - rect.left;
+                const touchY = touch.clientY - rect.top;
+
                 if (touch.identifier === this.moveTouchId) {
-                    let dx = touch.clientX - this.moveBaseX;
-                    let dy = touch.clientY - this.moveBaseY;
+                    let dx = touchX - this.moveBaseX;
+                    let dy = touchY - this.moveBaseY;
                     let dist = Math.hypot(dx, dy);
                     
                     if (dist > maxR) {
@@ -957,8 +967,8 @@ class Game {
                     this.joystickMove = { x: dx / maxR, y: dy / maxR, active: true };
                 }
                 else if (touch.identifier === this.aimTouchId) {
-                    let dx = touch.clientX - this.aimBaseX;
-                    let dy = touch.clientY - this.aimBaseY;
+                    let dx = touchX - this.aimBaseX;
+                    let dy = touchY - this.aimBaseY;
                     let dist = Math.hypot(dx, dy);
                     
                     if (dist > maxR) {
@@ -987,8 +997,7 @@ class Game {
         }, { passive: false });
 
         const endTouchHandler = (e) => {
-            if (this.state !== 'playing') return;
-
+            // Releasing touches should always work to avoid stuck inputs (even if state changes to pause/gameover)
             for (let i = 0; i < e.changedTouches.length; i++) {
                 const touch = e.changedTouches[i];
 
@@ -1038,6 +1047,24 @@ class Game {
         window.focus();
     }
 
+    resetJoystickState() {
+        this.moveTouchId = null;
+        this.aimTouchId = null;
+        this.joystickMove = { x: 0, y: 0, active: false };
+        this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+        
+        const moveJoy = document.getElementById('joystick-move');
+        const aimJoy = document.getElementById('joystick-aim');
+        if (moveJoy) {
+            moveJoy.classList.remove('active');
+            moveJoy.style.display = 'none';
+        }
+        if (aimJoy) {
+            aimJoy.classList.remove('active');
+            aimJoy.style.display = 'none';
+        }
+    }
+
     createMenuDust() {
         this.menuDust = [];
         for (let i = 0; i < 40; i++) {
@@ -1082,6 +1109,7 @@ class Game {
         audio.playWesternWhistle();
         audio.startBGM(); // Start Spaghetti Western loop!
 
+        this.resetJoystickState();
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'playing';
         this.bullets = [];
@@ -1339,6 +1367,7 @@ class Game {
 
 
     exitToMenu() {
+        this.resetJoystickState();
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music

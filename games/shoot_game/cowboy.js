@@ -711,16 +711,36 @@ export class Cowboy {
 
     drawAimGuide(ctx) {
         ctx.save();
-        // Guide lines: P1/helper_ai is gold/translucent, P2 is white/translucent for contrast
-        ctx.strokeStyle = (this.role === 'player1' || this.role === 'helper_ai') ? 'rgba(212, 175, 55, 0.45)' : 'rgba(255, 255, 255, 0.45)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([4, 6]);
+        
+        const isJoystickAiming = (this.role === 'player1' && window.game && window.game.joystickAim && window.game.joystickAim.active);
+        
+        if (isJoystickAiming) {
+            // Draw a prominent, glowing red laser guide line matching the red joystick
+            ctx.strokeStyle = 'rgba(255, 59, 48, 0.75)';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([8, 8]);
+            
+            // Add shadow glow
+            ctx.shadowColor = 'rgba(255, 59, 48, 0.8)';
+            ctx.shadowBlur = 8;
+            
+            const lineLen = 600; // Longer line for better aiming visibility
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
+            ctx.stroke();
+        } else {
+            // Standard guide line
+            ctx.strokeStyle = (this.role === 'player1' || this.role === 'helper_ai') ? 'rgba(212, 175, 55, 0.45)' : 'rgba(255, 255, 255, 0.45)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 6]);
 
-        const lineLen = 220;
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
-        ctx.stroke();
+            const lineLen = 220;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
+            ctx.stroke();
+        }
         ctx.restore();
     }
 
