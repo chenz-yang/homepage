@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=5';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=5';
-import { audio } from './audio.js?v=5';
-import { TRANSLATIONS } from './translations.js?v=5';
+import { Cowboy } from './cowboy.js?v=6';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=6';
+import { audio } from './audio.js?v=6';
+import { TRANSLATIONS } from './translations.js?v=6';
 
 class Game {
     constructor() {
@@ -217,6 +217,11 @@ class Game {
     }
 
     initDOM() {
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        if (isTouchDevice) {
+            document.body.classList.add('touch-device');
+        }
+
         // Language Select buttons
         const originalBtn = document.getElementById('lang-btn-original');
         const chineseBtn = document.getElementById('lang-btn-chinese');

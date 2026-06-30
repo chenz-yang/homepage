@@ -871,11 +871,14 @@ body {
     user-select: none;
 }
 
-/* Hide mobile controls on desktop devices with hover capabilities */
-@media (hover: hover) and (pointer: fine) {
-    #mobile-controls {
-        display: none !important;
-    }
+/* Hide mobile controls by default on non-touch devices */
+#mobile-controls {
+    display: none !important;
+}
+
+/* Show mobile controls on touch-capable devices */
+body.touch-device #mobile-controls {
+    display: block !important;
 }
 
 /* Mobile Joystick Controls */
