@@ -933,9 +933,14 @@ class Game {
             }
         }, { passive: false });
 
-        gameScreen.addEventListener('touchmove', (e) => {
+        // Listen on window for touchmove/touchend to capture drags/releases off the edge of gameScreen
+        window.addEventListener('touchmove', (e) => {
             if (this.state !== 'playing') return;
-            e.preventDefault(); // Prevent page scroll/zoom gestures during gameplay
+            
+            // Only prevent default if we are actively tracking a joystick touch
+            if (this.moveTouchId !== null || this.aimTouchId !== null) {
+                e.preventDefault();
+            }
 
             const rect = gameScreen.getBoundingClientRect();
 
@@ -1041,8 +1046,8 @@ class Game {
             }
         };
 
-        gameScreen.addEventListener('touchend', endTouchHandler, { passive: true });
-        gameScreen.addEventListener('touchcancel', endTouchHandler, { passive: true });
+        window.addEventListener('touchend', endTouchHandler, { passive: true });
+        window.addEventListener('touchcancel', endTouchHandler, { passive: true });
 
         window.focus();
     }
