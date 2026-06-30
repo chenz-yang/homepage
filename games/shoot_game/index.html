@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=19">
+    <link rel="stylesheet" href="style.css?v=20">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -21,8 +21,8 @@
             backface-visibility: hidden !important;
             will-change: transform !important;
         }
-        /* Lock buttons and cards to transparent backgrounds to bypass WebKit background drop bug */
-        .btn, .level-card, .shop-item {
+        /* Lock only the gold buttons (play/shop) to transparent backgrounds to bypass WebKit bug */
+        .btn-gold {
             background-color: transparent !important;
             background-image: none !important;
         }
@@ -323,6 +323,6 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=19"></script>
+    <script type="module" src="game.js?v=20"></script>
 </body>
 </html>
