@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=12';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=12';
-import { audio } from './audio.js?v=12';
-import { TRANSLATIONS } from './translations.js?v=12';
+import { Cowboy } from './cowboy.js?v=13';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=13';
+import { audio } from './audio.js?v=13';
+import { TRANSLATIONS } from './translations.js?v=13';
 
 class Game {
     constructor() {
@@ -217,10 +217,7 @@ class Game {
     }
 
     initDOM() {
-        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-        if (isTouchDevice) {
-            document.body.classList.add('touch-device');
-        }
+        this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
         // Language Select buttons
         const originalBtn = document.getElementById('lang-btn-original');
@@ -1122,6 +1119,9 @@ class Game {
         this.resetJoystickState();
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'playing';
+        if (this.isTouchDevice) {
+            document.body.classList.add('touch-device');
+        }
         this.bullets = [];
         this.obstacles = [];
         this.tumbleweeds = [];
@@ -1378,6 +1378,7 @@ class Game {
 
     exitToMenu() {
         this.resetJoystickState();
+        document.body.classList.remove('touch-device');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music
@@ -1700,6 +1701,7 @@ class Game {
     }
 
     endGame() {
+        document.body.classList.remove('touch-device');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'gameover';
         audio.stopBGM(); // Stop music on match end
