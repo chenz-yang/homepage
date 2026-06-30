@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=13';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=13';
-import { audio } from './audio.js?v=13';
-import { TRANSLATIONS } from './translations.js?v=13';
+import { Cowboy } from './cowboy.js?v=15';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=15';
+import { audio } from './audio.js?v=15';
+import { TRANSLATIONS } from './translations.js?v=15';
 
 class Game {
     constructor() {
@@ -1051,6 +1051,23 @@ class Game {
         window.addEventListener('touchend', endTouchHandler, { passive: true });
         window.addEventListener('touchcancel', endTouchHandler, { passive: true });
 
+        // Prevent iOS Safari double-tap to zoom on gameplay screen
+        let lastTouchEnd = 0;
+        gameScreen.addEventListener('touchend', (e) => {
+            if (this.state !== 'playing') return;
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('#hud')) return;
+
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault(); // blocks double-tap zoom gesture
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
+
+        this.canvas.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+        });
+
         window.focus();
     }
 
@@ -1121,6 +1138,7 @@ class Game {
         this.state = 'playing';
         if (this.isTouchDevice) {
             document.body.classList.add('touch-device');
+            document.documentElement.classList.add('touch-device');
         }
         this.bullets = [];
         this.obstacles = [];
@@ -1379,6 +1397,7 @@ class Game {
     exitToMenu() {
         this.resetJoystickState();
         document.body.classList.remove('touch-device');
+        document.documentElement.classList.remove('touch-device');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music
@@ -1702,6 +1721,7 @@ class Game {
 
     endGame() {
         document.body.classList.remove('touch-device');
+        document.documentElement.classList.remove('touch-device');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'gameover';
         audio.stopBGM(); // Stop music on match end
