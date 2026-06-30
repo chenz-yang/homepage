@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=8';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=8';
-import { audio } from './audio.js?v=8';
-import { TRANSLATIONS } from './translations.js?v=8';
+import { Cowboy } from './cowboy.js?v=9';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=9';
+import { audio } from './audio.js?v=9';
+import { TRANSLATIONS } from './translations.js?v=9';
 
 class Game {
     constructor() {
