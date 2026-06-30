@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=16';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=16';
-import { audio } from './audio.js?v=16';
-import { TRANSLATIONS } from './translations.js?v=16';
+import { Cowboy } from './cowboy.js?v=17';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=17';
+import { audio } from './audio.js?v=17';
+import { TRANSLATIONS } from './translations.js?v=17';
 
 class Game {
     constructor() {
@@ -91,6 +91,19 @@ class Game {
         this.createMenuDust();
         this.startMenuLoop();
         this.setLanguage(this.currentLanguage);
+        this.forceRepaint();
+    }
+
+    forceRepaint() {
+        // Safe trigger to force a style reflow and repaint on all main screens and interactive buttons
+        const elements = document.querySelectorAll('.btn, .level-card, .shop-item, .screen, .menu-section');
+        elements.forEach(el => {
+            const voidOffset = el.offsetHeight;
+            const originalOpacity = window.getComputedStyle(el).opacity;
+            el.style.opacity = '0.99';
+            el.offsetHeight; // triggers layout repaint
+            el.style.opacity = originalOpacity;
+        });
     }
 
     t(key, replacements = {}) {
@@ -1068,6 +1081,14 @@ class Game {
             e.preventDefault();
         });
 
+        // Trigger repaint on focus/visibility change to keep buttons fully rendered
+        window.addEventListener('focus', () => this.forceRepaint());
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                this.forceRepaint();
+            }
+        });
+
         window.focus();
     }
 
@@ -1408,6 +1429,7 @@ class Game {
         this.updateShopUI();
         this.createMenuDust();
         this.startMenuLoop();
+        this.forceRepaint();
     }
 
 
@@ -1759,6 +1781,7 @@ class Game {
 
         document.getElementById('game-screen').classList.remove('active');
         document.getElementById('game-over-screen').classList.add('active');
+        this.forceRepaint();
     }
 
 

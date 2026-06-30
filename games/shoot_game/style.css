@@ -10,6 +10,7 @@ html {
     background: radial-gradient(circle at center, #2e1d15 0%, #130a06 100%);
     min-height: 100vh;
     overflow-y: auto;
+    touch-action: manipulation;
 }
 
 body {
@@ -20,6 +21,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: visible;
+    touch-action: manipulation;
 }
 
 #game-container {
