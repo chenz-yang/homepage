@@ -871,6 +871,14 @@ body {
     user-select: none;
 }
 
+/* Lock body scroll and layout shifts on touch devices */
+body.touch-device {
+    overflow: hidden !important;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+}
+
 /* Hide mobile controls by default on non-touch devices */
 #mobile-controls {
     display: none !important;
