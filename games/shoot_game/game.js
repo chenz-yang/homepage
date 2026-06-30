@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=20';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=20';
-import { audio } from './audio.js?v=20';
-import { TRANSLATIONS } from './translations.js?v=20';
+import { Cowboy } from './cowboy.js?v=21';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=21';
+import { audio } from './audio.js?v=21';
+import { TRANSLATIONS } from './translations.js?v=21';
 
 class Game {
     constructor() {
@@ -1621,7 +1621,7 @@ class Game {
                 vx: (Math.random() - 0.5) * 2,
                 vy: (Math.random() - 0.5) * 2,
                 radius: 1.5 + Math.random() * 2.0,
-                color: '#ff7f32',
+                color: '#ffd700',
                 alpha: 1.0,
                 decay: 0.05 + Math.random() * 0.05,
                 gravity: 0
@@ -1970,7 +1970,7 @@ class Game {
         ctx.fillRect(3, 10, 5, 10);
 
         // Gold Poncho/Body
-        ctx.fillStyle = '#ff7f32'; // shiny gold
+        ctx.fillStyle = '#ffd700'; // shiny gold
         ctx.strokeStyle = '#8b7500';
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -1988,7 +1988,7 @@ class Game {
         ctx.arc(0, 0, 3, 0, Math.PI * 2);
         ctx.fill();
         
-        ctx.strokeStyle = '#ff7f32';
+        ctx.strokeStyle = '#ffd700';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.ellipse(0, 0, 5, 5, 0, 0, Math.PI * 2);
@@ -2023,7 +2023,7 @@ class Game {
         ctx.stroke();
 
         // Gun arms
-        ctx.strokeStyle = '#ff7f32';
+        ctx.strokeStyle = '#ffd700';
         ctx.lineWidth = 5;
         ctx.lineCap = 'round';
         

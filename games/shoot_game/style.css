@@ -78,7 +78,7 @@ body {
 .western-title {
     font-family: 'Rye', serif;
     font-size: 3.2rem;
-    color: #ff7f32;
+    color: #e5a93b;
     text-shadow: 0 3px 0 #6e4313, 0 6px 10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 169, 59, 0.2);
     margin-bottom: 0.2rem;
     text-transform: uppercase;
@@ -89,7 +89,7 @@ body {
 .victory-title {
     font-family: 'Rye', serif;
     font-size: 3.8rem;
-    color: #e65c00;
+    color: #d4af37;
     text-shadow: 0 0 30px rgba(212, 175, 55, 0.4), 0 6px 12px rgba(0, 0, 0, 0.9);
     margin-bottom: 0.8rem;
     text-transform: uppercase;
@@ -167,20 +167,20 @@ body {
 
 .btn-primary.selected {
     background: #8b521b;
-    border-color: #ff7f32;
-    box-shadow: 0 0 15px rgba(255, 127, 50, 0.3);
+    border-color: #e5a93b;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
 }
 
 .btn-gold {
     background: transparent;
-    color: #ff7f32;
+    color: #e5a93b;
     font-weight: 800;
-    border: 2px solid #e65c00;
+    border: 2px solid #d4af37;
     box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
 }
 
 .btn-gold:hover {
-    border-color: #ff7f32;
+    border-color: #e5a93b;
     color: #fff;
     transform: translateY(-3px) scale(1.03);
     box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
@@ -265,7 +265,7 @@ body {
 
 .weapon-btn.p2-wep-active {
     background: #a06e30;
-    border-color: #ff7f32;
+    border-color: #e5a93b;
     box-shadow: 0 0 10px rgba(229, 169, 59, 0.3);
     color: #fff;
 }
@@ -357,20 +357,20 @@ body {
 
 .level-card:hover {
     background: rgba(110, 67, 19, 0.3);
-    border-color: rgba(255, 127, 50, 0.5);
+    border-color: rgba(212, 175, 55, 0.5);
     transform: translateX(2px);
 }
 
 .level-card.active {
     background: rgba(139, 82, 27, 0.4);
-    border-color: #ff7f32;
-    box-shadow: inset 0 0 8px rgba(255, 127, 50, 0.2);
+    border-color: #e5a93b;
+    box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.2);
 }
 
 .level-num {
     font-family: 'Rye', serif;
     font-size: 1.1rem;
-    color: #ff7f32;
+    color: #e5a93b;
     min-width: 24px;
     text-align: center;
     border-right: 1px solid rgba(110, 67, 19, 0.3);
@@ -499,7 +499,7 @@ body {
 .sheriff-star {
     width: 24px;
     height: 24px;
-    background-color: #e65c00;
+    background-color: #d4af37;
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
     transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
     box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
@@ -523,7 +523,7 @@ body {
 #level-display-name {
     font-family: 'Rye', serif;
     font-size: 1.2rem;
-    color: #ff7f32;
+    color: #e5a93b;
     letter-spacing: 1px;
 }
 
@@ -629,7 +629,7 @@ body {
 .shop-coins-header {
     font-family: 'Rye', serif;
     font-size: 1.05rem;
-    color: #ff7f32;
+    color: #e5a93b;
     text-align: center;
     margin-bottom: 0.5rem;
     background: rgba(0, 0, 0, 0.45);
@@ -685,7 +685,7 @@ body {
 
 .shop-item:hover {
     background: rgba(110, 67, 19, 0.25);
-    border-color: rgba(255, 127, 50, 0.3);
+    border-color: rgba(212, 175, 55, 0.3);
 }
 
 .shop-item-info {
@@ -739,7 +739,7 @@ body {
 
 .wep-pts {
     background: rgba(0, 0, 0, 0.45);
-    color: #ff7f32;
+    color: #e5a93b;
     padding: 0.1rem 0.35rem;
     border-radius: 4px;
     font-size: 0.65rem;
@@ -752,9 +752,9 @@ body {
 .coins-reward-banner {
     font-family: 'Rye', serif;
     font-size: 1.5rem;
-    color: #ff7f32;
+    color: #e5a93b;
     background: rgba(0, 0, 0, 0.55);
-    border: 2px solid #e65c00;
+    border: 2px solid #d4af37;
     padding: 0.8rem 2rem;
     border-radius: 12px;
     margin: 1rem 0 2rem 0;
@@ -807,7 +807,7 @@ body {
     width: 100%;
     max-width: 900px;
     background: linear-gradient(135deg, #2c1a11 0%, #1a0f0a 100%);
-    border: 2px solid #e65c00;
+    border: 2px solid #d4af37;
     border-radius: 8px;
     padding: 0.35rem 0.8rem;
     margin-bottom: 0.6rem;
@@ -820,7 +820,7 @@ body {
 
 @keyframes borderGlow {
     0% { border-color: #8b6e2f; box-shadow: 0 0 8px rgba(212, 175, 55, 0.15); }
-    100% { border-color: #ff7f32; box-shadow: 0 0 18px rgba(212, 175, 55, 0.3); }
+    100% { border-color: #e5a93b; box-shadow: 0 0 18px rgba(212, 175, 55, 0.3); }
 }
 
 .prestige-info {
@@ -834,7 +834,7 @@ body {
 .prestige-title {
     font-family: 'Rye', serif;
     font-size: 0.92rem;
-    color: #ff7f32;
+    color: #e5a93b;
     letter-spacing: 0.5px;
 }
 
@@ -903,7 +903,7 @@ body {
 }
 .input-group input:focus {
     outline: none;
-    border-color: #ff7f32;
+    border-color: #e5a93b;
     box-shadow: 0 0 8px rgba(229, 169, 59, 0.4);
 }
 
@@ -929,9 +929,9 @@ body {
 
 #language-selector .btn.selected {
     background: transparent !important;
-    color: #ff7f32 !important;
-    border: 2px solid #ff7f32 !important;
-    box-shadow: 0 0 10px rgba(255, 127, 50, 0.4) !important;
+    color: #ffd700 !important;
+    border: 2px solid #d4af37 !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4) !important;
     font-weight: 800 !important;
 }
 
