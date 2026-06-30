@@ -200,18 +200,25 @@ export class Cowboy {
         let dx = 0;
         let dy = 0;
 
-        if (keys['w'] || keys['W']) dy -= this.speed;
-        if (keys['s'] || keys['S']) dy += this.speed;
-        if (keys['a'] || keys['A']) dx -= this.speed;
-        if (keys['d'] || keys['D']) dx += this.speed;
+        // Joystick movement (touch play)
+        if (game.joystickMove && game.joystickMove.active) {
+            dx = game.joystickMove.x * this.speed;
+            dy = game.joystickMove.y * this.speed;
+        } else {
+            // Keyboard movement
+            if (keys['w'] || keys['W']) dy -= this.speed;
+            if (keys['s'] || keys['S']) dy += this.speed;
+            if (keys['a'] || keys['A']) dx -= this.speed;
+            if (keys['d'] || keys['D']) dx += this.speed;
 
-        if (dx !== 0 || dy !== 0) {
-            // Diagonal speed normalization
             if (dx !== 0 && dy !== 0) {
+                // Diagonal speed normalization
                 dx *= 0.7071;
                 dy *= 0.7071;
             }
-            
+        }
+
+        if (dx !== 0 || dy !== 0) {
             // Try movement (slide against obstacles if any)
             if (!this.checkObstacleCollision(this.x + dx, this.y, game)) {
                 this.x += dx;
@@ -224,9 +231,13 @@ export class Cowboy {
         }
 
         // Aiming Gun rotation
-        const rotSpeed = 0.05;
-        if (keys['q'] || keys['Q']) this.angle -= rotSpeed;
-        if (keys['e'] || keys['E']) this.angle += rotSpeed;
+        if (game.joystickAim && game.joystickAim.active) {
+            this.angle = game.joystickAim.angle;
+        } else {
+            const rotSpeed = 0.05;
+            if (keys['q'] || keys['Q']) this.angle -= rotSpeed;
+            if (keys['e'] || keys['E']) this.angle += rotSpeed;
+        }
 
         // Shoot
         if (keys[' ']) {

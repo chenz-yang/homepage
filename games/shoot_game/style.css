@@ -863,3 +863,80 @@ body {
         right: 0.5rem;
     }
 }
+
+/* touch-action: none to prevent iPad scroll & zoom gestures during play */
+#game-screen, #game-canvas, #mobile-controls {
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Hide mobile controls on desktop devices with hover capabilities */
+@media (hover: hover) and (pointer: fine) {
+    #mobile-controls {
+        display: none !important;
+    }
+}
+
+/* Mobile Joystick Controls */
+#mobile-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+}
+
+.joystick-container {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    margin-left: -60px; /* Center-align on touch coordinate */
+    margin-top: -60px;
+    pointer-events: none;
+    display: none; /* Shown dynamically on touchstart */
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 100;
+}
+
+.joystick-container.active {
+    opacity: 1;
+}
+
+.joystick-base {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(19, 10, 6, 0.35);
+    border: 3px solid rgba(247, 230, 212, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    position: relative;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+.joystick-knob {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.joystick-knob.blue {
+    background: radial-gradient(circle at 35% 35%, #5ac8fa 0%, #007aff 70%, #0056b3 100%);
+    box-shadow: 0 0 15px rgba(0, 122, 255, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+.joystick-knob.red {
+    background: radial-gradient(circle at 35% 35%, #ff5e5e 0%, #ff3b30 70%, #c21a0f 100%);
+    box-shadow: 0 0 15px rgba(255, 59, 48, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+

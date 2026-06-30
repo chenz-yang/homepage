@@ -80,6 +80,12 @@ class Game {
 
         this.helperAIs = [];
 
+        // Joystick inputs for mobile/touch play
+        this.joystickMove = { x: 0, y: 0, active: false };
+        this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+        this.moveTouchId = null;
+        this.aimTouchId = null;
+
         this.initDOM();
         this.initInput();
         this.createMenuDust();
@@ -873,6 +879,161 @@ class Game {
         window.addEventListener('blur', () => {
             this.keys = {};
         });
+
+        // Touch events for mobile/touch screen joysticks
+        const gameScreen = document.getElementById('game-screen');
+        
+        gameScreen.addEventListener('touchstart', (e) => {
+            if (this.state !== 'playing') return;
+            
+            // Ignore touches on HUD/menu buttons (e.g., Pause, Mute, Exit)
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                // Left half of screen: Movement Joystick
+                if (touch.clientX < window.innerWidth / 2 && this.moveTouchId === null) {
+                    this.moveTouchId = touch.identifier;
+                    this.moveBaseX = touch.clientX;
+                    this.moveBaseY = touch.clientY;
+                    
+                    const moveJoy = document.getElementById('joystick-move');
+                    if (moveJoy) {
+                        moveJoy.style.left = `${touch.clientX}px`;
+                        moveJoy.style.top = `${touch.clientY}px`;
+                        moveJoy.style.display = 'block';
+                        const knob = moveJoy.querySelector('.joystick-knob');
+                        if (knob) knob.style.transform = 'translate(-50%, -50%)';
+                        setTimeout(() => moveJoy.classList.add('active'), 10);
+                    }
+                    this.joystickMove = { x: 0, y: 0, active: true };
+                }
+                // Right half of screen: Aiming/Shooting Joystick
+                else if (touch.clientX >= window.innerWidth / 2 && this.aimTouchId === null) {
+                    this.aimTouchId = touch.identifier;
+                    this.aimBaseX = touch.clientX;
+                    this.aimBaseY = touch.clientY;
+                    
+                    const aimJoy = document.getElementById('joystick-aim');
+                    if (aimJoy) {
+                        aimJoy.style.left = `${touch.clientX}px`;
+                        aimJoy.style.top = `${touch.clientY}px`;
+                        aimJoy.style.display = 'block';
+                        const knob = aimJoy.querySelector('.joystick-knob');
+                        if (knob) knob.style.transform = 'translate(-50%, -50%)';
+                        setTimeout(() => aimJoy.classList.add('active'), 10);
+                    }
+                    this.joystickAim = { x: 0, y: 0, angle: this.player1 ? this.player1.angle : 0, dist: 0, active: true };
+                }
+            }
+        }, { passive: false });
+
+        gameScreen.addEventListener('touchmove', (e) => {
+            if (this.state !== 'playing') return;
+            e.preventDefault(); // Prevent page scroll/zoom gestures during gameplay
+
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+                const maxR = 50; // Max drag radius in pixels
+
+                if (touch.identifier === this.moveTouchId) {
+                    let dx = touch.clientX - this.moveBaseX;
+                    let dy = touch.clientY - this.moveBaseY;
+                    let dist = Math.hypot(dx, dy);
+                    
+                    if (dist > maxR) {
+                        dx = (dx / dist) * maxR;
+                        dy = (dy / dist) * maxR;
+                        dist = maxR;
+                    }
+                    
+                    const moveJoy = document.getElementById('joystick-move');
+                    if (moveJoy) {
+                        const knob = moveJoy.querySelector('.joystick-knob');
+                        if (knob) {
+                            knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                        }
+                    }
+                    this.joystickMove = { x: dx / maxR, y: dy / maxR, active: true };
+                }
+                else if (touch.identifier === this.aimTouchId) {
+                    let dx = touch.clientX - this.aimBaseX;
+                    let dy = touch.clientY - this.aimBaseY;
+                    let dist = Math.hypot(dx, dy);
+                    
+                    if (dist > maxR) {
+                        dx = (dx / dist) * maxR;
+                        dy = (dy / dist) * maxR;
+                        dist = maxR;
+                    }
+                    
+                    const aimJoy = document.getElementById('joystick-aim');
+                    if (aimJoy) {
+                        const knob = aimJoy.querySelector('.joystick-knob');
+                        if (knob) {
+                            knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                        }
+                    }
+                    
+                    const angle = Math.atan2(dy, dx);
+                    this.joystickAim = { x: dx / maxR, y: dy / maxR, angle: angle, dist: dist / maxR, active: true };
+                    
+                    // Update player aiming angle immediately
+                    if (this.player1 && this.player1.health > 0) {
+                        this.player1.angle = angle;
+                    }
+                }
+            }
+        }, { passive: false });
+
+        const endTouchHandler = (e) => {
+            if (this.state !== 'playing') return;
+
+            for (let i = 0; i < e.changedTouches.length; i++) {
+                const touch = e.changedTouches[i];
+
+                if (touch.identifier === this.moveTouchId) {
+                    this.moveTouchId = null;
+                    const moveJoy = document.getElementById('joystick-move');
+                    if (moveJoy) {
+                        moveJoy.classList.remove('active');
+                        setTimeout(() => {
+                            if (this.moveTouchId === null) moveJoy.style.display = 'none';
+                        }, 150);
+                    }
+                    this.joystickMove = { x: 0, y: 0, active: false };
+                }
+                else if (touch.identifier === this.aimTouchId) {
+                    // Shoot checking on release
+                    if (this.joystickAim.active && this.player1 && this.player1.health > 0) {
+                        if (this.joystickAim.dist > 0.2) {
+                            // Fired in drag direction
+                            this.player1.shoot(this);
+                        } else {
+                            // Quick tap: Auto-aim at the nearest active opponent (player2)
+                            if (this.player2 && this.player2.health > 0) {
+                                const angle = Math.atan2(this.player2.y - this.player1.y, this.player2.x - this.player1.x);
+                                this.player1.angle = angle;
+                                this.player1.shoot(this);
+                            }
+                        }
+                    }
+                    
+                    this.aimTouchId = null;
+                    const aimJoy = document.getElementById('joystick-aim');
+                    if (aimJoy) {
+                        aimJoy.classList.remove('active');
+                        setTimeout(() => {
+                            if (this.aimTouchId === null) aimJoy.style.display = 'none';
+                        }, 150);
+                    }
+                    this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+                }
+            }
+        };
+
+        gameScreen.addEventListener('touchend', endTouchHandler, { passive: true });
+        gameScreen.addEventListener('touchcancel', endTouchHandler, { passive: true });
 
         window.focus();
     }
