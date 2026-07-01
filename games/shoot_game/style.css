@@ -949,8 +949,8 @@ body {
     user-select: none;
 }
 
-/* Lock body scroll on touch devices without breaking the background */
-html.touch-device, body.touch-device {
+/* Lock body scroll on touch devices ONLY during active gameplay to prevent screen dragging */
+html.touch-device.game-playing, body.touch-device.game-playing {
     overflow: hidden !important;
     height: 100% !important;
 }

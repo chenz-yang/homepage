@@ -241,10 +241,6 @@ class Game {
 
     initDOM() {
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-        if (this.isTouchDevice) {
-            document.body.classList.add('touch-device');
-            document.documentElement.classList.add('touch-device');
-        }
         
         if (this.isMobileDevice) {
             document.body.classList.add('mobile-device');
@@ -1245,6 +1241,10 @@ class Game {
             document.documentElement.classList.remove('touch-device');
         }
 
+        // Add class to lock body scroll only during gameplay
+        document.body.classList.add('game-playing');
+        document.documentElement.classList.add('game-playing');
+
         // Add classes for game mode styling
         if (this.mode === 'pvp') {
             document.body.classList.add('mode-pvp');
@@ -1511,6 +1511,8 @@ class Game {
         this.resetJoystickState();
         document.body.classList.remove('touch-device');
         document.documentElement.classList.remove('touch-device');
+        document.body.classList.remove('game-playing');
+        document.documentElement.classList.remove('game-playing');
         document.body.classList.remove('mode-pvp');
         document.body.classList.remove('mode-pve');
         window.scrollTo(0, 0); // Reset scroll position to top
@@ -1838,6 +1840,8 @@ class Game {
     endGame() {
         document.body.classList.remove('touch-device');
         document.documentElement.classList.remove('touch-device');
+        document.body.classList.remove('game-playing');
+        document.documentElement.classList.remove('game-playing');
         document.body.classList.remove('mode-pvp');
         document.body.classList.remove('mode-pve');
         window.scrollTo(0, 0); // Reset scroll position to top
