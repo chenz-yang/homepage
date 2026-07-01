@@ -32,8 +32,8 @@
     <div id="game-container">
         <!-- Language Selector -->
         <div id="language-selector">
-            <button id="lang-btn-original" class="btn btn-small btn-primary lang-btn selected" data-i18n="lang-original">ORIGINAL</button>
-            <button id="lang-btn-chinese" class="btn btn-small btn-primary lang-btn" data-i18n="lang-chinese">CHINESISCH</button>
+            <button id="lang-btn-original" class="btn btn-small btn-primary lang-btn selected">ORIGINAL</button>
+            <button id="lang-btn-chinese" class="btn btn-small btn-primary lang-btn">中文</button>
         </div>
 
         <!-- Background Dust Particles (Canvas overlay or pure CSS) -->
@@ -63,6 +63,10 @@
                     <button class="btn btn-primary mode-btn" data-mode="pve">
                         <span class="btn-icon">🤠</span>
                         <span data-i18n="mode-pve-text">1 Spieler (vs. Bandit-KI)</span>
+                    </button>
+                    <button class="btn btn-primary mode-btn" data-mode="pvp">
+                        <span class="btn-icon">👥</span>
+                        <span data-i18n="mode-pvp-text">2 Spieler (Lokales Duell)</span>
                     </button>
                 </div>
 
@@ -238,6 +242,12 @@
             </div>
 
 
+            <div class="controls-cheat-sheet-compact">
+                <span data-i18n="cheat-sheet-p1">🤠 P1: <strong>WASD</strong> (Bewegen) | <strong>Q/E</strong> (Zielen) | <strong>Leertaste</strong> (Schießen)</span>
+                <span class="sheet-divider">|</span>
+                <span data-i18n="cheat-sheet-p2">💀 P2/KI: <strong>Pfeiltasten</strong> (Bewegen) | <strong>U/O</strong> (Zielen) | <strong>Eingabe</strong> (Schießen)</span>
+            </div>
+
             <button id="start-game-btn" class="btn btn-gold btn-large" data-i18n="start-duel-btn">Duell Starten!</button>
         </div>
 
@@ -285,6 +295,13 @@
                 <button id="pause-btn" class="btn btn-small" data-i18n="hud-pause-btn">Pause</button>
                 <button id="mute-btn" class="btn btn-small">Ton: An</button>
                 <button id="exit-game-btn" class="btn btn-small btn-danger" data-i18n="hud-forfeit-btn">Aufgeben</button>
+            </div>
+
+            <!-- Keyboard Controls Cheat Sheet for PC -->
+            <div class="controls-cheat-sheet-compact gameplay-cheat-sheet">
+                <span data-i18n="cheat-sheet-p1">🤠 P1: <strong>WASD</strong> (Bewegen) | <strong>Q/E</strong> (Zielen) | <strong>Leertaste</strong> (Schießen)</span>
+                <span class="sheet-divider">|</span>
+                <span data-i18n="cheat-sheet-p2">💀 P2/KI: <strong>Pfeiltasten</strong> (Bewegen) | <strong>U/O</strong> (Zielen) | <strong>Eingabe</strong> (Schießen)</span>
             </div>
         </div>
 

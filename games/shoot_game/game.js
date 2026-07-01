@@ -69,6 +69,16 @@ class Game {
         // Language setup
         this.currentLanguage = localStorage.getItem('wild_west_lang') || 'original';
 
+        // Detect mobile device (smartphone or tablet)
+        this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                              (navigator.maxTouchPoints > 0 && /iPad|Macintosh/i.test(navigator.userAgent) && window.innerWidth <= 1024);
+        
+        // Detect smartphone specifically (mobile device with small screen dimension)
+        this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
+
+        // A device has a physical keyboard if it's NOT a mobile device
+        this.hasPhysicalKeyboard = !this.isMobileDevice;
+
         // Player names persistent stats with language defaults
         const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
         const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
@@ -231,6 +241,76 @@ class Game {
 
     initDOM() {
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+        if (this.isTouchDevice) {
+            document.body.classList.add('touch-device');
+            document.documentElement.classList.add('touch-device');
+        }
+        
+        if (this.isMobileDevice) {
+            document.body.classList.add('mobile-device');
+            document.documentElement.classList.add('mobile-device');
+        } else {
+            document.body.classList.add('pc-device');
+            document.documentElement.classList.add('pc-device');
+        }
+        
+        if (this.isSmartphone) {
+            document.body.classList.add('smartphone');
+            document.documentElement.classList.add('smartphone');
+        }
+
+        window.addEventListener('resize', () => {
+            this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
+            if (this.isSmartphone) {
+                document.body.classList.add('smartphone');
+                document.documentElement.classList.add('smartphone');
+            } else {
+                document.body.classList.remove('smartphone');
+                document.documentElement.classList.remove('smartphone');
+            }
+        });
+
+        // Dynamic input detection: switch UI dynamically on touch vs keyboard interaction
+        window.addEventListener('keydown', (e) => {
+            if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+                return;
+            }
+            if (this.isTouchDevice) {
+                this.isTouchDevice = false;
+                document.body.classList.remove('touch-device');
+                document.documentElement.classList.remove('touch-device');
+            }
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            if (!this.isTouchDevice) {
+                this.isTouchDevice = true;
+                document.body.classList.add('touch-device');
+                document.documentElement.classList.add('touch-device');
+
+                // If PvP mode was selected, fall back to PvE on touch device transition
+                // ONLY fall back if this is a mobile device (no physical keyboard)
+                if (this.mode === 'pvp' && this.isMobileDevice) {
+                    this.mode = 'pve';
+                    const pveBtn = document.querySelector('.mode-btn[data-mode="pve"]');
+                    const pvpBtn = document.querySelector('.mode-btn[data-mode="pvp"]');
+                    if (pveBtn && pvpBtn) {
+                        pvpBtn.classList.remove('selected');
+                        pveBtn.classList.add('selected');
+
+                        // Update P2 labels for PvE (Bandit/KI)
+                        const p2Label = document.getElementById('p2-label-text');
+                        const p2WepTitle = document.getElementById('p2-weapon-title');
+                        const p2NameLabel = document.getElementById('p2-name-label');
+                        const p2Input = document.getElementById('p2-name-input');
+                        if (p2Label) p2Label.textContent = `${this.p2NamePvE}${this.t('suffix-ki')}`;
+                        if (p2WepTitle) p2WepTitle.textContent = this.t('weapon-p2-label-ki');
+                        if (p2NameLabel) p2NameLabel.textContent = this.t('label-p2-name-ki');
+                        if (p2Input) p2Input.value = this.p2NamePvE;
+                    }
+                }
+            }
+        }, { passive: true });
 
         // Language Select buttons
         const originalBtn = document.getElementById('lang-btn-original');
@@ -1160,6 +1240,18 @@ class Game {
         if (this.isTouchDevice) {
             document.body.classList.add('touch-device');
             document.documentElement.classList.add('touch-device');
+        } else {
+            document.body.classList.remove('touch-device');
+            document.documentElement.classList.remove('touch-device');
+        }
+
+        // Add classes for game mode styling
+        if (this.mode === 'pvp') {
+            document.body.classList.add('mode-pvp');
+            document.body.classList.remove('mode-pve');
+        } else {
+            document.body.classList.add('mode-pve');
+            document.body.classList.remove('mode-pvp');
         }
         this.bullets = [];
         this.obstacles = [];
@@ -1419,6 +1511,8 @@ class Game {
         this.resetJoystickState();
         document.body.classList.remove('touch-device');
         document.documentElement.classList.remove('touch-device');
+        document.body.classList.remove('mode-pvp');
+        document.body.classList.remove('mode-pve');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music
@@ -1744,6 +1838,8 @@ class Game {
     endGame() {
         document.body.classList.remove('touch-device');
         document.documentElement.classList.remove('touch-device');
+        document.body.classList.remove('mode-pvp');
+        document.body.classList.remove('mode-pve');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'gameover';
         audio.stopBGM(); // Stop music on match end

@@ -1027,3 +1027,66 @@ body.touch-device #mobile-controls {
     box-shadow: 0 0 15px rgba(255, 59, 48, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
+/* Hide PvP mode button and keyboard cheat sheet on mobile devices (smartphones/tablets without default physical keyboards) */
+body.mobile-device .controls-cheat-sheet-compact,
+body.mobile-device .mode-btn[data-mode="pvp"] {
+    display: none !important;
+}
+
+/* Hide joysticks in PvP mode since P2 requires keyboard and touch screen has no P2 joystick */
+body.mode-pvp #mobile-controls {
+    display: none !important;
+}
+
+/* Hide controls cheat sheet on mobile devices during gameplay */
+body.mobile-device .gameplay-cheat-sheet {
+    display: none !important;
+}
+
+/* Gameplay cheat sheet layout styling */
+.gameplay-cheat-sheet {
+    margin-top: 0.8rem;
+    margin-bottom: 0;
+    z-index: 10;
+}
+
+/* Smartphone specific viewport optimizations to enlarge playfield */
+body.smartphone #canvas-wrapper {
+    max-width: 98vw;
+    max-height: calc(100vh - 110px) !important;
+    border-width: 3px;
+}
+
+body.smartphone #hud {
+    padding: 0.4rem 0.8rem;
+    max-width: 98vw;
+    border-width: 1px;
+}
+
+body.smartphone .player-label {
+    font-size: 0.85rem;
+}
+
+body.smartphone .sheriff-star {
+    width: 16px;
+    height: 16px;
+}
+
+body.smartphone #level-display-name {
+    font-size: 0.95rem;
+}
+
+body.smartphone #wind-indicator {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.4rem;
+}
+
+body.smartphone #game-controls-bar {
+    gap: 0.5rem;
+}
+
+body.smartphone #game-controls-bar .btn {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.8rem !important;
+}
+
