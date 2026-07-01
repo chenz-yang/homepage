@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=23';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=23';
-import { audio } from './audio.js?v=23';
-import { TRANSLATIONS } from './translations.js?v=23';
+import { Cowboy } from './cowboy.js?v=24';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=24';
+import { audio } from './audio.js?v=24';
+import { TRANSLATIONS } from './translations.js?v=24';
 
 class Game {
     constructor() {
@@ -69,9 +69,9 @@ class Game {
         // Language setup
         this.currentLanguage = localStorage.getItem('wild_west_lang') || 'original';
 
-        // Detect mobile device (smartphone or tablet)
+        // Detect mobile device (smartphone or tablet like iPad)
         this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                              (navigator.maxTouchPoints > 0 && /iPad|Macintosh/i.test(navigator.userAgent) && window.innerWidth <= 1024);
+                              (navigator.maxTouchPoints > 0 && (/iPad/i.test(navigator.userAgent) || /Macintosh/i.test(navigator.userAgent)));
         
         // Detect smartphone specifically (mobile device with small screen dimension)
         this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
