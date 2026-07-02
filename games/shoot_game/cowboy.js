@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=29';
-import { audio } from './audio.js?v=29';
+import { Bullet } from './bullet.js?v=32';
+import { audio } from './audio.js?v=32';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid') {
@@ -45,7 +45,7 @@ export class Cowboy {
     }
 
     setWeaponProperties() {
-        const isPlayerAligned = this.id === 'player1' || this.id === 'helper_ai';
+        const isPlayerAligned = this.role === 'player1' || this.role === 'helper_ai';
         if (this.weaponType === 'heavy') {
             const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
             this.shootCooldown = 1500 - (lvl - 1) * 200; // Level 1: 1500ms, Level 5: 700ms!
