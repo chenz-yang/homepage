@@ -64,6 +64,7 @@ class Game {
         this.rapidLvl = parseInt(localStorage.getItem('wild_west_rapid_level')) || 1;
         this.heavyLvl = parseInt(localStorage.getItem('wild_west_heavy_level')) || 1;
         this.bombLvl = parseInt(localStorage.getItem('wild_west_bomb_level')) || 1;
+        this.aiDifficulty = parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1;
         this.lastPrestigeChoiceTime = parseInt(localStorage.getItem('wild_west_prestige_time')) || 0;
 
         // Language setup
@@ -239,6 +240,17 @@ class Game {
         return this.lasergunLvl > 0;
     }
 
+    updateModeVisibility() {
+        const diffSection = document.getElementById('difficulty-select-section');
+        if (diffSection) {
+            if (this.mode === 'pve') {
+                diffSection.classList.remove('hidden');
+            } else {
+                diffSection.classList.add('hidden');
+            }
+        }
+    }
+
     initDOM() {
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
@@ -304,6 +316,7 @@ class Game {
                         if (p2NameLabel) p2NameLabel.textContent = this.t('label-p2-name-ki');
                         if (p2Input) p2Input.value = this.p2NamePvE;
                     }
+                    this.updateModeVisibility();
                 }
             }
         }, { passive: true });
@@ -373,6 +386,7 @@ class Game {
                     if (p2NameLabel) p2NameLabel.textContent = this.t('label-p2-name-ki');
                     if (p2Input) p2Input.value = this.p2NamePvE;
                 }
+                this.updateModeVisibility();
             });
         });
         // Select PVE by default
@@ -407,6 +421,27 @@ class Game {
                 this.level = parseInt(card.getAttribute('data-level'));
                 audio.playRicochet(); // sound cue
             });
+        });
+
+        // Difficulty cards
+        const difficultyCards = document.querySelectorAll('.difficulty-card');
+        difficultyCards.forEach(card => {
+            card.addEventListener('click', () => {
+                difficultyCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+                this.aiDifficulty = parseInt(card.getAttribute('data-difficulty'));
+                localStorage.setItem('wild_west_ai_difficulty', this.aiDifficulty);
+                audio.playRicochet(); // sound cue
+            });
+        });
+
+        // Highlight active difficulty card on startup
+        difficultyCards.forEach(card => {
+            if (parseInt(card.getAttribute('data-difficulty')) === this.aiDifficulty) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
         });
 
         // Start button
@@ -447,6 +482,7 @@ class Game {
         // Initialize Shop & Weapons UI
         this.updateWeaponsUI();
         this.updateShopUI();
+        this.updateModeVisibility();
 
         // Shop Upgrades: +1 HP
         const buyHpBtn = document.getElementById('buy-hp-btn');
@@ -1312,7 +1348,7 @@ class Game {
             this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', this.p2Weapon);
         } else {
             // Level 10 KI boss utilizes the Lasergun for maximum lethality!
-            const aiWeapon = this.level === 10 ? 'laser' : this.p2Weapon;
+            const aiWeapon = this.aiDifficulty === 10 ? 'laser' : this.p2Weapon;
             this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon);
         }
 
@@ -1866,11 +1902,15 @@ class Game {
 
             // Earn coins if PvE mode
             if (this.mode === 'pve') {
-                this.coins += 3;
+                const coinsEarned = this.aiDifficulty >= 5 ? 5 : 3;
+                this.coins += coinsEarned;
                 localStorage.setItem('wild_west_coins', this.coins);
                 
                 const rewardBanner = document.getElementById('coins-reward-banner');
-                rewardBanner.classList.remove('hidden');
+                if (rewardBanner) {
+                    rewardBanner.innerHTML = this.t('go-reward-banner', { val: coinsEarned });
+                    rewardBanner.classList.remove('hidden');
+                }
                 
                 // Play a brief delayed coin sound effect for maximum dopamine
                 setTimeout(() => {

@@ -365,7 +365,7 @@ export class Cowboy {
         this.aiDecisionTimer--;
         this.dodgeCooldown = Math.max(0, this.dodgeCooldown - 1);
 
-        const lvl = game.level;
+        const lvl = game.aiDifficulty || 1;
 
         // Calculate dynamic cooldown & speed based on chosen weapon type & level difficulty
         let baseCooldown = 250; // rapid default

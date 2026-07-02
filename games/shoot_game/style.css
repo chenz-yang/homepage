@@ -208,16 +208,11 @@ body {
 .menu-sections {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     gap: 0.8rem;
     width: 95%;
     max-width: 1200px;
     margin-bottom: 1.0rem;
-}
-
-@media (max-width: 1250px) {
-    .menu-sections {
-        flex-wrap: wrap;
-    }
 }
 
 /* Weapon Select Styling */
@@ -310,7 +305,7 @@ body {
     justify-content: center;
 }
 
-.level-grid {
+.level-grid, .difficulty-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.35rem;
@@ -318,22 +313,22 @@ body {
     overflow-y: auto;
     padding-right: 0.2rem;
 }
-.level-grid::-webkit-scrollbar {
+.level-grid::-webkit-scrollbar, .difficulty-grid::-webkit-scrollbar {
     width: 6px;
 }
-.level-grid::-webkit-scrollbar-track {
+.level-grid::-webkit-scrollbar-track, .difficulty-grid::-webkit-scrollbar-track {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 3px;
 }
-.level-grid::-webkit-scrollbar-thumb {
+.level-grid::-webkit-scrollbar-thumb, .difficulty-grid::-webkit-scrollbar-thumb {
     background: rgba(110, 67, 19, 0.6);
     border-radius: 3px;
 }
-.level-grid::-webkit-scrollbar-thumb:hover {
+.level-grid::-webkit-scrollbar-thumb:hover, .difficulty-grid::-webkit-scrollbar-thumb:hover {
     background: rgba(229, 169, 59, 0.6);
 }
 
-.level-card {
+.level-card, .difficulty-card {
     background: rgba(50, 31, 23, 0.5);
     border: 1px solid rgba(110, 67, 19, 0.3);
     border-radius: 8px;
@@ -355,19 +350,19 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-.level-card:hover {
+.level-card:hover, .difficulty-card:hover {
     background: rgba(110, 67, 19, 0.3);
     border-color: rgba(212, 175, 55, 0.5);
     transform: translateX(2px);
 }
 
-.level-card.active {
+.level-card.active, .difficulty-card.active {
     background: rgba(139, 82, 27, 0.4);
     border-color: #e5a93b;
     box-shadow: inset 0 0 8px rgba(212, 175, 55, 0.2);
 }
 
-.level-num {
+.level-num, .difficulty-num {
     font-family: 'Rye', serif;
     font-size: 1.1rem;
     color: #e5a93b;
@@ -377,7 +372,7 @@ body {
     padding-right: 0.4rem;
 }
 
-.level-name {
+.level-name, .difficulty-name {
     font-weight: 600;
     font-size: 0.82rem;
     color: #fff;
@@ -386,7 +381,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.level-desc {
+.level-desc, .difficulty-desc {
     display: none; /* Hide descriptions to keep layout compact */
 }
 

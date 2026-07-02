@@ -39,8 +39,10 @@ export const TRANSLATIONS = {
         "wep-pts-2": "2 Pkt",
         "wep-pts-3": "3 Pkt",
         
-        "level-title": "3. Level einstellen",
+        "level-title": "3. Welten einstellen",
         "level-label": "Level",
+        "difficulty-title": "4. KI-Schwierigkeit einstellen",
+        "difficulty-label": "Schwierigkeit",
         "level-1-name": "Sunny Prairie",
         "level-1-desc": "Einfaches Feld, keine Gefahren.",
         "level-2-name": "Cactus Canyon",
@@ -62,7 +64,7 @@ export const TRANSLATIONS = {
         "level-10-name": "Armageddon Duel",
         "level-10-desc": "Ultimatives Chaos: Alles inklusive Bodenspikes!",
         
-        "shop-title": "4. Shop & Upgrades",
+        "shop-title": "5. Shop & Upgrades",
         "shop-balance": "Saldo:",
         "shop-max": "Max",
         "shop-hp-title": "+1 Start-Leben",
@@ -113,7 +115,7 @@ export const TRANSLATIONS = {
         "go-p2-win-pvp-subtitle": "{oppName} triumphiert über {p1Name}.",
         "go-p2-win-ki-subtitle": "Besser zielen beim nächsten Mal!",
         "go-victory-default-subtitle": "Schnellster Finger im Wilden Westen",
-        "go-reward-banner": "🪙 +3 Münzen erhalten!",
+        "go-reward-banner": "🪙 +{val} Münzen erhalten!",
         "go-rematch-btn": "Revanche",
         "go-menu-btn": "Hauptmenü",
         
@@ -163,8 +165,10 @@ export const TRANSLATIONS = {
         "wep-pts-2": "2 分",
         "wep-pts-3": "3 分",
         
-        "level-title": "3. 选择关卡",
+        "level-title": "3. 世界设置",
         "level-label": "关卡",
+        "difficulty-title": "4. 设置AI难度",
+        "difficulty-label": "难度",
         "level-1-name": "阳光原野",
         "level-1-desc": "普通场地，没有危险。",
         "level-2-name": "仙人掌峡谷",
@@ -186,7 +190,7 @@ export const TRANSLATIONS = {
         "level-10-name": "末日决斗",
         "level-10-desc": "终极混乱：包含一切及地面尖刺！",
         
-        "shop-title": "4. 商店与升级",
+        "shop-title": "5. 商店与升级",
         "shop-balance": "余额:",
         "shop-max": "满级",
         "shop-hp-title": "+1 初始生命",
@@ -237,7 +241,7 @@ export const TRANSLATIONS = {
         "go-p2-win-pvp-subtitle": "{oppName} 战胜了 {p1Name}。",
         "go-p2-win-ki-subtitle": "下一次瞄准点！",
         "go-victory-default-subtitle": "西部最快的手指",
-        "go-reward-banner": "获得 +3 金币！",
+        "go-reward-banner": "获得 +{val} 金币！",
         "go-rematch-btn": "再战一局",
         "go-menu-btn": "主菜单",
         
