@@ -1357,10 +1357,19 @@ body.mobile-device .mobile-only-notice {
 }
 
 #qr-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important; /* critical for scrollbar behavior */
+    padding: 2rem 0 !important;
+    box-sizing: border-box !important;
+}
+
+@media (min-height: 600px) and (min-width: 600px) {
+    #qr-modal.active {
+        justify-content: center !important;
+        padding: 0 !important;
+    }
 }
 
 .qr-text-col {
