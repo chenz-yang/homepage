@@ -1309,3 +1309,44 @@ body.mobile-device .mobile-only-notice {
     max-width: 200px;
 }
 
+/* Menu QR Code Section Styles */
+.qr-code-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.menu-qr-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    height: calc(100% - 2.5rem);
+    padding-top: 0.4rem;
+}
+
+.menu-qr-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    border: 2px solid #d4af37;
+    background: #ffd700;
+    padding: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-qr-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(212, 175, 55, 0.4);
+}
+
+.menu-qr-desc {
+    font-size: 0.7rem;
+    color: #c5a880;
+    text-align: center;
+    margin: 0;
+    line-height: 1.3;
+}
+

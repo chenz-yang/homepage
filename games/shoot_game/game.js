@@ -103,8 +103,6 @@ class Game {
         this.startMenuLoop();
         this.setLanguage(this.currentLanguage);
         this.forceRepaint();
-        // Auto-open QR Code modal on startup for testing/visual verification
-        setTimeout(() => this.showQRCode(), 500);
     }
 
     forceRepaint() {
