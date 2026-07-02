@@ -1,5 +1,5 @@
 // Bullet physics, trajectory, wind influence, and collision handling
-import { audio } from './audio.js?v=4';
+import { audio } from './audio.js?v=28';
 
 export class Bullet {
     constructor(x, y, angle, owner, type = 'normal') {
