@@ -1350,3 +1350,80 @@ body.mobile-device .mobile-only-notice {
     line-height: 1.3;
 }
 
+/* Responsive landscape and scroll rules for QR Code Modal */
+#qr-modal {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#qr-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.qr-text-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+@media (max-height: 520px) {
+    #qr-modal.active {
+        align-items: flex-start; /* prevent clipping at the top */
+        padding: 1.5rem 0;
+    }
+
+    .qr-modal-content {
+        flex-direction: row !important;
+        max-width: 620px;
+        gap: 1.5rem;
+        padding: 1.2rem !important;
+        align-items: center;
+        text-align: left;
+    }
+
+    .qr-text-col {
+        align-items: flex-start;
+        flex-grow: 1;
+    }
+
+    .qr-modal-content h2 {
+        font-size: 1.35rem;
+        margin-bottom: 0.2rem;
+        text-align: left;
+    }
+
+    .qr-desc {
+        font-size: 0.75rem;
+        margin-bottom: 0.6rem;
+        text-align: left;
+    }
+
+    .qr-canvas-container {
+        margin-bottom: 0 !important;
+    }
+
+    #qr-image {
+        width: 130px !important;
+        height: 130px !important;
+    }
+
+    .qr-link-container {
+        margin-bottom: 0.6rem !important;
+    }
+
+    .qr-modal-buttons {
+        justify-content: flex-start !important;
+    }
+    
+    .qr-modal-buttons .btn {
+        max-width: 150px !important;
+        height: 35px !important;
+        font-size: 0.75rem !important;
+        padding: 0.3rem 0.6rem !important;
+    }
+}
+
