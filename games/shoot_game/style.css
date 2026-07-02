@@ -785,15 +785,18 @@ body {
     color: #a58e74 !important;
 }
 
-/* Active Toggle button style */
-.btn-toggle-active {
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
-    color: #fff !important;
-    border: 1px solid #2ecc71 !important;
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.2) !important;
+/* Toggle button styles (Green Outline) */
+.btn-toggle-active, .btn-toggle-inactive {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #2ecc71 !important;
+    border: 2px solid #2ecc71 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
 }
-.btn-toggle-active:hover {
-    background: linear-gradient(135deg, #27ae60 0%, #219653 100%) !important;
+.btn-toggle-active:hover, .btn-toggle-inactive:hover {
+    background: rgba(46, 204, 113, 0.1) !important;
     transform: translateY(-2px) !important;
 }
 

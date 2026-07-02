@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=28';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=28';
-import { audio } from './audio.js?v=28';
-import { TRANSLATIONS } from './translations.js?v=28';
+import { Cowboy } from './cowboy.js?v=29';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=29';
+import { audio } from './audio.js?v=29';
+import { TRANSLATIONS } from './translations.js?v=29';
 
 class Game {
     constructor() {
@@ -763,7 +763,7 @@ class Game {
                 hpStatus.style.color = '#2ecc71';
             } else {
                 toggleHpBtn.textContent = this.t('btn-activate');
-                toggleHpBtn.className = 'btn btn-shop btn-primary';
+                toggleHpBtn.className = 'btn btn-shop btn-toggle-inactive';
                 hpStatus.textContent = this.t('status-inactive');
                 hpStatus.style.color = '#e74c3c';
             }
@@ -801,7 +801,7 @@ class Game {
                 doppelStatus.textContent = this.t('status-inactive');
                 doppelStatus.className = 'status-inactive';
                 toggleDoppelBtn.textContent = this.t('btn-activate');
-                toggleDoppelBtn.className = 'btn btn-shop btn-primary';
+                toggleDoppelBtn.className = 'btn btn-shop btn-toggle-inactive';
             }
         } else {
             doppelStatus.textContent = `(${this.t('status-locked')})`;

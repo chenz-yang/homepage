@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=28">
+    <link rel="stylesheet" href="style.css?v=29">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -236,7 +236,7 @@
                             <div class="shop-item-info">
                                 <div class="shop-item-title" data-i18n="shop-hp-title">+1 Start-Leben</div>
                                 <div class="shop-item-desc" id="shop-hp-desc-container">Käufe: +<span id="shop-hp-lvl">0</span> LP (Max 10) <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span></div>
-                                <button id="toggle-hp-btn" class="btn btn-primary btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
+                                <button id="toggle-hp-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
                             </div>
                             <button id="buy-hp-btn" class="btn btn-gold btn-shop">10 🪙</button>
                         </div>
@@ -244,7 +244,7 @@
                             <div class="shop-item-info">
                                 <div class="shop-item-title" data-i18n="shop-doppel-title">Doppelgänger (Anzahl)</div>
                                 <div class="shop-item-desc" id="shop-doppel-count-container">Helfer: <span id="shop-doppel-count-val">0</span> / 3 <span id="shop-doppel-status" class="status-inactive"></span></div>
-                                <button id="toggle-doppel-btn" class="btn btn-primary btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
+                                <button id="toggle-doppel-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
                             </div>
                             <button id="buy-doppel-count-btn" class="btn btn-gold btn-shop">30 🪙</button>
                         </div>
@@ -380,6 +380,6 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=28"></script>
+    <script type="module" src="game.js?v=29"></script>
 </body>
 </html>
