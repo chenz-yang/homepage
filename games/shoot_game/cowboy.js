@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=22';
-import { audio } from './audio.js?v=22';
+import { Bullet } from './bullet.js?v=26';
+import { audio } from './audio.js?v=26';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid') {
