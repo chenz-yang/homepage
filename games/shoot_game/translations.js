@@ -90,6 +90,13 @@ export const TRANSLATIONS = {
         "btn-activate": "Einschalten",
         "btn-deactivate-action": "Ausschalten",
         
+        "qr-btn-text": "📱 QR-Code",
+        "qr-modal-title": "Mobil spielen",
+        "qr-modal-desc": "Scanne diesen QR-Code mit deinem Smartphone oder Tablet, um das Duell auf deinem Mobilgerät fortzusetzen!",
+        "qr-btn-copy": "Kopieren",
+        "qr-btn-close": "Schließen",
+        "qr-copied": "Kopiert!",
+
         "cheat-sheet-p1": "🤠 P1: WASD (Bewegen) | Q/E (Zielen) | Leertaste (Schießen)",
         "cheat-sheet-p2": "💀 P2/KI: Pfeiltasten (Bewegen) | U/O (Zielen) | Eingabe (Schießen)",
         "start-duel-btn": "Duell Starten!",
@@ -216,6 +223,13 @@ export const TRANSLATIONS = {
         "btn-activate": "启用",
         "btn-deactivate-action": "禁用",
         
+        "qr-btn-text": "📱 二维码",
+        "qr-modal-title": "手机端游玩",
+        "qr-modal-desc": "用您的手机或平板扫描此二维码，即可在移动设备上开始西部对决！",
+        "qr-btn-copy": "复制链接",
+        "qr-btn-close": "关闭",
+        "qr-copied": "已复制！",
+
         "cheat-sheet-p1": "🤠 玩家1: WASD (移动) | Q/E (瞄准) | 空格键 (射击)",
         "cheat-sheet-p2": "💀 玩家2/AI: 方向键 (移动) | U/O (瞄准) | 回车键 (射击)",
         "start-duel-btn": "开始决斗！",

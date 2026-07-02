@@ -698,6 +698,98 @@ class Game {
             this.updateWeaponsUI();
             this.updateShopUI();
         });
+
+        // QR Code button and modal listeners
+        const qrToggleBtn = document.getElementById('qr-toggle-btn');
+        if (qrToggleBtn) {
+            qrToggleBtn.addEventListener('click', () => {
+                this.showQRCode();
+                audio.playWesternWhistle();
+            });
+        }
+
+        const qrModalClose = document.getElementById('qr-modal-close');
+        if (qrModalClose) {
+            qrModalClose.addEventListener('click', () => {
+                this.closeQRCode();
+                audio.playRicochet();
+            });
+        }
+
+        const qrModal = document.getElementById('qr-modal');
+        if (qrModal) {
+            qrModal.addEventListener('click', (e) => {
+                if (e.target === qrModal) {
+                    this.closeQRCode();
+                    audio.playRicochet();
+                }
+            });
+        }
+
+        const qrCopyBtn = document.getElementById('qr-copy-btn');
+        const qrLinkInput = document.getElementById('qr-link-input');
+        if (qrCopyBtn && qrLinkInput) {
+            qrCopyBtn.addEventListener('click', () => {
+                qrLinkInput.select();
+                qrLinkInput.setSelectionRange(0, 99999);
+                try {
+                    navigator.clipboard.writeText(qrLinkInput.value).then(() => {
+                        qrCopyBtn.textContent = this.t('qr-copied');
+                        qrCopyBtn.classList.remove('btn-gold');
+                        qrCopyBtn.classList.add('btn-toggle-active');
+                        audio.playCoinSound();
+                        setTimeout(() => {
+                            qrCopyBtn.textContent = this.t('qr-btn-copy');
+                            qrCopyBtn.classList.remove('btn-toggle-active');
+                            qrCopyBtn.classList.add('btn-gold');
+                        }, 2000);
+                    });
+                } catch (err) {
+                    document.execCommand('copy');
+                    qrCopyBtn.textContent = this.t('qr-copied');
+                    setTimeout(() => {
+                        qrCopyBtn.textContent = this.t('qr-btn-copy');
+                    }, 2000);
+                }
+            });
+        }
+    }
+
+    showQRCode() {
+        const qrModal = document.getElementById('qr-modal');
+        const qrCanvas = document.getElementById('qr-canvas');
+        const qrLinkInput = document.getElementById('qr-link-input');
+        
+        if (qrModal && qrCanvas) {
+            qrModal.classList.add('active');
+            
+            const currentURL = window.location.href;
+            if (qrLinkInput) {
+                qrLinkInput.value = currentURL;
+            }
+            
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(qrCanvas, currentURL, {
+                    width: 180,
+                    margin: 2,
+                    color: {
+                        dark: '#1e120c',
+                        light: '#f7e6d4'
+                    }
+                }, function (error) {
+                    if (error) console.error("QR Code Error:", error);
+                });
+            } else {
+                console.error("QRCode library not loaded.");
+            }
+        }
+    }
+
+    closeQRCode() {
+        const qrModal = document.getElementById('qr-modal');
+        if (qrModal) {
+            qrModal.classList.remove('active');
+        }
     }
 
     updateShopUI() {
@@ -990,8 +1082,15 @@ class Game {
             if (this.state === 'playing' && [' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
             }
-            if (e.key === 'Escape' && this.state === 'playing') {
-                this.togglePause();
+            if (e.key === 'Escape') {
+                const qrModal = document.getElementById('qr-modal');
+                if (qrModal && qrModal.classList.contains('active')) {
+                    this.closeQRCode();
+                    audio.playRicochet();
+                    e.preventDefault();
+                } else if (this.state === 'playing') {
+                    this.togglePause();
+                }
             }
         });
 
