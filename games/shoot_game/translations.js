@@ -5,6 +5,7 @@ export const TRANSLATIONS = {
         "lang-chinese": "CHINESISCH",
 
         // Main Menu
+        "landscape-notice-text": "BITTE SPIELT IM QUERFORMAT!!!",
         "game-title": "Wild West Duel",
         "game-subtitle": "Zwei Colts. Ein Überlebender.",
         "prestige-title": "🏆 Saloon-Legende",
@@ -128,6 +129,7 @@ export const TRANSLATIONS = {
         "lang-chinese": "中文",
 
         // Main Menu
+        "landscape-notice-text": "请在横屏模式下游玩！！！",
         "game-title": "西部对决",
         "game-subtitle": "两把左轮。一个幸存者。",
         "prestige-title": "🏆 酒馆传奇",

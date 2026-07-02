@@ -1050,17 +1050,70 @@ body.mobile-device .gameplay-cheat-sheet {
     z-index: 10;
 }
 
-/* Smartphone specific viewport optimizations to enlarge playfield */
+/* Smartphone specific viewport optimizations to enlarge playfield and resolve layout overlaps */
+body.smartphone .western-title {
+    font-size: 1.8rem !important;
+    margin-top: 2.2rem !important;
+    margin-bottom: 0.1rem !important;
+}
+
+body.smartphone .subtitle {
+    font-size: 0.75rem !important;
+    margin-bottom: 0.4rem !important;
+    letter-spacing: 2px !important;
+}
+
+body.smartphone #language-selector {
+    top: 0.4rem !important;
+    right: 0.4rem !important;
+    gap: 0.3rem !important;
+}
+
+body.smartphone #language-selector .btn {
+    font-size: 0.65rem !important;
+    padding: 0.25rem 0.5rem !important;
+}
+
+body.smartphone #game-screen {
+    position: relative !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+}
+
 body.smartphone #canvas-wrapper {
-    max-width: 98vw;
-    max-height: calc(100vh - 110px) !important;
-    border-width: 3px;
+    max-width: 98vw !important;
+    max-height: 96vh !important;
+    height: auto !important;
+    aspect-ratio: 1200 / 800 !important;
+    border-width: 3px !important;
+    margin: auto !important;
 }
 
 body.smartphone #hud {
-    padding: 0.4rem 0.8rem;
-    max-width: 98vw;
-    border-width: 1px;
+    position: absolute !important;
+    top: 5px !important;
+    left: 5px !important;
+    right: 5px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
+}
+
+body.smartphone .hud-player,
+body.smartphone #level-display {
+    background: rgba(30, 18, 12, 0.8) !important;
+    border: 1px solid rgba(110, 67, 19, 0.4) !important;
+    border-radius: 8px !important;
+    padding: 0.25rem 0.5rem !important;
+    pointer-events: auto !important;
 }
 
 body.smartphone .player-label {
@@ -1082,11 +1135,46 @@ body.smartphone #wind-indicator {
 }
 
 body.smartphone #game-controls-bar {
-    gap: 0.5rem;
+    position: absolute !important;
+    bottom: 5px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 0.3rem !important;
+    background: rgba(30, 18, 12, 0.8) !important;
+    border: 1px solid rgba(110, 67, 19, 0.4) !important;
+    border-radius: 8px !important;
+    padding: 0.2rem 0.4rem !important;
+    z-index: 10 !important;
 }
 
 body.smartphone #game-controls-bar .btn {
-    font-size: 0.75rem !important;
-    padding: 0.4rem 0.8rem !important;
+    font-size: 0.65rem !important;
+    padding: 0.2rem 0.4rem !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* Landscape Mode Notice (shown only on iPad and Smartphone) */
+.mobile-only-notice {
+    display: none;
+}
+
+body.mobile-device .mobile-only-notice {
+    display: block;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ff9500;
+    text-shadow: 0 0 8px rgba(255, 149, 0, 0.4);
+    text-align: center;
+    letter-spacing: 1px;
+    animation: pulseNotice 2.5s infinite alternate;
+}
+
+@keyframes pulseNotice {
+    0% { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 1; transform: scale(1.03); }
 }
 
