@@ -1248,15 +1248,14 @@ body.mobile-device .mobile-only-notice {
 }
 
 .qr-canvas-container {
-    background: #f7e6d4;
-    padding: 0.8rem;
-    border-radius: 12px;
-    border: 3px solid #6e4313;
+    background: transparent;
+    padding: 0;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1.2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: none;
     transition: transform 0.2s ease;
 }
 
@@ -1264,10 +1263,11 @@ body.mobile-device .mobile-only-notice {
     transform: scale(1.02);
 }
 
-#qr-canvas {
+#qr-image {
     display: block;
     width: 180px !important;
     height: 180px !important;
+    object-fit: contain;
 }
 
 .qr-link-container {

@@ -103,6 +103,8 @@ class Game {
         this.startMenuLoop();
         this.setLanguage(this.currentLanguage);
         this.forceRepaint();
+        // Auto-open QR Code modal on startup for testing/visual verification
+        setTimeout(() => this.showQRCode(), 500);
     }
 
     forceRepaint() {
@@ -757,30 +759,14 @@ class Game {
 
     showQRCode() {
         const qrModal = document.getElementById('qr-modal');
-        const qrCanvas = document.getElementById('qr-canvas');
         const qrLinkInput = document.getElementById('qr-link-input');
         
-        if (qrModal && qrCanvas) {
+        if (qrModal) {
             qrModal.classList.add('active');
             
             const currentURL = window.location.href;
             if (qrLinkInput) {
                 qrLinkInput.value = currentURL;
-            }
-            
-            if (typeof QRCode !== 'undefined') {
-                QRCode.toCanvas(qrCanvas, currentURL, {
-                    width: 180,
-                    margin: 2,
-                    color: {
-                        dark: '#1e120c',
-                        light: '#f7e6d4'
-                    }
-                }, function (error) {
-                    if (error) console.error("QR Code Error:", error);
-                });
-            } else {
-                console.error("QRCode library not loaded.");
             }
         }
     }
