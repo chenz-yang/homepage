@@ -1665,6 +1665,10 @@ class Game {
         if (qrContainer) {
             qrContainer.classList.remove('hidden');
         }
+        
+        // Remove active gameplay class to unlock menu scrolling on mobile devices
+        document.body.classList.remove('game-playing');
+        document.documentElement.classList.remove('game-playing');
         this.updateShopUI();
         this.createMenuDust();
         this.startMenuLoop();
