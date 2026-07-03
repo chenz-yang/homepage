@@ -1051,7 +1051,7 @@ class Game {
         const timerEl = document.getElementById('prestige-timer');
 
         if (remaining <= 0) {
-            timerEl.textContent = "Wählen!";
+            timerEl.textContent = this.t('prestige-timer-choose');
             timerEl.style.color = "#2ecc71";
             keepBtn.disabled = false;
             resetBtn.disabled = false;
@@ -1406,6 +1406,12 @@ class Game {
         document.getElementById('pause-screen').classList.remove('active');
         document.getElementById('game-screen').classList.add('active');
         document.getElementById('coins-reward-banner').classList.add('hidden');
+        
+        // Hide QR container during play
+        const qrContainer = document.getElementById('qr-container');
+        if (qrContainer) {
+            qrContainer.classList.add('hidden');
+        }
         // Load entered names and update HUD
         const p1Input = document.getElementById('p1-name-input');
         const p2Input = document.getElementById('p2-name-input');
@@ -1653,6 +1659,12 @@ class Game {
         document.getElementById('game-over-screen').classList.remove('active');
         document.getElementById('pause-screen').classList.remove('active');
         document.getElementById('main-menu').classList.add('active');
+        
+        // Show QR container in menu
+        const qrContainer = document.getElementById('qr-container');
+        if (qrContainer) {
+            qrContainer.classList.remove('hidden');
+        }
         this.updateShopUI();
         this.createMenuDust();
         this.startMenuLoop();

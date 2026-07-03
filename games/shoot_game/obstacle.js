@@ -402,7 +402,8 @@ export class Obstacle {
         }
 
         const explosionRadius = 120;
-        [game.player1, game.player2].forEach(player => {
+        const targets = [game.player1, game.player2, ...game.helperAIs];
+        targets.forEach(player => {
             if (!player || player.health <= 0) return;
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
             if (dist < explosionRadius) {

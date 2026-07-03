@@ -12,7 +12,7 @@ export class Bullet {
         this.maxTrailLength = 12;
 
         // Dynamic properties based on weapon type
-        const isPlayerAligned = owner.id === 'player1' || owner.id === 'helper_ai';
+        const isPlayerAligned = owner.role === 'player1' || owner.role === 'helper_ai';
         if (type === 'heavy') {
             const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
             this.speed = 7.5 + (lvl - 1) * 1.0;

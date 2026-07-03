@@ -103,9 +103,6 @@ export const TRANSLATIONS = {
         "start-duel-btn": "Duell Starten!",
         
         // Gameplay Screen
-        "hud-p1-label": "Spieler 1 (Weiß)",
-        "hud-p2-label-ki": "Bandit (KI)",
-        "hud-p2-label-pvp": "Spieler 2 (Schwarz)",
         "suffix-black": " (Schwarz)",
         "suffix-ki": " (KI)",
         "suffix-white": " (Weiß)",
@@ -237,9 +234,6 @@ export const TRANSLATIONS = {
         "start-duel-btn": "开始决斗！",
         
         // Gameplay Screen
-        "hud-p1-label": "玩家 1 (白色)",
-        "hud-p2-label-ki": "强盗 (AI)",
-        "hud-p2-label-pvp": "玩家 2 (黑色)",
         "suffix-black": " (黑色)",
         "suffix-ki": " (AI)",
         "suffix-white": " (白色)",
