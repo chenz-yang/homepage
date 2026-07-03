@@ -3,6 +3,43 @@ class AudioSynth {
     constructor() {
         this.ctx = null;
         this.muted = false;
+
+        const unlock = () => {
+            this.init();
+            if (this.ctx) {
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume().then(() => {
+                        if (this.ctx.state === 'running') {
+                            window.removeEventListener('click', unlock);
+                            window.removeEventListener('touchstart', unlock);
+                            window.removeEventListener('touchend', unlock);
+                        }
+                    }).catch(e => console.warn("Failed to resume AudioContext:", e));
+                } else if (this.ctx.state === 'running') {
+                    window.removeEventListener('click', unlock);
+                    window.removeEventListener('touchstart', unlock);
+                    window.removeEventListener('touchend', unlock);
+                }
+            }
+        };
+
+        const setupUnlock = () => {
+            window.addEventListener('click', unlock);
+            window.addEventListener('touchstart', unlock);
+            window.addEventListener('touchend', unlock);
+        };
+
+        if (typeof window !== 'undefined') {
+            setupUnlock();
+
+            // Re-setup unlock listeners on focus or visibility change to recover from iOS device lock/suspend
+            window.addEventListener('focus', setupUnlock);
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    setupUnlock();
+                }
+            });
+        }
     }
 
     init() {

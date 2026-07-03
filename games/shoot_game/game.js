@@ -1,7 +1,9 @@
-import { Cowboy } from './cowboy.js?v=33';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=33';
-import { audio } from './audio.js?v=33';
-import { TRANSLATIONS } from './translations.js?v=33';
+import { Cowboy } from './cowboy.js?v=35';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=35';
+import { audio } from './audio.js?v=35';
+import { TRANSLATIONS } from './translations.js?v=35';
+
+console.log("Wild West Duel - Loaded version 35");
 
 class Game {
     constructor() {
@@ -130,6 +132,7 @@ class Game {
         const oldLang = this.currentLanguage;
         this.currentLanguage = lang;
         localStorage.setItem('wild_west_lang', lang);
+        console.log("setLanguage: changed to", lang, "state:", this.state);
 
         // Update button states in language selector
         const originalBtn = document.getElementById('lang-btn-original');
@@ -220,6 +223,15 @@ class Game {
                 } else {
                     title.textContent = this.t('go-victory-title', { name: this.p1Name });
                     subtitle.textContent = this.t('go-p1-win-subtitle');
+                    
+                    // Update reward banner translation dynamically if in PvE mode
+                    if (this.mode === 'pve') {
+                        const coinsEarned = this.aiDifficulty >= 5 ? 5 : 3;
+                        const rewardBanner = document.getElementById('coins-reward-banner');
+                        if (rewardBanner) {
+                            rewardBanner.innerHTML = this.t('go-reward-banner', { val: coinsEarned });
+                        }
+                    }
                 }
             }
         }
@@ -1970,14 +1982,18 @@ class Game {
         const title = document.getElementById('victory-title');
         const subtitle = document.getElementById('victory-subtitle');
 
+        const rewardBanner = document.getElementById('coins-reward-banner');
+
         if (this.player1.health <= 0 && this.player2.health <= 0) {
             title.textContent = this.t('go-draw-title');
             subtitle.textContent = this.t('go-draw-subtitle');
+            if (rewardBanner) rewardBanner.classList.add('hidden');
         } else if (this.player1.health <= 0) {
             const oppName = this.mode === 'pvp' ? this.p2Name : this.p2NamePvE;
             title.textContent = this.t('go-victory-title', { name: oppName });
             subtitle.textContent = this.mode === 'pvp' ? this.t('go-p2-win-pvp-subtitle', { oppName, p1Name: this.p1Name }) : this.t('go-p2-win-ki-subtitle');
             audio.playHit();
+            if (rewardBanner) rewardBanner.classList.add('hidden');
         } else {
             title.textContent = this.t('go-victory-title', { name: this.p1Name });
             subtitle.textContent = this.t('go-p1-win-subtitle');
@@ -1989,7 +2005,6 @@ class Game {
                 this.coins += coinsEarned;
                 localStorage.setItem('wild_west_coins', this.coins);
                 
-                const rewardBanner = document.getElementById('coins-reward-banner');
                 if (rewardBanner) {
                     rewardBanner.innerHTML = this.t('go-reward-banner', { val: coinsEarned });
                     rewardBanner.classList.remove('hidden');
@@ -1999,6 +2014,8 @@ class Game {
                 setTimeout(() => {
                     audio.playCoinSound();
                 }, 800);
+            } else {
+                if (rewardBanner) rewardBanner.classList.add('hidden');
             }
         }
 
