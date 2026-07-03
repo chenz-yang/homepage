@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Wild West Duel - Mobile Simulator</title>
+    <style>
+        /* Simulator indicator bar at the top */
+        #simulator-indicator {
+            background: #ff9500;
+            color: #1a0f0a;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 0.4rem;
+            position: relative;
+            z-index: 99999;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+    <script>
+        // Mock mobile device/touch properties for testing on PC
+        Object.defineProperty(navigator, 'userAgent', {
+            get: function () { 
+                return 'Mozilla/5.0 (iPad; CPU OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1'; 
+            },
+            configurable: true
+        });
+        Object.defineProperty(navigator, 'maxTouchPoints', {
+            get: function () { return 5; },
+            configurable: true
+        });
+        window.ontouchstart = function() {}; // mock touch support
+        
+        console.log("Mocking mobile iPad device coordinates and touch support.");
+
+        // Fetch index.html and inject it dynamically
+        fetch('index.html')
+            .then(r => r.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Copy body contents
+                const gameContainer = doc.getElementById('game-container');
+                if (gameContainer) {
+                    document.body.innerHTML = '<div id="simulator-indicator">📱 IPAD & SMARTPHONE SIMULATOR (Zum Spielen F12 drücken und Touch-Modus in DevTools aktivieren!)</div>' + doc.body.innerHTML;
+                } else {
+                    document.body.innerHTML = doc.body.innerHTML;
+                }
+                
+                // Copy head elements (except title and viewport to keep simulator title)
+                Array.from(doc.head.children).forEach(child => {
+                    if (child.tagName !== 'TITLE' && child.tagName !== 'META') {
+                        const newEl = document.createElement(child.tagName);
+                        Array.from(child.attributes).forEach(attr => newEl.setAttribute(attr.name, attr.value));
+                        newEl.innerHTML = child.innerHTML;
+                        document.head.appendChild(newEl);
+                    }
+                });
+
+                // Load modules
+                const scripts = doc.querySelectorAll('script[type="module"]');
+                scripts.forEach(s => {
+                    const newScript = document.createElement('script');
+                    newScript.type = 'module';
+                    newScript.src = s.src;
+                    document.body.appendChild(newScript);
+                });
+            });
+    </script>
+</head>
+<body style="background: radial-gradient(circle at center, #2e1d15 0%, #130a06 100%); margin: 0; min-height: 100vh;">
+    <div style="text-align: center; padding: 3rem; font-family: sans-serif; color: #ffd700;">
+        <h2>Wild West Duel</h2>
+        <p>Lade Mobile Simulator...</p>
+    </div>
+</body>
+</html>
