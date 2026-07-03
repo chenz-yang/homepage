@@ -1,9 +1,5 @@
 export const TRANSLATIONS = {
     original: {
-        // Language Buttons
-        "lang-original": "ORIGINAL",
-        "lang-chinese": "CHINESISCH",
-
         // Main Menu
         "landscape-notice-text": "BITTE SPIELT IM QUERFORMAT!!!",
         "game-title": "Wild West Duel",
@@ -131,10 +127,6 @@ export const TRANSLATIONS = {
         "pause-menu-btn": "Hauptmenü"
     },
     chinese: {
-        // Language Buttons
-        "lang-original": "原版",
-        "lang-chinese": "中文",
-
         // Main Menu
         "landscape-notice-text": "请在横屏模式下游玩！！！",
         "game-title": "西部对决",
