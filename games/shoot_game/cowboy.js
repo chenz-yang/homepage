@@ -117,7 +117,7 @@ export class Cowboy {
 
     shoot(game) {
         if (this.health <= 0) return;
-        if (game && game.isOnBridge && game.isOnBridge(this.x, this.y)) return; // Brückenblockade
+        if (game && game.isInTunnel && game.isInTunnel(this.x, this.y)) return; // Tunnelblockade
 
         const now = Date.now();
         if (now - this.lastShotTime >= this.shootCooldown) {

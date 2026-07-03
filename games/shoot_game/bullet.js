@@ -148,8 +148,8 @@ export class Bullet {
         }
 
         for (let target of targets) {
-            if (game && game.isOnBridge && game.isOnBridge(target.x, target.y)) {
-                continue; // Can't be hit on bridges!
+            if (game && game.isInTunnel && game.isInTunnel(target.x, target.y)) {
+                continue; // Can't be hit inside the tunnel (under the roof)!
             }
             const dist = Math.hypot(this.x - target.x, this.y - target.y);
             if (dist < this.radius + target.radius) {

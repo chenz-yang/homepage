@@ -497,7 +497,8 @@ export class Tumbleweed {
             this.destroyed = true;
         }
 
-        [game.player1, game.player2].forEach(player => {
+        const targets = [game.player1, game.player2, ...game.helperAIs];
+        targets.forEach(player => {
             if (!player || player.health <= 0) return;
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
             const minDist = this.radius + player.radius;
