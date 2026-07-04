@@ -35,8 +35,8 @@
         
         console.log("Mocking mobile iPad device coordinates and touch support.");
 
-        // Fetch index.html and inject it dynamically
-        fetch('index.html')
+        // Fetch index.html with a cache-buster and inject it dynamically
+        fetch('index.html?v=' + Date.now())
             .then(r => r.text())
             .then(html => {
                 const parser = new DOMParser();

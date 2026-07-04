@@ -611,6 +611,7 @@ class Game {
                 localStorage.setItem('wild_west_rapid_level', this.rapidLvl);
                 audio.playCoinSound();
                 this.updateShopUI();
+                this.updateWeaponsUI();
             } else {
                 audio.playRicochet();
                 buyRapidBtn.classList.add('shake');
@@ -630,6 +631,7 @@ class Game {
                 localStorage.setItem('wild_west_heavy_level', this.heavyLvl);
                 audio.playCoinSound();
                 this.updateShopUI();
+                this.updateWeaponsUI();
             } else {
                 audio.playRicochet();
                 buyHeavyBtn.classList.add('shake');
@@ -649,6 +651,7 @@ class Game {
                 localStorage.setItem('wild_west_bomb_level', this.bombLvl);
                 audio.playCoinSound();
                 this.updateShopUI();
+                this.updateWeaponsUI();
             } else {
                 audio.playRicochet();
                 buyBombBtn.classList.add('shake');
@@ -1021,6 +1024,33 @@ class Game {
                     document.querySelector('.weapon-btn[data-player="p2"][data-weapon="rapid"]').classList.add('p2-wep-active');
                 }
             }
+        }
+
+        // Dynamically update Player 1's weapon points display with actual upgraded damage values
+        const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
+        
+        const p1RapidPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="rapid"] .wep-pts');
+        if (p1RapidPts) {
+            const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
+            p1RapidPts.textContent = `${rapidDmg}${ptsUnit}`;
+        }
+        
+        const p1HeavyPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="heavy"] .wep-pts');
+        if (p1HeavyPts) {
+            const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
+            p1HeavyPts.textContent = `${heavyDmg}${ptsUnit}`;
+        }
+        
+        const p1BombPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="bomb"] .wep-pts');
+        if (p1BombPts) {
+            const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
+            p1BombPts.textContent = `${bombDmg}${ptsUnit}`;
+        }
+        
+        const p1LaserPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="laser"] .wep-pts');
+        if (p1LaserPts) {
+            const laserDmg = this.lasergunLvl >= 5 ? 5 : (this.lasergunLvl >= 3 ? 4 : 3);
+            p1LaserPts.textContent = `${laserDmg}${ptsUnit}`;
         }
     }
 
