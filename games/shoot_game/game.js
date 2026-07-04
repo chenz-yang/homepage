@@ -1052,6 +1052,7 @@ class Game {
             const laserDmg = this.lasergunLvl >= 5 ? 5 : (this.lasergunLvl >= 3 ? 4 : 3);
             p1LaserPts.textContent = `${laserDmg}${ptsUnit}`;
         }
+        this.forceRepaint();
     }
 
     updatePrestigeUI() {
