@@ -1159,16 +1159,24 @@ body.smartphone #game-controls-bar .btn {
     display: none;
 }
 
-body.mobile-device .mobile-only-notice {
-    display: block;
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: #ff9500;
-    text-shadow: 0 0 8px rgba(255, 149, 0, 0.4);
-    text-align: center;
-    letter-spacing: 1px;
-    animation: pulseNotice 2.5s infinite alternate;
+@media (orientation: portrait) {
+    body.mobile-device .mobile-only-notice {
+        display: block;
+        margin-top: 1rem;
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #ff9500;
+        text-shadow: 0 0 8px rgba(255, 149, 0, 0.4);
+        text-align: center;
+        letter-spacing: 1px;
+        animation: pulseNotice 2.5s infinite alternate;
+    }
+}
+
+@media (orientation: landscape) {
+    body.mobile-device .mobile-only-notice {
+        display: none;
+    }
 }
 
 @keyframes pulseNotice {

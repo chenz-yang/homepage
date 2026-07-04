@@ -1,7 +1,7 @@
-import { Cowboy } from './cowboy.js?v=35';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=35';
-import { audio } from './audio.js?v=35';
-import { TRANSLATIONS } from './translations.js?v=35';
+import { Cowboy } from './cowboy.js?v=38';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=38';
+import { audio } from './audio.js?v=38';
+import { TRANSLATIONS } from './translations.js?v=38';
 
 console.log("Wild West Duel - Loaded version 35");
 
@@ -1677,8 +1677,6 @@ class Game {
 
     exitToMenu() {
         this.resetJoystickState();
-        document.body.classList.remove('touch-device');
-        document.documentElement.classList.remove('touch-device');
         document.body.classList.remove('game-playing');
         document.documentElement.classList.remove('game-playing');
         document.body.classList.remove('mode-pvp');
@@ -2016,8 +2014,6 @@ class Game {
     }
 
     endGame() {
-        document.body.classList.remove('touch-device');
-        document.documentElement.classList.remove('touch-device');
         document.body.classList.remove('game-playing');
         document.documentElement.classList.remove('game-playing');
         document.body.classList.remove('mode-pvp');
