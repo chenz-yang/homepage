@@ -1473,7 +1473,7 @@ class Game {
 
         // Spawn Cowboys: P1 is Black, P2/AI is White
         this.player1 = new Cowboy(120, this.canvas.height / 2 + 30, 'player1', this.p1Weapon);
-        this.player1.maxHealth = 5 + (this.hpActive ? this.hpUpgrades : 0);
+        this.player1.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
         this.player1.health = this.player1.maxHealth;
         
         if (this.mode === 'pvp') {
@@ -1704,23 +1704,27 @@ class Game {
         this.forceRepaint();
     }
 
-
     updateHUD() {
-        const renderStars = (containerId, health, maxHealth = 5) => {
+        const renderStars = (containerId, health, maxHealth = 50) => {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
-            for (let i = 0; i < maxHealth; i++) {
-                const star = document.createElement('div');
-                star.className = 'sheriff-star';
-                if (i >= health) {
-                    star.classList.add('lost');
-                }
-                container.appendChild(star);
+            
+            const countSpan = document.createElement('span');
+            countSpan.className = 'hp-count';
+            countSpan.textContent = health;
+            
+            const star = document.createElement('div');
+            star.className = 'sheriff-star';
+            if (health <= 0) {
+                star.classList.add('lost');
             }
+            
+            container.appendChild(countSpan);
+            container.appendChild(star);
         };
 
-        renderStars('p1-hearts', this.player1 ? this.player1.health : (5 + this.hpUpgrades), this.player1 ? this.player1.maxHealth : (5 + this.hpUpgrades));
-        renderStars('p2-hearts', this.player2 ? this.player2.health : 5, this.player2 ? this.player2.maxHealth : 5);
+        renderStars('p1-hearts', this.player1 ? this.player1.health : (50 + this.hpUpgrades), this.player1 ? this.player1.maxHealth : (50 + this.hpUpgrades));
+        renderStars('p2-hearts', this.player2 ? this.player2.health : 50, this.player2 ? this.player2.maxHealth : 50);
 
         const windText = document.getElementById('wind-text');
         const windArrow = document.getElementById('wind-arrow');

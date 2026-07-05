@@ -485,9 +485,17 @@ body {
 
 .hearts {
     display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
     max-width: 280px;
+}
+
+.hp-count {
+    font-family: 'Rye', serif;
+    font-size: 1.5rem;
+    color: #e5a93b;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1;
 }
 
 /* Sheriff star HP indicators */

@@ -21,8 +21,8 @@ export class Cowboy {
             this.color = role === 'player1' ? '#212529' : '#f8f9fa';
             this.radius = 20;
             this.speed = 3;
-            this.maxHealth = 5;
-            this.health = 5;
+            this.maxHealth = 50;
+            this.health = 50;
             this.angle = role === 'player1' ? 0 : Math.PI; // aim direction
         }
         
