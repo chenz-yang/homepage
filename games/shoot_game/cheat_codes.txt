@@ -1,5 +1,5 @@
 localStorage.setItem('wild_west_coins', '1000'); window.location.reload();
-game.lastPrestigeChoiceTime = Date.now() - 11 * 60 * 1000;
+game.lastPrestigeChoiceTime = Date.now() - 21 * 60 * 1000;
 game.player1.health = 99; game.updateHUD();
 game.player2.health = 1;
 game.helperAIs.forEach(h => { h.health = 99; });

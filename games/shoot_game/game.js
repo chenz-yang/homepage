@@ -1074,7 +1074,7 @@ class Game {
     updatePrestigeTimer() {
         if (!this.lastPrestigeChoiceTime) return;
         const elapsed = Date.now() - this.lastPrestigeChoiceTime;
-        const totalDuration = 10 * 60 * 1000; // 10 minutes in ms
+        const totalDuration = 20 * 60 * 1000; // 20 minutes in ms
         const remaining = Math.max(0, totalDuration - elapsed);
 
         const keepBtn = document.getElementById('prestige-keep-btn');

@@ -5,21 +5,11 @@ class AudioSynth {
         this.muted = false;
 
         const unlock = () => {
-            this.init();
-            if (this.ctx) {
-                if (this.ctx.state === 'suspended') {
-                    this.ctx.resume().then(() => {
-                        if (this.ctx.state === 'running') {
-                            window.removeEventListener('click', unlock);
-                            window.removeEventListener('touchstart', unlock);
-                            window.removeEventListener('touchend', unlock);
-                        }
-                    }).catch(e => console.warn("Failed to resume AudioContext:", e));
-                } else if (this.ctx.state === 'running') {
-                    window.removeEventListener('click', unlock);
-                    window.removeEventListener('touchstart', unlock);
-                    window.removeEventListener('touchend', unlock);
-                }
+            if (!this.ctx) {
+                this.init();
+            }
+            if (this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
+                this.ctx.resume().catch(e => console.warn("Failed to resume AudioContext on gesture:", e));
             }
         };
 
@@ -31,14 +21,6 @@ class AudioSynth {
 
         if (typeof window !== 'undefined') {
             setupUnlock();
-
-            // Re-setup unlock listeners on focus or visibility change to recover from iOS device lock/suspend
-            window.addEventListener('focus', setupUnlock);
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible') {
-                    setupUnlock();
-                }
-            });
         }
     }
 
@@ -541,6 +523,9 @@ class AudioSynth {
         };
 
         const scheduler = () => {
+            if (nextStepTime < ctx.currentTime) {
+                nextStepTime = ctx.currentTime;
+            }
             while (nextStepTime < ctx.currentTime + 0.1) {
                 playStep();
             }
