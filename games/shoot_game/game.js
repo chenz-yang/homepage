@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=39';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=39';
-import { audio } from './audio.js?v=39';
-import { TRANSLATIONS } from './translations.js?v=39';
+import { Cowboy } from './cowboy.js?v=40';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=40';
+import { audio } from './audio.js?v=40';
+import { TRANSLATIONS } from './translations.js?v=40';
 
-console.log("Wild West Duel - Loaded version 39");
+console.log("Wild West Duel - Loaded version 40");
 
 class Game {
     constructor() {
@@ -55,8 +55,8 @@ class Game {
         // Tumbleweed spawn controller
         this.tumbleweedSpawnTimer = 0;
 
-        // Shop & Upgrades persistent stats
-        this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
+        const savedCoins = localStorage.getItem('wild_west_coins');
+        this.coins = (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) ? Infinity : (parseInt(savedCoins) || 0);
         this.hpUpgrades = parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0;
         this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
         this.doppelgangerCount = parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0;
@@ -779,8 +779,8 @@ class Game {
                     versionClicks = 0;
                     
                     // Add coins
-                    this.coins = 1000;
-                    localStorage.setItem('wild_west_coins', '1000');
+                    this.coins = Infinity;
+                    localStorage.setItem('wild_west_coins', 'Infinity');
                     
                     // Max out all upgrades
                     this.hpUpgrades = 10;
@@ -812,8 +812,27 @@ class Game {
                     this.updateWeaponsUI();
                     audio.playCoinSound();
                     
-                    alert("Cheat aktiviert! 1000 Münzen hinzugefügt, alle Upgrades maximiert und Prestige-Countdown (20:00) gestartet.");
+                    alert("Cheat aktiviert! Unendlich Münzen hinzugefügt, alle Upgrades maximiert und Prestige-Countdown (20:00) gestartet.");
                 }
+            });
+        }
+
+        // Secret QR Code Click Listener to reset coins to 0
+        const qrImages = document.querySelectorAll('.menu-qr-image, #qr-image');
+        if (qrImages.length > 0) {
+            let qrClicks = 0;
+            qrImages.forEach(img => {
+                img.addEventListener('click', () => {
+                    qrClicks++;
+                    if (qrClicks >= 5) {
+                        qrClicks = 0;
+                        this.coins = 0;
+                        localStorage.setItem('wild_west_coins', '0');
+                        this.updateShopUI();
+                        audio.playRicochet();
+                        alert("Münzen auf 0 zurückgesetzt!");
+                    }
+                });
             });
         }
     }
@@ -840,7 +859,8 @@ class Game {
     }
 
     updateShopUI() {
-        document.getElementById('shop-coins-val').textContent = this.coins;
+        const displayedCoins = (this.coins === Infinity || this.coins >= 99999999) ? "Unendlich" : this.coins;
+        document.getElementById('shop-coins-val').textContent = displayedCoins;
 
         // Render descriptions from templates so that the span IDs are present
         const hpDescContainer = document.getElementById('shop-hp-desc-container');
