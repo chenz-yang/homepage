@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=40';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=40';
-import { audio } from './audio.js?v=40';
-import { TRANSLATIONS } from './translations.js?v=40';
+import { Cowboy } from './cowboy.js?v=41';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=41';
+import { audio } from './audio.js?v=41';
+import { TRANSLATIONS } from './translations.js?v=41';
 
-console.log("Wild West Duel - Loaded version 40");
+console.log("Wild West Duel - Loaded version 41");
 
 class Game {
     constructor() {
@@ -782,37 +782,11 @@ class Game {
                     this.coins = Infinity;
                     localStorage.setItem('wild_west_coins', 'Infinity');
                     
-                    // Max out all upgrades
-                    this.hpUpgrades = 10;
-                    this.hpActive = true;
-                    this.doppelgangerCount = 3;
-                    this.doppelgangerLvl = 5;
-                    this.doppelgangerActive = true;
-                    this.lasergunLvl = 5;
-                    this.rapidLvl = 5;
-                    this.heavyLvl = 5;
-                    this.bombLvl = 5;
-                    
-                    localStorage.setItem('wild_west_hp_upgrade', '10');
-                    localStorage.setItem('wild_west_hp_active', 'true');
-                    localStorage.setItem('wild_west_doppelganger_count', '3');
-                    localStorage.setItem('wild_west_doppelganger_level', '5');
-                    localStorage.setItem('wild_west_doppelganger_active', 'true');
-                    localStorage.setItem('wild_west_lasergun_level', '5');
-                    localStorage.setItem('wild_west_rapid_level', '5');
-                    localStorage.setItem('wild_west_heavy_level', '5');
-                    localStorage.setItem('wild_west_bomb_level', '5');
-                    
-                    // Start prestige countdown
-                    this.lastPrestigeChoiceTime = Date.now();
-                    localStorage.setItem('wild_west_prestige_time', this.lastPrestigeChoiceTime);
-                    
                     // Update UI
                     this.updateShopUI();
-                    this.updateWeaponsUI();
                     audio.playCoinSound();
                     
-                    alert("Cheat aktiviert! Unendlich Münzen hinzugefügt, alle Upgrades maximiert und Prestige-Countdown (20:00) gestartet.");
+                    alert("Cheat aktiviert! Unendlich Münzen hinzugefügt (bestehende Upgrades bleiben unverändert).");
                 }
             });
         }
