@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=38';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=38';
-import { audio } from './audio.js?v=38';
-import { TRANSLATIONS } from './translations.js?v=38';
+import { Cowboy } from './cowboy.js?v=39';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=39';
+import { audio } from './audio.js?v=39';
+import { TRANSLATIONS } from './translations.js?v=39';
 
-console.log("Wild West Duel - Loaded version 35");
+console.log("Wild West Duel - Loaded version 39");
 
 class Game {
     constructor() {
@@ -765,6 +765,54 @@ class Game {
                     setTimeout(() => {
                         qrCopyBtn.textContent = this.t('qr-btn-copy');
                     }, 2000);
+                }
+            });
+        }
+
+        // Secret Version Badge Click Cheat for Mobile / iPad (No F12)
+        const versionBadge = document.getElementById('version-badge');
+        if (versionBadge) {
+            let versionClicks = 0;
+            versionBadge.addEventListener('click', () => {
+                versionClicks++;
+                if (versionClicks >= 5) {
+                    versionClicks = 0;
+                    
+                    // Add coins
+                    this.coins = 1000;
+                    localStorage.setItem('wild_west_coins', '1000');
+                    
+                    // Max out all upgrades
+                    this.hpUpgrades = 10;
+                    this.hpActive = true;
+                    this.doppelgangerCount = 3;
+                    this.doppelgangerLvl = 5;
+                    this.doppelgangerActive = true;
+                    this.lasergunLvl = 5;
+                    this.rapidLvl = 5;
+                    this.heavyLvl = 5;
+                    this.bombLvl = 5;
+                    
+                    localStorage.setItem('wild_west_hp_upgrade', '10');
+                    localStorage.setItem('wild_west_hp_active', 'true');
+                    localStorage.setItem('wild_west_doppelganger_count', '3');
+                    localStorage.setItem('wild_west_doppelganger_level', '5');
+                    localStorage.setItem('wild_west_doppelganger_active', 'true');
+                    localStorage.setItem('wild_west_lasergun_level', '5');
+                    localStorage.setItem('wild_west_rapid_level', '5');
+                    localStorage.setItem('wild_west_heavy_level', '5');
+                    localStorage.setItem('wild_west_bomb_level', '5');
+                    
+                    // Start prestige countdown
+                    this.lastPrestigeChoiceTime = Date.now();
+                    localStorage.setItem('wild_west_prestige_time', this.lastPrestigeChoiceTime);
+                    
+                    // Update UI
+                    this.updateShopUI();
+                    this.updateWeaponsUI();
+                    audio.playCoinSound();
+                    
+                    alert("Cheat aktiviert! 1000 Münzen hinzugefügt, alle Upgrades maximiert und Prestige-Countdown (20:00) gestartet.");
                 }
             });
         }
