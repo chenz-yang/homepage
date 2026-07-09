@@ -55,8 +55,12 @@ class Game {
         // Tumbleweed spawn controller
         this.tumbleweedSpawnTimer = 0;
 
-        const savedCoins = localStorage.getItem('wild_west_coins');
-        this.coins = (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) ? Infinity : (parseInt(savedCoins) || 0);
+        let savedCoins = localStorage.getItem('wild_west_coins');
+        if (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) {
+            localStorage.setItem('wild_west_coins', '0');
+            savedCoins = '0';
+        }
+        this.coins = parseInt(savedCoins) || 0;
         this.hpUpgrades = parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0;
         this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
         this.doppelgangerCount = parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0;
@@ -766,47 +770,6 @@ class Game {
                         qrCopyBtn.textContent = this.t('qr-btn-copy');
                     }, 2000);
                 }
-            });
-        }
-
-        // Secret Version Badge Click Cheat for Mobile / iPad (No F12)
-        const versionBadge = document.getElementById('version-badge');
-        if (versionBadge) {
-            let versionClicks = 0;
-            versionBadge.addEventListener('click', () => {
-                versionClicks++;
-                if (versionClicks >= 5) {
-                    versionClicks = 0;
-                    
-                    // Add coins
-                    this.coins = Infinity;
-                    localStorage.setItem('wild_west_coins', 'Infinity');
-                    
-                    // Update UI
-                    this.updateShopUI();
-                    audio.playCoinSound();
-                    
-                    alert("Cheat aktiviert! Unendlich Münzen hinzugefügt (bestehende Upgrades bleiben unverändert).");
-                }
-            });
-        }
-
-        // Secret QR Code Click Listener to reset coins to 0
-        const qrImages = document.querySelectorAll('.menu-qr-image, #qr-image');
-        if (qrImages.length > 0) {
-            let qrClicks = 0;
-            qrImages.forEach(img => {
-                img.addEventListener('click', () => {
-                    qrClicks++;
-                    if (qrClicks >= 5) {
-                        qrClicks = 0;
-                        this.coins = 0;
-                        localStorage.setItem('wild_west_coins', '0');
-                        this.updateShopUI();
-                        audio.playRicochet();
-                        alert("Münzen auf 0 zurückgesetzt!");
-                    }
-                });
             });
         }
     }
