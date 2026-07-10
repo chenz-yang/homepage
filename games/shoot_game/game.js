@@ -1448,6 +1448,11 @@ class Game {
         if (qrContainer) {
             qrContainer.classList.add('hidden');
         }
+        // Hide Language Selector during play
+        const langSelector = document.getElementById('language-selector');
+        if (langSelector) {
+            langSelector.classList.add('hidden');
+        }
         // Load entered names and update HUD
         const p1Input = document.getElementById('p1-name-input');
         const p2Input = document.getElementById('p2-name-input');
@@ -1698,6 +1703,11 @@ class Game {
         const qrContainer = document.getElementById('qr-container');
         if (qrContainer) {
             qrContainer.classList.remove('hidden');
+        }
+        // Show Language Selector in menu
+        const langSelector = document.getElementById('language-selector');
+        if (langSelector) {
+            langSelector.classList.remove('hidden');
         }
         
         // Remove active gameplay class to unlock menu scrolling on mobile devices
