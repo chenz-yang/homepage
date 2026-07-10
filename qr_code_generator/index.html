@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium QR Code Generator</title>
+  <meta name="description" content="Erstellen und personalisieren Sie hochauflösende QR-Codes mit Farbverläufen, Logos und individuellen Stilen direkt im Browser.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- QR Code Styling Library -->
+  <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3H9V9H3V3ZM5 5V7H7V5H5ZM3 15H9V21H3V15ZM5 17V19H7V17H5ZM15 3H21V9H15V3ZM17 5V7H19V5H17ZM15 15H18V18H15V15ZM18 18H21V21H18V18ZM15 18H18V21H15V18ZM11 11H13V13H11V11ZM11 7H13V9H11V7ZM7 11H9V13H7V11ZM11 15H13V17H11V15ZM15 11H17V13H17.02L17 11ZM17 13H19V15H17V13ZM19 11H21V13H19V11ZM13 19H15V21H13V19ZM11 3H13V5H11V3Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h1>QR-Code Studio</h1>
+      </div>
+      <p class="subtitle">Erstellen Sie wunderschöne, scannbare QR-Codes für Ihre Links und Apps</p>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Left Panel: Settings -->
+      <section class="settings-panel card">
+        <div class="panel-section">
+          <h2><span class="step-num">1</span> Inhalt eingeben</h2>
+          <div class="input-group">
+            <label for="qr-data">URL oder Text</label>
+            <input type="text" id="qr-data" placeholder="https://..." value="https://yang.zchen.org/games/shoot_game/index.html">
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2><span class="step-num">2</span> Farben anpassen</h2>
+          
+          <div class="color-options-grid">
+            <div class="input-group">
+              <label for="color-type">Farbtyp</label>
+              <select id="color-type">
+                <option value="single">Einfache Farbe</option>
+                <option value="gradient">Farbverlauf</option>
+              </select>
+            </div>
+
+            <div class="input-group" id="bg-color-group">
+              <label for="bg-color">Hintergrund</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="bg-color" value="#ffffff">
+                <span class="color-hex">#ffffff</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="color-options-grid" id="single-color-controls">
+            <div class="input-group">
+              <label for="qr-color">QR-Code Farbe</label>
+              <div class="color-picker-wrapper">
+                <input type="color" id="qr-color" value="#0f172a">
+                <span class="color-hex">#0f172a</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gradient-controls hidden" id="gradient-color-controls">
+            <div class="color-options-grid">
+              <div class="input-group">
+                <label for="qr-color-1">Startfarbe</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="qr-color-1" value="#3b82f6">
+                  <span class="color-hex">#3b82f6</span>
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="qr-color-2">Endfarbe</label>
+                <div class="color-picker-wrapper">
+                  <input type="color" id="qr-color-2" value="#8b5cf6">
+                  <span class="color-hex">#8b5cf6</span>
+                </div>
+              </div>
+            </div>
+            <div class="color-options-grid">
+              <div class="input-group">
+                <label for="gradient-type">Verlaufstyp</label>
+                <select id="gradient-type">
+                  <option value="linear">Linear</option>
+                  <option value="radial">Radial</option>
+                </select>
+              </div>
+              <div class="input-group" id="gradient-angle-group">
+                <label for="gradient-angle">Winkel (Grad)</label>
+                <input type="number" id="gradient-angle" min="0" max="360" value="45">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2><span class="step-num">3</span> Design & Muster</h2>
+          
+          <div class="design-grid">
+            <div class="input-group">
+              <label for="dots-type">Punkt-Muster</label>
+              <select id="dots-type">
+                <option value="rounded">Abgerundet</option>
+                <option value="dots">Punkte</option>
+                <option value="classy">Edel (Classy)</option>
+                <option value="classy-rounded">Edel abgerundet</option>
+                <option value="square" selected>Quadrate (Standard)</option>
+                <option value="extra-rounded">Extra abgerundet</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="corners-type">Äußere Ecken</label>
+              <select id="corners-type">
+                <option value="square" selected>Quadratisch</option>
+                <option value="dot">Punkt</option>
+                <option value="rounded">Abgerundet</option>
+                <option value="extra-rounded">Extra abgerundet</option>
+              </select>
+            </div>
+
+            <div class="input-group">
+              <label for="corners-dot-type">Innere Ecken</label>
+              <select id="corners-dot-type">
+                <option value="square" selected>Quadratisch</option>
+                <option value="dot">Punkt</option>
+                <option value="rounded">Abgerundet</option>
+              </select>
+            </div>
+            
+            <div class="input-group">
+              <label for="qr-error-correction">Fehlerkorrektur (EC)</label>
+              <select id="qr-error-correction">
+                <option value="L">Niedrig (7%)</option>
+                <option value="M" selected>Mittel (15%)</option>
+                <option value="Q">Viertel (25%)</option>
+                <option value="H">Hoch (30% - Empfohlen bei Logos)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <h2><span class="step-num">4</span> Logo hinzufügen (Optional)</h2>
+          <div class="logo-section">
+            <div class="file-upload-wrapper">
+              <input type="file" id="logo-file" accept="image/*" class="file-input">
+              <label for="logo-file" class="file-label">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 16V8M12 8L9 11M12 8L15 11M3 15V19C3 19.5304 3.21071 20.0391 3.58579 20.4142C3.96086 20.7893 4.46957 21 5 21H19C19.5304 21 20.0391 20.7893 20.4142 20.4142C20.7893 20.0391 21 19.5304 21 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Logo hochladen</span>
+              </label>
+            </div>
+            <button id="remove-logo" class="btn btn-outline btn-sm hidden">Logo entfernen</button>
+          </div>
+          
+          <div class="logo-options-grid hidden" id="logo-options">
+            <div class="input-group">
+              <label for="logo-size">Logo-Größe</label>
+              <input type="range" id="logo-size" min="0.05" max="0.3" step="0.01" value="0.15">
+            </div>
+            <div class="input-group">
+              <label for="logo-margin">Schutzbereich (px)</label>
+              <input type="number" id="logo-margin" min="0" max="30" value="5">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right Panel: Preview & Downloads -->
+      <section class="preview-panel">
+        <div class="preview-card card">
+          <div class="preview-header">
+            <h3>Vorschau</h3>
+            <span class="status-badge" id="scan-status">Aktiv</span>
+          </div>
+          
+          <div class="qr-code-wrapper">
+            <div id="qr-code-canvas"></div>
+          </div>
+
+          <div class="download-section">
+            <div class="download-format-selector">
+              <button class="format-btn active" data-format="png">PNG</button>
+              <button class="format-btn" data-format="svg">SVG</button>
+              <button class="format-btn" data-format="jpeg">JPEG</button>
+            </div>
+            
+            <button id="btn-download" class="btn btn-primary btn-block">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15V3M12 15L8 11M12 15L16 11M3 17V19C3 19.5304 3.21071 20.0391 3.58579 20.4142C3.96086 20.7893 4.46957 21 5 21H19C19.5304 21 20.0391 20.7893 20.4142 20.4142C20.7893 20.0391 21 19.5304 21 19V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              QR-Code herunterladen
+            </button>
+            
+            <button id="btn-copy" class="btn btn-secondary btn-block">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 5H6C4.89543 5 4 5.89543 4 7V19C4 20.1046 4.89543 21 6 21H16C17.1046 21 18 20.1046 18 19V17M8 5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5M8 5C8 6.10457 8.89543 7 10 7H14C15.1046 7 16 6.10457 16 5M16 5V7M20 7H12C10.8954 7 10 7.89543 10 9V17C10 18.1046 10.8954 19 12 19H20C21.1046 19 22 18.1046 22 17V9C22 7.89543 21.1046 7 20 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              In Zwischenablage kopieren
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- App Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
