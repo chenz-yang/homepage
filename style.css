@@ -317,6 +317,8 @@ body::after {
 }
 
 .search-container {
+  display: flex;
+  align-items: center;
   position: relative;
 }
 
@@ -607,11 +609,6 @@ body::after {
 }
 
 /* Search keyboard shortcut layout styling */
-.search-container {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
 
 .search-shortcut-hint {
   position: absolute;
