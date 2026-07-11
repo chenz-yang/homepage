@@ -26,11 +26,7 @@
 				<span class="badge">✈️ Exploring</span>
 			</div>
 			<div class="stats">
-				<div class="stat-item active" id="stat-travels">
-					<span class="stat-val">137</span>
-					<span class="stat-lbl">Albums</span>
-				</div>
-				<div class="stat-item" id="stat-games">
+				<div class="stat-item active" id="stat-games">
 					<span class="stat-val">1</span>
 					<span class="stat-lbl">Games</span>
 				</div>
@@ -38,11 +34,15 @@
 					<span class="stat-val">1</span>
 					<span class="stat-lbl">Tools</span>
 				</div>
+				<div class="stat-item" id="stat-travels">
+					<span class="stat-val">137</span>
+					<span class="stat-lbl">Albums</span>
+				</div>
 			</div>
 		</aside>
 
 		<main id="content-wrap">
-			<div class="controls-card" id="travel-controls">
+			<div class="controls-card" id="travel-controls" style="display: none;">
 				<div class="search-container">
 					<span class="search-icon">🔍</span>
 					<input type="text" id="search-input" class="search-input"
@@ -54,7 +54,7 @@
 				</div>
 			</div>
 
-			<div class="travels-container" id="travels-container">
+			<div class="travels-container" id="travels-container" style="display: none;">
 				<section class="year-section" data-year="2026">
 					<h2 class="year-title">2026</h2>
 					<ul class="travel-grid">
@@ -2175,7 +2175,7 @@
 				</section>
 			</div>
 
-			<div class="travels-container" id="games-container" style="display: none;">
+			<div class="travels-container" id="games-container" style="display: flex;">
 				<section class="category-section">
 					<h2 class="year-title">Games</h2>
 					<ul class="travel-grid">
@@ -2381,6 +2381,9 @@
 			if (statAlbums) statAlbums.addEventListener('click', () => switchCategory('travels'));
 			if (statGames) statGames.addEventListener('click', () => switchCategory('games'));
 			if (statTools) statTools.addEventListener('click', () => switchCategory('tools'));
+
+			// Highlight games category on page load
+			switchCategory('games');
 		});
 	</script>
 </body>
