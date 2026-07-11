@@ -1,1754 +1,2228 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta name="Description" content="Zhiyang Chen (陈志扬)'s Homepage" />
-	<meta name="Keywords" content="Zhiyang Chen, 陈志扬" />
-	<title>Zhiyang Chen</title>
+	<title>Yangyang's Homepage</title>
 	<link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 	<div class="accent-bar"></div>
 	<div id="wrap">
 		<aside id="header">
 			<div id="header-links">
-				<img src="images/czy.jpg" alt="Zhiyang Chen" />
+				<img src="images/yangyang.png" alt="Yangyang" />
 			</div>
-			<h1 id="logo-text"><a href="index.html">Zhiyang Chen</a></h1>
+			<h1 id="logo-text">Yangyang</h1>
 			<p class="intro-bio">
-				I am a student at <a href="https://fsg-marbach.de/" target="_blank">Friedrich-Schiller-Gymnasium Marbach</a>. 
-				I like swimming, skiing, and seeing the world.
+				I like science, swimming, skiing, and seeing the world.
 			</p>
 			<div class="badge-list">
+				<span class="badge">🔬 Science</span>
 				<span class="badge">🏊‍♂️ Swimming</span>
 				<span class="badge">⛷️ Skiing</span>
 				<span class="badge">✈️ Exploring</span>
 			</div>
 			<div class="stats">
-				<div class="stat-item">
+				<div class="stat-item" style="cursor: pointer; border-color: var(--accent-color);" id="stat-travels">
 					<span class="stat-val">137</span>
 					<span class="stat-lbl">Albums</span>
+				</div>
+				<div class="stat-item" style="cursor: pointer;" id="stat-games">
+					<span class="stat-val">1</span>
+					<span class="stat-lbl">Games</span>
+				</div>
+				<div class="stat-item" style="cursor: pointer;" id="stat-tools">
+					<span class="stat-val">1</span>
+					<span class="stat-lbl">Tools</span>
 				</div>
 			</div>
 		</aside>
 
 		<main id="content-wrap">
-			<div class="controls-card">
+			<div class="controls-card" id="travel-controls">
 				<div class="search-container">
 					<span class="search-icon">🔍</span>
-					<input type="text" id="search-input" class="search-input" placeholder="Search travel destinations, months..." />
+					<input type="text" id="search-input" class="search-input"
+						placeholder="Search travel destinations, months..." />
+					<span class="search-shortcut-hint">/</span>
 				</div>
-				<div class="filter-tabs" id="filter-tabs">
+				<div class="filter-tabs" id="filter-tabs" style="margin-top: 1rem;">
 					<button class="tab-btn active" data-filter="all">All Trips</button>
 				</div>
 			</div>
 
 			<div class="travels-container" id="travels-container">
-		<section class="year-section" data-year="2026">
-			<h2 class="year-title">2026</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Paris, FR 巴黎" data-month="May / 五月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/jpHGuo8LEzSXsRmq9" target="_blank" class="location-link">Paris, FR 巴黎</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/jpHGuo8LEzSXsRmq9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="South Island (East Coast), NZ 新西兰南岛(东线)" data-month="April / 四月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/amPq2d1WqYVf48CTA" target="_blank" class="location-link">South Island (East Coast), NZ 新西兰南岛(东线)</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/amPq2d1WqYVf48CTA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="South Island (Inland &amp; Fiordland), NZ 新西兰南岛(中线)" data-month="April / 四月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/9bcTPGoyAabJFEpV9" target="_blank" class="location-link">South Island (Inland &amp; Fiordland), NZ 新西兰南岛(中线)</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/9bcTPGoyAabJFEpV9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="South Island (West Coast), NZ 新西兰南岛(西线)" data-month="April / 四月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/21zZwP162hSDiUco9" target="_blank" class="location-link">South Island (West Coast), NZ 新西兰南岛(西线)</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/21zZwP162hSDiUco9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zurich, CH 苏黎世" data-month="March / 三月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">March / 三月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/9KdoNAottzJAHdPG9" target="_blank" class="location-link">Zurich, CH 苏黎世</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/9KdoNAottzJAHdPG9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯" data-month="February / 二月" data-year="2026">
-					<div class="card-header">
-						<span class="card-date">February / 二月</span>
-						<span class="card-icon">⛷️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/mGsiQYpJUAb9B9nX6" target="_blank" class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/mGsiQYpJUAb9B9nX6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2025">
-			<h2 class="year-title">2025</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/ukWqn86LBYCw9pSE7" target="_blank" class="location-link">Hurghada, EG 胡尔格达</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/ukWqn86LBYCw9pSE7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Sounion, GR 苏尼翁" data-month="October / 十月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/oMgaANyUVqBxymH38" target="_blank" class="location-link">Sounion, GR 苏尼翁</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/oMgaANyUVqBxymH38" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Athens, GR 雅典" data-month="October / 十月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/pdFjXgHKbwJ6bP1k8" target="_blank" class="location-link">Athens, GR 雅典</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/pdFjXgHKbwJ6bP1k8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Lichtenstein, DE 利希滕施泰因城堡" data-month="October / 十月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/saxTARNxpgJJK3YN7" target="_blank" class="location-link">Schloss Lichtenstein, DE 利希滕施泰因城堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/saxTARNxpgJJK3YN7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zhaohua Old Town, CN 昭化古城" data-month="August / 八月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/i6gRQ4B23M6Kgj7o6" target="_blank" class="location-link">Zhaohua Old Town, CN 昭化古城</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/i6gRQ4B23M6Kgj7o6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Jianmen Pass, CN 剑门关" data-month="August / 八月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/QyXJNKEsg9zDK6UR9" target="_blank" class="location-link">Jianmen Pass, CN 剑门关</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/QyXJNKEsg9zDK6UR9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Xi'an, CN 西安" data-month="August / 八月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/VScHrDNj4ckQf7ni9" target="_blank" class="location-link">Xi'an, CN 西安</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/VScHrDNj4ckQf7ni9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="August / 八月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/8QRiNCcCjSP3Y23X8" target="_blank" class="location-link">Chongqing, CN 重庆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/8QRiNCcCjSP3Y23X8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Rothenburg, DE 罗滕堡" data-month="July / 七月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/EyWvW8fnJXwKntnm8" target="_blank" class="location-link">Rothenburg, DE 罗滕堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/EyWvW8fnJXwKntnm8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Dubrovnik, HR 杜布罗夫尼克" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/xSsY76QWLeWFxz5P7" target="_blank" class="location-link">Dubrovnik, HR 杜布罗夫尼克</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/xSsY76QWLeWFxz5P7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Punta Rata Beach, HR Punta Rata海滩" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/Jvb6QRwQGNayDwoUA" target="_blank" class="location-link">Punta Rata Beach, HR Punta Rata海滩</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/Jvb6QRwQGNayDwoUA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Island Hopping from Split, HR 斯普利特跳岛游" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/v9obDaBSa4VUBzfD7" target="_blank" class="location-link">Island Hopping from Split, HR 斯普利特跳岛游</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/v9obDaBSa4VUBzfD7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Split, HR 斯普利特" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/TfTzzE29wkDYHwhG8" target="_blank" class="location-link">Split, HR 斯普利特</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/TfTzzE29wkDYHwhG8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Primosten, HR 普莫斯特" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/dVGYy6dgmsbj571E9" target="_blank" class="location-link">Primosten, HR 普莫斯特</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/dVGYy6dgmsbj571E9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zadar, HR 扎达尔" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/7JinvqGWpGv6eHsEA" target="_blank" class="location-link">Zadar, HR 扎达尔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/7JinvqGWpGv6eHsEA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Plitvice Lakes National Park, HR 十六湖国家公园" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/95Wqt7QBpz93s6Tj9" target="_blank" class="location-link">Plitvice Lakes National Park, HR 十六湖国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/95Wqt7QBpz93s6Tj9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zagreb, HR 萨格勒布" data-month="June / 六月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/RXbkzz5gSHat9P9JA" target="_blank" class="location-link">Zagreb, HR 萨格勒布</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/RXbkzz5gSHat9P9JA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯" data-month="March / 三月" data-year="2025">
-					<div class="card-header">
-						<span class="card-date">March / 三月</span>
-						<span class="card-icon">⛷️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/oxnfQRBJvX8TpYUq7" target="_blank" class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/oxnfQRBJvX8TpYUq7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2024">
-			<h2 class="year-title">2024</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Gurgl, AT 古格尔" data-month="December / 十二月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">⛷️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/ovkGXyEShDBRjoKb7" target="_blank" class="location-link">Gurgl, AT 古格尔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/ovkGXyEShDBRjoKb7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Sölden, AT 索尔登" data-month="December / 十二月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/X2XHdyno1HMkw2vJA" target="_blank" class="location-link">Sölden, AT 索尔登</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/X2XHdyno1HMkw2vJA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Himmelssteig, DE Himmelssteig徒步" data-month="November / 十一月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/eyctv6TTDrtfqxaW8" target="_blank" class="location-link">Himmelssteig, DE Himmelssteig徒步</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/eyctv6TTDrtfqxaW8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Strasbourg, FR 斯特拉斯堡" data-month="November / 十一月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/7u2axpDWecePRsHo8" target="_blank" class="location-link">Strasbourg, FR 斯特拉斯堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/7u2axpDWecePRsHo8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Berlin Marathon, DE 柏林马拉松" data-month="September / 九月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">September / 九月</span>
-						<span class="card-icon">🏃‍♂️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/p5KTjFr884jpfHoP6" target="_blank" class="location-link">Berlin Marathon, DE 柏林马拉松</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/p5KTjFr884jpfHoP6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Beijing, CN 北京" data-month="August / 八月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/57mrUQ7zE9h8cY3x7" target="_blank" class="location-link">Beijing, CN 北京</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/57mrUQ7zE9h8cY3x7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Xuzhou, CN 徐州" data-month="August / 八月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/CiCBZKEJJVFMatww9" target="_blank" class="location-link">Xuzhou, CN 徐州</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/CiCBZKEJJVFMatww9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="July / 七月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/jF7Ka7KzzjGGiZbJA" target="_blank" class="location-link">Chongqing, CN 重庆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/jF7Ka7KzzjGGiZbJA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Sicily, IT 西西里岛" data-month="May / 五月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/SiqwY5BUTA4QYmpp9" target="_blank" class="location-link">Sicily, IT 西西里岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/SiqwY5BUTA4QYmpp9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Aurora Borealis (Northern Lights) near Stuttgart, DE 极光爆发" data-month="May / 五月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/m13dLs4t1U3iqviRA" target="_blank" class="location-link">Aurora Borealis (Northern Lights) near Stuttgart, DE 极光爆发</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/m13dLs4t1U3iqviRA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯" data-month="February / 二月" data-year="2024">
-					<div class="card-header">
-						<span class="card-date">February / 二月</span>
-						<span class="card-icon">⛷️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/r2x7tXquhQBDq3Ra9" target="_blank" class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/r2x7tXquhQBDq3Ra9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2023">
-			<h2 class="year-title">2023</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/am5UHhQztQRYUdgN9" target="_blank" class="location-link">Hurghada, EG 胡尔格达</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/am5UHhQztQRYUdgN9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Gardasee, IT 加尔达湖" data-month="November / 十一月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/v19HMXA9bMNDWw8Q9" target="_blank" class="location-link">Gardasee, IT 加尔达湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/v19HMXA9bMNDWw8Q9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Frankfurt Marathon, DE 法兰克福马拉松" data-month="October / 十月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏃‍♂️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/VXK7EFPa9TNZX2KU8" target="_blank" class="location-link">Frankfurt Marathon, DE 法兰克福马拉松</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/VXK7EFPa9TNZX2KU8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Jasper National Park, CA 贾斯珀国家公园" data-month="August / 八月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/XdfKacYcuwTZteYUA" target="_blank" class="location-link">Jasper National Park, CA 贾斯珀国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/XdfKacYcuwTZteYUA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Yoho National Park, CA 幽鹤国家公园" data-month="August / 八月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/KSsijvymMnyxsthEA" target="_blank" class="location-link">Yoho National Park, CA 幽鹤国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/KSsijvymMnyxsthEA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Banff National Park, CA 班夫国家公园" data-month="August / 八月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/pQxvF5A16fChhgFx9" target="_blank" class="location-link">Banff National Park, CA 班夫国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/pQxvF5A16fChhgFx9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Niagara Falls, CA 尼亚加拉瀑布" data-month="August / 八月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/uxK6n5GD3XBgZ8549" target="_blank" class="location-link">Niagara Falls, CA 尼亚加拉瀑布</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/uxK6n5GD3XBgZ8549" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Toronto, CA 多伦多" data-month="August / 八月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/XdV63zsqM3MjFB4x7" target="_blank" class="location-link">Toronto, CA 多伦多</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/XdV63zsqM3MjFB4x7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Mercedes-Benz Museum, DE 梅赛德斯-奔驰博物馆" data-month="June / 六月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/K6oNb8VEoP55M1vZ6" target="_blank" class="location-link">Mercedes-Benz Museum, DE 梅赛德斯-奔驰博物馆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/K6oNb8VEoP55M1vZ6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Andernach Geyser, DE 安德纳赫间歇泉" data-month="May / 五月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/F2rTKFHDNx3muxnd9" target="_blank" class="location-link">Andernach Geyser, DE 安德纳赫间歇泉</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/F2rTKFHDNx3muxnd9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Düsseldorf, DE 杜塞尔多夫" data-month="May / 五月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/fbheQyECPcek7Gtw7" target="_blank" class="location-link">Düsseldorf, DE 杜塞尔多夫</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/fbheQyECPcek7Gtw7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Cologne, DE 科隆" data-month="May / 五月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/1EUifHiJbDqV4shx5" target="_blank" class="location-link">Cologne, DE 科隆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/1EUifHiJbDqV4shx5" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯" data-month="February / 二月" data-year="2023">
-					<div class="card-header">
-						<span class="card-date">February / 二月</span>
-						<span class="card-icon">⛷️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/Rg1sFTbR5WpPc3kC7" target="_blank" class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/Rg1sFTbR5WpPc3kC7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2022">
-			<h2 class="year-title">2022</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/X9Uzt1U9ArxZfz1KA" target="_blank" class="location-link">Hurghada, EG 胡尔格达</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/X9Uzt1U9ArxZfz1KA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Berlin, DE 柏林" data-month="November / 十一月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/38KfLphkayPXiT4YA" target="_blank" class="location-link">Berlin, DE 柏林</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/38KfLphkayPXiT4YA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Dolomites, IT 多洛米蒂" data-month="August / 八月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/gCNBUQwSn3DKtkmu6" target="_blank" class="location-link">Dolomites, IT 多洛米蒂</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/gCNBUQwSn3DKtkmu6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Meradalir Volcano Eruption, IS Meradalir火山喷发" data-month="August / 八月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/59SC3hv9xomso2Kx5" target="_blank" class="location-link">Meradalir Volcano Eruption, IS Meradalir火山喷发</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/59SC3hv9xomso2Kx5" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Iceland, IS 冰岛" data-month="June / 六月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/U9Faz6kmxEDkSzVa6" target="_blank" class="location-link">Iceland, IS 冰岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/U9Faz6kmxEDkSzVa6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Tyrol, AT 蒂罗尔" data-month="April / 四月" data-year="2022">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/eWWxQQRysJP9sah78" target="_blank" class="location-link">Tyrol, AT 蒂罗尔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/eWWxQQRysJP9sah78" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2021">
-			<h2 class="year-title">2021</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Crete, GR 克里特" data-month="August / 八月" data-year="2021">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/AbqAruSWMKW6z8Fj7" target="_blank" class="location-link">Crete, GR 克里特</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/AbqAruSWMKW6z8Fj7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2020">
-			<h2 class="year-title">2020</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Zillertal, AT 齐勒河谷" data-month="August / 八月" data-year="2020">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/m7iFMzFmj6NxDuNq8" target="_blank" class="location-link">Zillertal, AT 齐勒河谷</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/m7iFMzFmj6NxDuNq8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Comet NEOWISE 新智彗星" data-month="July / 七月" data-year="2020">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/gUitTAjHTGt1aBEp7" target="_blank" class="location-link">Comet NEOWISE 新智彗星</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/gUitTAjHTGt1aBEp7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Rhine Falls, CH 莱茵瀑布" data-month="January / 一月" data-year="2020">
-					<div class="card-header">
-						<span class="card-date">January / 一月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/Ng7oCPFNsgUhmdBG6" target="_blank" class="location-link">Rhine Falls, CH 莱茵瀑布</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/Ng7oCPFNsgUhmdBG6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2019">
-			<h2 class="year-title">2019</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Cairo &amp; Pyramids, EG 开罗&amp;金字塔" data-month="December / 十二月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/XTvebr5TPjS6TSgx8" target="_blank" class="location-link">Cairo &amp; Pyramids, EG 开罗&amp;金字塔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/XTvebr5TPjS6TSgx8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Luxor, EG 卢克索" data-month="December / 十二月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/dCHE846AsBx2Umgb8" target="_blank" class="location-link">Luxor, EG 卢克索</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/dCHE846AsBx2Umgb8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/fYPC9yr8Z2Yp2a7E8" target="_blank" class="location-link">Hurghada, EG 胡尔格达</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/fYPC9yr8Z2Yp2a7E8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Svalbard, NO 斯瓦尔巴群岛" data-month="August / 八月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/To6567A5Vc5RXme58" target="_blank" class="location-link">Svalbard, NO 斯瓦尔巴群岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/To6567A5Vc5RXme58" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Lofoten, NO 罗弗敦群岛" data-month="August / 八月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/vz7q9de75jm2sqc97" target="_blank" class="location-link">Lofoten, NO 罗弗敦群岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/vz7q9de75jm2sqc97" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Tenerife, ES 特内里费岛" data-month="April / 四月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/GZB2Q5mqJyzNrktE6" target="_blank" class="location-link">Tenerife, ES 特内里费岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/GZB2Q5mqJyzNrktE6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="April / 四月" data-year="2019">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/fino1RgqpM5ccEUK8" target="_blank" class="location-link">Allgäu, DE 阿尔高</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/fino1RgqpM5ccEUK8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2018">
-			<h2 class="year-title">2018</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/U54i2usRqTowTVWK6" target="_blank" class="location-link">Hurghada, EG 胡尔格达</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/U54i2usRqTowTVWK6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Black Forest, DE 黑森林" data-month="November / 十一月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/xWi24WuUvwab9HmN6" target="_blank" class="location-link">Black Forest, DE 黑森林</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/xWi24WuUvwab9HmN6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Burg Hohenzollern, DE 霍亨索伦城堡" data-month="October / 十月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/ceRKi3pTzMA7Q6jf6" target="_blank" class="location-link">Burg Hohenzollern, DE 霍亨索伦城堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/ceRKi3pTzMA7Q6jf6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="October / 十月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/aCMHAigHjpgyy9Wg9" target="_blank" class="location-link">Allgäu, DE 阿尔高</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/aCMHAigHjpgyy9Wg9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Scotland, UK 苏格兰" data-month="August / 八月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/cEPhCUHdqM6AQJLTA" target="_blank" class="location-link">Scotland, UK 苏格兰</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/cEPhCUHdqM6AQJLTA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="England, UK 英格兰" data-month="August / 八月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/Zvtyunsb662jvnB89" target="_blank" class="location-link">England, UK 英格兰</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/Zvtyunsb662jvnB89" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="London, UK 伦敦" data-month="July / 七月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/c4y8SUfxP9fi199a8" target="_blank" class="location-link">London, UK 伦敦</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/c4y8SUfxP9fi199a8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Gardasee, IT 加尔达湖" data-month="May / 五月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/1TmzWKeo3FgJJKyB8" target="_blank" class="location-link">Gardasee, IT 加尔达湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/1TmzWKeo3FgJJKyB8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Schwetzingen, DE 施韦芩根宫" data-month="April / 四月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/BiT1jhedkaTtvdE86" target="_blank" class="location-link">Schloss Schwetzingen, DE 施韦芩根宫</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/BiT1jhedkaTtvdE86" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="January / 一月" data-year="2018">
-					<div class="card-header">
-						<span class="card-date">January / 一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/6xQz7HthNETSL9XNA" target="_blank" class="location-link">Chongqing, CN 重庆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/6xQz7HthNETSL9XNA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2017">
-			<h2 class="year-title">2017</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Zhangjiajie, CN 张家界" data-month="December / 十二月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/HFA25GdcLncq4yPF6" target="_blank" class="location-link">Zhangjiajie, CN 张家界</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/HFA25GdcLncq4yPF6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Seoul, KR 首尔" data-month="December / 十二月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/iWvwvoymwBgXdKWg7" target="_blank" class="location-link">Seoul, KR 首尔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/iWvwvoymwBgXdKWg7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Madeira, PT 马德拉" data-month="November / 十一月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/qmWEVbVTXNn96Gih7" target="_blank" class="location-link">Madeira, PT 马德拉</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/qmWEVbVTXNn96Gih7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Titisee, DE 蒂蒂湖" data-month="November / 十一月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/nZ7gBEtHojqHqe5q9" target="_blank" class="location-link">Titisee, DE 蒂蒂湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/nZ7gBEtHojqHqe5q9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Freiburg, DE 弗莱堡" data-month="November / 十一月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/bqYn8xJ7pXPU6HfH7" target="_blank" class="location-link">Freiburg, DE 弗莱堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/bqYn8xJ7pXPU6HfH7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Rhine Falls, CH 莱茵瀑布" data-month="November / 十一月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">November / 十一月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/HJM9RGzNTTuW5Xx69" target="_blank" class="location-link">Rhine Falls, CH 莱茵瀑布</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/HJM9RGzNTTuW5Xx69" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Burg Hohenzollern, DE 霍亨索伦城堡" data-month="October / 十月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/KQ915FzSPhvqJMnM9" target="_blank" class="location-link">Burg Hohenzollern, DE 霍亨索伦城堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/KQ915FzSPhvqJMnM9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡" data-month="October / 十月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/uFcAwJqg5HprRmiz9" target="_blank" class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/uFcAwJqg5HprRmiz9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Hallstatt, AT 哈尔施塔特" data-month="October / 十月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/jaj7ESkt8xLow1rz6" target="_blank" class="location-link">Hallstatt, AT 哈尔施塔特</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/jaj7ESkt8xLow1rz6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Salzburg, AT 萨尔茨堡" data-month="October / 十月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/gxHH3pgD7gretpDF6" target="_blank" class="location-link">Salzburg, AT 萨尔茨堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/gxHH3pgD7gretpDF6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Königssee, DE 国王湖" data-month="October / 十月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/oirHEpZtL2qDyfHN8" target="_blank" class="location-link">Königssee, DE 国王湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/oirHEpZtL2qDyfHN8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Trier, DE 特里尔" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/B6JQUhyJwcQhjmS97" target="_blank" class="location-link">Trier, DE 特里尔</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/B6JQUhyJwcQhjmS97" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Kaiserslautern, DE 凯泽斯劳滕" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/bxuGSgCNT783NEN97" target="_blank" class="location-link">Kaiserslautern, DE 凯泽斯劳滕</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/bxuGSgCNT783NEN97" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Blaubeuren, DE 布劳博伊伦" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/eM8vMK5fGxcGGg9G7" target="_blank" class="location-link">Blaubeuren, DE 布劳博伊伦</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/eM8vMK5fGxcGGg9G7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zugspitze, DE 楚格峰" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/UActspFty2YQAMZE8" target="_blank" class="location-link">Zugspitze, DE 楚格峰</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/UActspFty2YQAMZE8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/KjXsLVEXvmHHNeSr6" target="_blank" class="location-link">Allgäu, DE 阿尔高</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/KjXsLVEXvmHHNeSr6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡" data-month="August / 八月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/S4ouC2uPk8ow7jXb8" target="_blank" class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/S4ouC2uPk8ow7jXb8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Federsee, DE 费德湖" data-month="May / 五月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/7wKaXLW94dK77HMLA" target="_blank" class="location-link">Federsee, DE 费德湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/7wKaXLW94dK77HMLA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="May / 五月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/egRpB9oZNjj95KvL7" target="_blank" class="location-link">Allgäu, DE 阿尔高</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/egRpB9oZNjj95KvL7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Malta, MT 马耳他" data-month="April / 四月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/faYWeaqafJn2HUEw9" target="_blank" class="location-link">Malta, MT 马耳他</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/faYWeaqafJn2HUEw9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Lucerne, CH 卢塞恩" data-month="April / 四月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/aKdrfwFxhn5ebvTv7" target="_blank" class="location-link">Lucerne, CH 卢塞恩</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/aKdrfwFxhn5ebvTv7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Konstanz, DE 康斯坦茨" data-month="April / 四月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/s1MHdkHhcjjsYRrm8" target="_blank" class="location-link">Konstanz, DE 康斯坦茨</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/s1MHdkHhcjjsYRrm8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Reichenau Island, DE 赖兴瑙岛" data-month="April / 四月" data-year="2017">
-					<div class="card-header">
-						<span class="card-date">April / 四月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/wLhjuvcVEMr5Z4KJA" target="_blank" class="location-link">Reichenau Island, DE 赖兴瑙岛</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/wLhjuvcVEMr5Z4KJA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2016">
-			<h2 class="year-title">2016</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Kunming, CN 昆明" data-month="December / 十二月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/YUrTupkwtAwAoKGM8" target="_blank" class="location-link">Kunming, CN 昆明</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/YUrTupkwtAwAoKGM8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="December / 十二月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/oBSAEr8JQMhRDAPK9" target="_blank" class="location-link">Chongqing, CN 重庆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/oBSAEr8JQMhRDAPK9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Beijing, CN 北京" data-month="December / 十二月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://photos.app.goo.gl/fMjySgR5buJeCrrYA" target="_blank" class="location-link">Beijing, CN 北京</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://photos.app.goo.gl/fMjySgR5buJeCrrYA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Heidelberg, DE 海德堡" data-month="October / 十月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/iZzbdzA2XVbYMQMJA" target="_blank" class="location-link">Heidelberg, DE 海德堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/iZzbdzA2XVbYMQMJA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Lichtenstein, DE 利希滕施泰因城堡" data-month="October / 十月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/9sqRLLHM47eCL1Zt7" target="_blank" class="location-link">Schloss Lichtenstein, DE 利希滕施泰因城堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/9sqRLLHM47eCL1Zt7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡" data-month="October / 十月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Ndj1vEZnwR3EGjsb8" target="_blank" class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Ndj1vEZnwR3EGjsb8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Göttingen, DE 哥廷根" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/1eHUpWf2Lcr1Gb57A" target="_blank" class="location-link">Göttingen, DE 哥廷根</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/1eHUpWf2Lcr1Gb57A" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="New York City, US 纽约" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/1Gegubk55sKVtpJh7" target="_blank" class="location-link">New York City, US 纽约</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/1Gegubk55sKVtpJh7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Grand Teton National Park, US 大提顿国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/GzJbo4BNGooyow4YA" target="_blank" class="location-link">Grand Teton National Park, US 大提顿国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/GzJbo4BNGooyow4YA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Yellowstone National Park, US 黄石国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/6LxBx7NxoFzM89NV6" target="_blank" class="location-link">Yellowstone National Park, US 黄石国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/6LxBx7NxoFzM89NV6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Grand Canyon National Park (North Rim), US 大峡谷国家公园(北缘)" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/xJaKxSaBDkW96Hty9" target="_blank" class="location-link">Grand Canyon National Park (North Rim), US 大峡谷国家公园(北缘)</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/xJaKxSaBDkW96Hty9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Zion National Park, US 锡安国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Nifn9HdhtSMdwKwu6" target="_blank" class="location-link">Zion National Park, US 锡安国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Nifn9HdhtSMdwKwu6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Bryce Canyon National Park, US 布莱斯峡谷国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Xgmrme2p8jLz8znK8" target="_blank" class="location-link">Bryce Canyon National Park, US 布莱斯峡谷国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Xgmrme2p8jLz8znK8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Canyonlands National Park, US 峡谷地国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/DDrkMSbT3CYn3Dbh6" target="_blank" class="location-link">Canyonlands National Park, US 峡谷地国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/DDrkMSbT3CYn3Dbh6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Arches National Park, US 拱门国家公园" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/AWSoohALq4gYghpt7" target="_blank" class="location-link">Arches National Park, US 拱门国家公园</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/AWSoohALq4gYghpt7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Monument Valley, US 纪念碑谷" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/YeER9zfeb7jPGQSw9" target="_blank" class="location-link">Monument Valley, US 纪念碑谷</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/YeER9zfeb7jPGQSw9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Upper Antelope Canyon, US 上羚羊谷" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/ss8TndwEFpYF1Dqn8" target="_blank" class="location-link">Upper Antelope Canyon, US 上羚羊谷</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/ss8TndwEFpYF1Dqn8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Lake Powell, US 鲍威尔湖" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">🏖️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/MTJSMtB1QATAvyuW9" target="_blank" class="location-link">Lake Powell, US 鲍威尔湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/MTJSMtB1QATAvyuW9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Horseshoe Bend, US 马蹄湾" data-month="August / 八月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">August / 八月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/4xbJj28jBwwrawwBA" target="_blank" class="location-link">Horseshoe Bend, US 马蹄湾</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/4xbJj28jBwwrawwBA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Grand Canyon National Park (South Rim), US 大峡谷国家公园(南缘)" data-month="July / 七月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">⛰️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/vz6vsWdKxg49b8JR8" target="_blank" class="location-link">Grand Canyon National Park (South Rim), US 大峡谷国家公园(南缘)</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/vz6vsWdKxg49b8JR8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Hoover Dam, US 胡佛水坝" data-month="July / 七月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Phg33eHD2g8Tf6E66" target="_blank" class="location-link">Hoover Dam, US 胡佛水坝</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Phg33eHD2g8Tf6E66" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Las Vegas, US 拉斯维加斯" data-month="July / 七月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">July / 七月</span>
-						<span class="card-icon">🏙️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Wdk1iLkEwtg21yr68" target="_blank" class="location-link">Las Vegas, US 拉斯维加斯</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Wdk1iLkEwtg21yr68" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Pompeii, IT 庞贝" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/Tmc5cJZs8k3LZy579" target="_blank" class="location-link">Pompeii, IT 庞贝</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/Tmc5cJZs8k3LZy579" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Paestum, IT 帕埃斯图姆" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/N75eZVct3UcYrQcGA" target="_blank" class="location-link">Paestum, IT 帕埃斯图姆</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/N75eZVct3UcYrQcGA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Southern Peninsula, IS 冰岛西南区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/yeB2HswLzcxNPenp7" target="_blank" class="location-link">Southern Peninsula, IS 冰岛西南区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/yeB2HswLzcxNPenp7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Western Region, IS 冰岛西部区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/6vD8aP91T1fj5ptv7" target="_blank" class="location-link">Western Region, IS 冰岛西部区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/6vD8aP91T1fj5ptv7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Westfjords, IS 冰岛西峡湾区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/LdMvTTpw4kuLpcoV7" target="_blank" class="location-link">Westfjords, IS 冰岛西峡湾区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/LdMvTTpw4kuLpcoV7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Northwestern Region, IS 冰岛西北区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/vMxteCkiHdaiKVwu9" target="_blank" class="location-link">Northwestern Region, IS 冰岛西北区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/vMxteCkiHdaiKVwu9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Northeastern Region, IS 冰岛东北区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/dLhBa3nmLaBqWUXW9" target="_blank" class="location-link">Northeastern Region, IS 冰岛东北区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/dLhBa3nmLaBqWUXW9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Eastern Region, IS 冰岛东部区" data-month="June / 六月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">June / 六月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/orXSrAkAMgLgCMKR9" target="_blank" class="location-link">Eastern Region, IS 冰岛东部区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/orXSrAkAMgLgCMKR9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Southern Region, IS 冰岛南部区" data-month="May / 五月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/3yGqiXtupkEHV9xj7" target="_blank" class="location-link">Southern Region, IS 冰岛南部区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/3yGqiXtupkEHV9xj7" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Capital Region, IS 冰岛大雷克雅未克区" data-month="May / 五月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">May / 五月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/BeLECB5u9nb2tgo29" target="_blank" class="location-link">Capital Region, IS 冰岛大雷克雅未克区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/BeLECB5u9nb2tgo29" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Wolfgangsee, AT 沃尔夫冈湖" data-month="March / 三月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">March / 三月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/fZYsVYno2P1qFX8m8" target="_blank" class="location-link">Wolfgangsee, AT 沃尔夫冈湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/fZYsVYno2P1qFX8m8" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Hallstatt, AT 哈尔施塔特" data-month="March / 三月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">March / 三月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/DGqL4r8aUV5EQ5gTA" target="_blank" class="location-link">Hallstatt, AT 哈尔施塔特</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/DGqL4r8aUV5EQ5gTA" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Königssee, DE 国王湖" data-month="March / 三月" data-year="2016">
-					<div class="card-header">
-						<span class="card-date">March / 三月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/3WrUDDm3PLJPTk21A" target="_blank" class="location-link">Königssee, DE 国王湖</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/3WrUDDm3PLJPTk21A" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
-		<section class="year-section" data-year="2015">
-			<h2 class="year-title">2015</h2>
-			<ul class="travel-grid">
-				<li class="travel-card-item" data-location="Matterhorn Region, CH 马特宏峰地区" data-month="December / 十二月" data-year="2015">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/m5VPKkJe7i5JwQrx9" target="_blank" class="location-link">Matterhorn Region, CH 马特宏峰地区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/m5VPKkJe7i5JwQrx9" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Lucerne, CH 卢塞恩" data-month="December / 十二月" data-year="2015">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/uYKekvp2onTgk77y5" target="_blank" class="location-link">Lucerne, CH 卢塞恩</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/uYKekvp2onTgk77y5" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Jungfrau Region, CH 少女峰地区" data-month="December / 十二月" data-year="2015">
-					<div class="card-header">
-						<span class="card-date">December / 十二月</span>
-						<span class="card-icon">✈️</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/HkGxKhnEjKovLUyy6" target="_blank" class="location-link">Jungfrau Region, CH 少女峰地区</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/HkGxKhnEjKovLUyy6" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-				<li class="travel-card-item" data-location="Maulbronn Monastery, DE 毛尔布龙修道院" data-month="October / 十月" data-year="2015">
-					<div class="card-header">
-						<span class="card-date">October / 十月</span>
-						<span class="card-icon">🏰</span>
-					</div>
-					<div class="card-body">
-						<a href="https://goo.gl/photos/sgAg4J7oa2sS8b717" target="_blank" class="location-link">Maulbronn Monastery, DE 毛尔布龙修道院</a>
-					</div>
-					<div class="card-footer">
-						<a href="https://goo.gl/photos/sgAg4J7oa2sS8b717" target="_blank" class="gallery-btn">View Album &rarr;</a>
-					</div>
-				</li>
-			</ul>
-		</section>
+				<section class="year-section" data-year="2026">
+					<h2 class="year-title">2026</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Paris, FR 巴黎" data-month="May / 五月"
+							data-year="2026">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/jpHGuo8LEzSXsRmq9" target="_blank"
+									class="location-link">Paris, FR 巴黎</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/jpHGuo8LEzSXsRmq9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="South Island (East Coast), NZ 新西兰南岛(东线)"
+							data-month="April / 四月" data-year="2026">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/amPq2d1WqYVf48CTA" target="_blank"
+									class="location-link">South Island (East Coast), NZ 新西兰南岛(东线)</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/amPq2d1WqYVf48CTA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="South Island (Inland &amp; Fiordland), NZ 新西兰南岛(中线)"
+							data-month="April / 四月" data-year="2026">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/9bcTPGoyAabJFEpV9" target="_blank"
+									class="location-link">South Island (Inland &amp; Fiordland), NZ 新西兰南岛(中线)</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/9bcTPGoyAabJFEpV9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="South Island (West Coast), NZ 新西兰南岛(西线)"
+							data-month="April / 四月" data-year="2026">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/21zZwP162hSDiUco9" target="_blank"
+									class="location-link">South Island (West Coast), NZ 新西兰南岛(西线)</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/21zZwP162hSDiUco9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zurich, CH 苏黎世" data-month="March / 三月"
+							data-year="2026">
+							<div class="card-header">
+								<span class="card-date">March / 三月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/9KdoNAottzJAHdPG9" target="_blank"
+									class="location-link">Zurich, CH 苏黎世</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/9KdoNAottzJAHdPG9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯"
+							data-month="February / 二月" data-year="2026">
+							<div class="card-header">
+								<span class="card-date">February / 二月</span>
+								<span class="card-icon">⛷️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/mGsiQYpJUAb9B9nX6" target="_blank"
+									class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/mGsiQYpJUAb9B9nX6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2025">
+					<h2 class="year-title">2025</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/ukWqn86LBYCw9pSE7" target="_blank"
+									class="location-link">Hurghada, EG 胡尔格达</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/ukWqn86LBYCw9pSE7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Sounion, GR 苏尼翁" data-month="October / 十月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/oMgaANyUVqBxymH38" target="_blank"
+									class="location-link">Sounion, GR 苏尼翁</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/oMgaANyUVqBxymH38" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Athens, GR 雅典" data-month="October / 十月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/pdFjXgHKbwJ6bP1k8" target="_blank"
+									class="location-link">Athens, GR 雅典</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/pdFjXgHKbwJ6bP1k8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Lichtenstein, DE 利希滕施泰因城堡"
+							data-month="October / 十月" data-year="2025">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/saxTARNxpgJJK3YN7" target="_blank"
+									class="location-link">Schloss Lichtenstein, DE 利希滕施泰因城堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/saxTARNxpgJJK3YN7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zhaohua Old Town, CN 昭化古城" data-month="August / 八月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/i6gRQ4B23M6Kgj7o6" target="_blank"
+									class="location-link">Zhaohua Old Town, CN 昭化古城</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/i6gRQ4B23M6Kgj7o6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Jianmen Pass, CN 剑门关" data-month="August / 八月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/QyXJNKEsg9zDK6UR9" target="_blank"
+									class="location-link">Jianmen Pass, CN 剑门关</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/QyXJNKEsg9zDK6UR9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Xi'an, CN 西安" data-month="August / 八月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/VScHrDNj4ckQf7ni9" target="_blank"
+									class="location-link">Xi'an, CN 西安</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/VScHrDNj4ckQf7ni9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="August / 八月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/8QRiNCcCjSP3Y23X8" target="_blank"
+									class="location-link">Chongqing, CN 重庆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/8QRiNCcCjSP3Y23X8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Rothenburg, DE 罗滕堡" data-month="July / 七月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/EyWvW8fnJXwKntnm8" target="_blank"
+									class="location-link">Rothenburg, DE 罗滕堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/EyWvW8fnJXwKntnm8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Dubrovnik, HR 杜布罗夫尼克" data-month="June / 六月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/xSsY76QWLeWFxz5P7" target="_blank"
+									class="location-link">Dubrovnik, HR 杜布罗夫尼克</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/xSsY76QWLeWFxz5P7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Punta Rata Beach, HR Punta Rata海滩"
+							data-month="June / 六月" data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/Jvb6QRwQGNayDwoUA" target="_blank"
+									class="location-link">Punta Rata Beach, HR Punta Rata海滩</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/Jvb6QRwQGNayDwoUA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Island Hopping from Split, HR 斯普利特跳岛游"
+							data-month="June / 六月" data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/v9obDaBSa4VUBzfD7" target="_blank"
+									class="location-link">Island Hopping from Split, HR 斯普利特跳岛游</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/v9obDaBSa4VUBzfD7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Split, HR 斯普利特" data-month="June / 六月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/TfTzzE29wkDYHwhG8" target="_blank"
+									class="location-link">Split, HR 斯普利特</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/TfTzzE29wkDYHwhG8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Primosten, HR 普莫斯特" data-month="June / 六月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/dVGYy6dgmsbj571E9" target="_blank"
+									class="location-link">Primosten, HR 普莫斯特</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/dVGYy6dgmsbj571E9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zadar, HR 扎达尔" data-month="June / 六月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/7JinvqGWpGv6eHsEA" target="_blank"
+									class="location-link">Zadar, HR 扎达尔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/7JinvqGWpGv6eHsEA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Plitvice Lakes National Park, HR 十六湖国家公园"
+							data-month="June / 六月" data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/95Wqt7QBpz93s6Tj9" target="_blank"
+									class="location-link">Plitvice Lakes National Park, HR 十六湖国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/95Wqt7QBpz93s6Tj9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zagreb, HR 萨格勒布" data-month="June / 六月"
+							data-year="2025">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/RXbkzz5gSHat9P9JA" target="_blank"
+									class="location-link">Zagreb, HR 萨格勒布</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/RXbkzz5gSHat9P9JA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯"
+							data-month="March / 三月" data-year="2025">
+							<div class="card-header">
+								<span class="card-date">March / 三月</span>
+								<span class="card-icon">⛷️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/oxnfQRBJvX8TpYUq7" target="_blank"
+									class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/oxnfQRBJvX8TpYUq7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2024">
+					<h2 class="year-title">2024</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Gurgl, AT 古格尔" data-month="December / 十二月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">⛷️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/ovkGXyEShDBRjoKb7" target="_blank"
+									class="location-link">Gurgl, AT 古格尔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/ovkGXyEShDBRjoKb7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Sölden, AT 索尔登" data-month="December / 十二月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/X2XHdyno1HMkw2vJA" target="_blank"
+									class="location-link">Sölden, AT 索尔登</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/X2XHdyno1HMkw2vJA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Himmelssteig, DE Himmelssteig徒步"
+							data-month="November / 十一月" data-year="2024">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/eyctv6TTDrtfqxaW8" target="_blank"
+									class="location-link">Himmelssteig, DE Himmelssteig徒步</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/eyctv6TTDrtfqxaW8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Strasbourg, FR 斯特拉斯堡" data-month="November / 十一月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/7u2axpDWecePRsHo8" target="_blank"
+									class="location-link">Strasbourg, FR 斯特拉斯堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/7u2axpDWecePRsHo8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Berlin Marathon, DE 柏林马拉松"
+							data-month="September / 九月" data-year="2024">
+							<div class="card-header">
+								<span class="card-date">September / 九月</span>
+								<span class="card-icon">🏃‍♂️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/p5KTjFr884jpfHoP6" target="_blank"
+									class="location-link">Berlin Marathon, DE 柏林马拉松</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/p5KTjFr884jpfHoP6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Beijing, CN 北京" data-month="August / 八月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/57mrUQ7zE9h8cY3x7" target="_blank"
+									class="location-link">Beijing, CN 北京</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/57mrUQ7zE9h8cY3x7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Xuzhou, CN 徐州" data-month="August / 八月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/CiCBZKEJJVFMatww9" target="_blank"
+									class="location-link">Xuzhou, CN 徐州</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/CiCBZKEJJVFMatww9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="July / 七月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/jF7Ka7KzzjGGiZbJA" target="_blank"
+									class="location-link">Chongqing, CN 重庆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/jF7Ka7KzzjGGiZbJA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Sicily, IT 西西里岛" data-month="May / 五月"
+							data-year="2024">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/SiqwY5BUTA4QYmpp9" target="_blank"
+									class="location-link">Sicily, IT 西西里岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/SiqwY5BUTA4QYmpp9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item"
+							data-location="Aurora Borealis (Northern Lights) near Stuttgart, DE 极光爆发"
+							data-month="May / 五月" data-year="2024">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/m13dLs4t1U3iqviRA" target="_blank"
+									class="location-link">Aurora Borealis (Northern Lights) near Stuttgart, DE 极光爆发</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/m13dLs4t1U3iqviRA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯"
+							data-month="February / 二月" data-year="2024">
+							<div class="card-header">
+								<span class="card-date">February / 二月</span>
+								<span class="card-icon">⛷️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/r2x7tXquhQBDq3Ra9" target="_blank"
+									class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/r2x7tXquhQBDq3Ra9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2023">
+					<h2 class="year-title">2023</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/am5UHhQztQRYUdgN9" target="_blank"
+									class="location-link">Hurghada, EG 胡尔格达</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/am5UHhQztQRYUdgN9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Gardasee, IT 加尔达湖" data-month="November / 十一月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/v19HMXA9bMNDWw8Q9" target="_blank"
+									class="location-link">Gardasee, IT 加尔达湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/v19HMXA9bMNDWw8Q9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Frankfurt Marathon, DE 法兰克福马拉松"
+							data-month="October / 十月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏃‍♂️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/VXK7EFPa9TNZX2KU8" target="_blank"
+									class="location-link">Frankfurt Marathon, DE 法兰克福马拉松</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/VXK7EFPa9TNZX2KU8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Jasper National Park, CA 贾斯珀国家公园"
+							data-month="August / 八月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/XdfKacYcuwTZteYUA" target="_blank"
+									class="location-link">Jasper National Park, CA 贾斯珀国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/XdfKacYcuwTZteYUA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Yoho National Park, CA 幽鹤国家公园"
+							data-month="August / 八月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/KSsijvymMnyxsthEA" target="_blank"
+									class="location-link">Yoho National Park, CA 幽鹤国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/KSsijvymMnyxsthEA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Banff National Park, CA 班夫国家公园"
+							data-month="August / 八月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/pQxvF5A16fChhgFx9" target="_blank"
+									class="location-link">Banff National Park, CA 班夫国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/pQxvF5A16fChhgFx9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Niagara Falls, CA 尼亚加拉瀑布" data-month="August / 八月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/uxK6n5GD3XBgZ8549" target="_blank"
+									class="location-link">Niagara Falls, CA 尼亚加拉瀑布</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/uxK6n5GD3XBgZ8549" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Toronto, CA 多伦多" data-month="August / 八月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/XdV63zsqM3MjFB4x7" target="_blank"
+									class="location-link">Toronto, CA 多伦多</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/XdV63zsqM3MjFB4x7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Mercedes-Benz Museum, DE 梅赛德斯-奔驰博物馆"
+							data-month="June / 六月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/K6oNb8VEoP55M1vZ6" target="_blank"
+									class="location-link">Mercedes-Benz Museum, DE 梅赛德斯-奔驰博物馆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/K6oNb8VEoP55M1vZ6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Andernach Geyser, DE 安德纳赫间歇泉" data-month="May / 五月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/F2rTKFHDNx3muxnd9" target="_blank"
+									class="location-link">Andernach Geyser, DE 安德纳赫间歇泉</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/F2rTKFHDNx3muxnd9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Düsseldorf, DE 杜塞尔多夫" data-month="May / 五月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/fbheQyECPcek7Gtw7" target="_blank"
+									class="location-link">Düsseldorf, DE 杜塞尔多夫</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/fbheQyECPcek7Gtw7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Cologne, DE 科隆" data-month="May / 五月"
+							data-year="2023">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/1EUifHiJbDqV4shx5" target="_blank"
+									class="location-link">Cologne, DE 科隆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/1EUifHiJbDqV4shx5" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯"
+							data-month="February / 二月" data-year="2023">
+							<div class="card-header">
+								<span class="card-date">February / 二月</span>
+								<span class="card-icon">⛷️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/Rg1sFTbR5WpPc3kC7" target="_blank"
+									class="location-link">Serfaus-Fiss-Ladis, AT 塞尔福斯-菲斯-拉迪斯</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/Rg1sFTbR5WpPc3kC7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2022">
+					<h2 class="year-title">2022</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月"
+							data-year="2022">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/X9Uzt1U9ArxZfz1KA" target="_blank"
+									class="location-link">Hurghada, EG 胡尔格达</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/X9Uzt1U9ArxZfz1KA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Berlin, DE 柏林" data-month="November / 十一月"
+							data-year="2022">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/38KfLphkayPXiT4YA" target="_blank"
+									class="location-link">Berlin, DE 柏林</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/38KfLphkayPXiT4YA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Dolomites, IT 多洛米蒂" data-month="August / 八月"
+							data-year="2022">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/gCNBUQwSn3DKtkmu6" target="_blank"
+									class="location-link">Dolomites, IT 多洛米蒂</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/gCNBUQwSn3DKtkmu6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Meradalir Volcano Eruption, IS Meradalir火山喷发"
+							data-month="August / 八月" data-year="2022">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/59SC3hv9xomso2Kx5" target="_blank"
+									class="location-link">Meradalir Volcano Eruption, IS Meradalir火山喷发</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/59SC3hv9xomso2Kx5" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Iceland, IS 冰岛" data-month="June / 六月"
+							data-year="2022">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/U9Faz6kmxEDkSzVa6" target="_blank"
+									class="location-link">Iceland, IS 冰岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/U9Faz6kmxEDkSzVa6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Tyrol, AT 蒂罗尔" data-month="April / 四月"
+							data-year="2022">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/eWWxQQRysJP9sah78" target="_blank"
+									class="location-link">Tyrol, AT 蒂罗尔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/eWWxQQRysJP9sah78" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2021">
+					<h2 class="year-title">2021</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Crete, GR 克里特" data-month="August / 八月"
+							data-year="2021">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/AbqAruSWMKW6z8Fj7" target="_blank"
+									class="location-link">Crete, GR 克里特</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/AbqAruSWMKW6z8Fj7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2020">
+					<h2 class="year-title">2020</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Zillertal, AT 齐勒河谷" data-month="August / 八月"
+							data-year="2020">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/m7iFMzFmj6NxDuNq8" target="_blank"
+									class="location-link">Zillertal, AT 齐勒河谷</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/m7iFMzFmj6NxDuNq8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Comet NEOWISE 新智彗星" data-month="July / 七月"
+							data-year="2020">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/gUitTAjHTGt1aBEp7" target="_blank"
+									class="location-link">Comet NEOWISE 新智彗星</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/gUitTAjHTGt1aBEp7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Rhine Falls, CH 莱茵瀑布" data-month="January / 一月"
+							data-year="2020">
+							<div class="card-header">
+								<span class="card-date">January / 一月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/Ng7oCPFNsgUhmdBG6" target="_blank"
+									class="location-link">Rhine Falls, CH 莱茵瀑布</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/Ng7oCPFNsgUhmdBG6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2019">
+					<h2 class="year-title">2019</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Cairo &amp; Pyramids, EG 开罗&amp;金字塔"
+							data-month="December / 十二月" data-year="2019">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/XTvebr5TPjS6TSgx8" target="_blank"
+									class="location-link">Cairo &amp; Pyramids, EG 开罗&amp;金字塔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/XTvebr5TPjS6TSgx8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Luxor, EG 卢克索" data-month="December / 十二月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/dCHE846AsBx2Umgb8" target="_blank"
+									class="location-link">Luxor, EG 卢克索</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/dCHE846AsBx2Umgb8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/fYPC9yr8Z2Yp2a7E8" target="_blank"
+									class="location-link">Hurghada, EG 胡尔格达</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/fYPC9yr8Z2Yp2a7E8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Svalbard, NO 斯瓦尔巴群岛" data-month="August / 八月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/To6567A5Vc5RXme58" target="_blank"
+									class="location-link">Svalbard, NO 斯瓦尔巴群岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/To6567A5Vc5RXme58" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Lofoten, NO 罗弗敦群岛" data-month="August / 八月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/vz7q9de75jm2sqc97" target="_blank"
+									class="location-link">Lofoten, NO 罗弗敦群岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/vz7q9de75jm2sqc97" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Tenerife, ES 特内里费岛" data-month="April / 四月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/GZB2Q5mqJyzNrktE6" target="_blank"
+									class="location-link">Tenerife, ES 特内里费岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/GZB2Q5mqJyzNrktE6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="April / 四月"
+							data-year="2019">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/fino1RgqpM5ccEUK8" target="_blank"
+									class="location-link">Allgäu, DE 阿尔高</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/fino1RgqpM5ccEUK8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2018">
+					<h2 class="year-title">2018</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Hurghada, EG 胡尔格达" data-month="December / 十二月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/U54i2usRqTowTVWK6" target="_blank"
+									class="location-link">Hurghada, EG 胡尔格达</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/U54i2usRqTowTVWK6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Black Forest, DE 黑森林" data-month="November / 十一月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/xWi24WuUvwab9HmN6" target="_blank"
+									class="location-link">Black Forest, DE 黑森林</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/xWi24WuUvwab9HmN6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Burg Hohenzollern, DE 霍亨索伦城堡"
+							data-month="October / 十月" data-year="2018">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/ceRKi3pTzMA7Q6jf6" target="_blank"
+									class="location-link">Burg Hohenzollern, DE 霍亨索伦城堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/ceRKi3pTzMA7Q6jf6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="October / 十月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/aCMHAigHjpgyy9Wg9" target="_blank"
+									class="location-link">Allgäu, DE 阿尔高</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/aCMHAigHjpgyy9Wg9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Scotland, UK 苏格兰" data-month="August / 八月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/cEPhCUHdqM6AQJLTA" target="_blank"
+									class="location-link">Scotland, UK 苏格兰</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/cEPhCUHdqM6AQJLTA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="England, UK 英格兰" data-month="August / 八月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/Zvtyunsb662jvnB89" target="_blank"
+									class="location-link">England, UK 英格兰</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/Zvtyunsb662jvnB89" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="London, UK 伦敦" data-month="July / 七月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/c4y8SUfxP9fi199a8" target="_blank"
+									class="location-link">London, UK 伦敦</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/c4y8SUfxP9fi199a8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Gardasee, IT 加尔达湖" data-month="May / 五月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/1TmzWKeo3FgJJKyB8" target="_blank"
+									class="location-link">Gardasee, IT 加尔达湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/1TmzWKeo3FgJJKyB8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Schwetzingen, DE 施韦芩根宫"
+							data-month="April / 四月" data-year="2018">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/BiT1jhedkaTtvdE86" target="_blank"
+									class="location-link">Schloss Schwetzingen, DE 施韦芩根宫</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/BiT1jhedkaTtvdE86" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="January / 一月"
+							data-year="2018">
+							<div class="card-header">
+								<span class="card-date">January / 一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/6xQz7HthNETSL9XNA" target="_blank"
+									class="location-link">Chongqing, CN 重庆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/6xQz7HthNETSL9XNA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2017">
+					<h2 class="year-title">2017</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Zhangjiajie, CN 张家界" data-month="December / 十二月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/HFA25GdcLncq4yPF6" target="_blank"
+									class="location-link">Zhangjiajie, CN 张家界</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/HFA25GdcLncq4yPF6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Seoul, KR 首尔" data-month="December / 十二月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/iWvwvoymwBgXdKWg7" target="_blank"
+									class="location-link">Seoul, KR 首尔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/iWvwvoymwBgXdKWg7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Madeira, PT 马德拉" data-month="November / 十一月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/qmWEVbVTXNn96Gih7" target="_blank"
+									class="location-link">Madeira, PT 马德拉</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/qmWEVbVTXNn96Gih7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Titisee, DE 蒂蒂湖" data-month="November / 十一月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/nZ7gBEtHojqHqe5q9" target="_blank"
+									class="location-link">Titisee, DE 蒂蒂湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/nZ7gBEtHojqHqe5q9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Freiburg, DE 弗莱堡" data-month="November / 十一月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/bqYn8xJ7pXPU6HfH7" target="_blank"
+									class="location-link">Freiburg, DE 弗莱堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/bqYn8xJ7pXPU6HfH7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Rhine Falls, CH 莱茵瀑布" data-month="November / 十一月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">November / 十一月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/HJM9RGzNTTuW5Xx69" target="_blank"
+									class="location-link">Rhine Falls, CH 莱茵瀑布</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/HJM9RGzNTTuW5Xx69" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Burg Hohenzollern, DE 霍亨索伦城堡"
+							data-month="October / 十月" data-year="2017">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/KQ915FzSPhvqJMnM9" target="_blank"
+									class="location-link">Burg Hohenzollern, DE 霍亨索伦城堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/KQ915FzSPhvqJMnM9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡"
+							data-month="October / 十月" data-year="2017">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/uFcAwJqg5HprRmiz9" target="_blank"
+									class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/uFcAwJqg5HprRmiz9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Hallstatt, AT 哈尔施塔特" data-month="October / 十月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/jaj7ESkt8xLow1rz6" target="_blank"
+									class="location-link">Hallstatt, AT 哈尔施塔特</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/jaj7ESkt8xLow1rz6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Salzburg, AT 萨尔茨堡" data-month="October / 十月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/gxHH3pgD7gretpDF6" target="_blank"
+									class="location-link">Salzburg, AT 萨尔茨堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/gxHH3pgD7gretpDF6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Königssee, DE 国王湖" data-month="October / 十月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/oirHEpZtL2qDyfHN8" target="_blank"
+									class="location-link">Königssee, DE 国王湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/oirHEpZtL2qDyfHN8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Trier, DE 特里尔" data-month="August / 八月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/B6JQUhyJwcQhjmS97" target="_blank"
+									class="location-link">Trier, DE 特里尔</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/B6JQUhyJwcQhjmS97" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Kaiserslautern, DE 凯泽斯劳滕" data-month="August / 八月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/bxuGSgCNT783NEN97" target="_blank"
+									class="location-link">Kaiserslautern, DE 凯泽斯劳滕</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/bxuGSgCNT783NEN97" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Blaubeuren, DE 布劳博伊伦" data-month="August / 八月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/eM8vMK5fGxcGGg9G7" target="_blank"
+									class="location-link">Blaubeuren, DE 布劳博伊伦</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/eM8vMK5fGxcGGg9G7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zugspitze, DE 楚格峰" data-month="August / 八月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/UActspFty2YQAMZE8" target="_blank"
+									class="location-link">Zugspitze, DE 楚格峰</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/UActspFty2YQAMZE8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="August / 八月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/KjXsLVEXvmHHNeSr6" target="_blank"
+									class="location-link">Allgäu, DE 阿尔高</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/KjXsLVEXvmHHNeSr6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡"
+							data-month="August / 八月" data-year="2017">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/S4ouC2uPk8ow7jXb8" target="_blank"
+									class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/S4ouC2uPk8ow7jXb8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Federsee, DE 费德湖" data-month="May / 五月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/7wKaXLW94dK77HMLA" target="_blank"
+									class="location-link">Federsee, DE 费德湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/7wKaXLW94dK77HMLA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Allgäu, DE 阿尔高" data-month="May / 五月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/egRpB9oZNjj95KvL7" target="_blank"
+									class="location-link">Allgäu, DE 阿尔高</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/egRpB9oZNjj95KvL7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Malta, MT 马耳他" data-month="April / 四月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/faYWeaqafJn2HUEw9" target="_blank"
+									class="location-link">Malta, MT 马耳他</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/faYWeaqafJn2HUEw9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Lucerne, CH 卢塞恩" data-month="April / 四月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/aKdrfwFxhn5ebvTv7" target="_blank"
+									class="location-link">Lucerne, CH 卢塞恩</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/aKdrfwFxhn5ebvTv7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Konstanz, DE 康斯坦茨" data-month="April / 四月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/s1MHdkHhcjjsYRrm8" target="_blank"
+									class="location-link">Konstanz, DE 康斯坦茨</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/s1MHdkHhcjjsYRrm8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Reichenau Island, DE 赖兴瑙岛" data-month="April / 四月"
+							data-year="2017">
+							<div class="card-header">
+								<span class="card-date">April / 四月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/wLhjuvcVEMr5Z4KJA" target="_blank"
+									class="location-link">Reichenau Island, DE 赖兴瑙岛</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/wLhjuvcVEMr5Z4KJA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2016">
+					<h2 class="year-title">2016</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Kunming, CN 昆明" data-month="December / 十二月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/YUrTupkwtAwAoKGM8" target="_blank"
+									class="location-link">Kunming, CN 昆明</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/YUrTupkwtAwAoKGM8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Chongqing, CN 重庆" data-month="December / 十二月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/oBSAEr8JQMhRDAPK9" target="_blank"
+									class="location-link">Chongqing, CN 重庆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/oBSAEr8JQMhRDAPK9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Beijing, CN 北京" data-month="December / 十二月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://photos.app.goo.gl/fMjySgR5buJeCrrYA" target="_blank"
+									class="location-link">Beijing, CN 北京</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://photos.app.goo.gl/fMjySgR5buJeCrrYA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Heidelberg, DE 海德堡" data-month="October / 十月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/iZzbdzA2XVbYMQMJA" target="_blank"
+									class="location-link">Heidelberg, DE 海德堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/iZzbdzA2XVbYMQMJA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Lichtenstein, DE 利希滕施泰因城堡"
+							data-month="October / 十月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/9sqRLLHM47eCL1Zt7" target="_blank"
+									class="location-link">Schloss Lichtenstein, DE 利希滕施泰因城堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/9sqRLLHM47eCL1Zt7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Schloss Neuschwanstein, DE 新天鹅堡"
+							data-month="October / 十月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Ndj1vEZnwR3EGjsb8" target="_blank"
+									class="location-link">Schloss Neuschwanstein, DE 新天鹅堡</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Ndj1vEZnwR3EGjsb8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Göttingen, DE 哥廷根" data-month="August / 八月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/1eHUpWf2Lcr1Gb57A" target="_blank"
+									class="location-link">Göttingen, DE 哥廷根</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/1eHUpWf2Lcr1Gb57A" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="New York City, US 纽约" data-month="August / 八月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/1Gegubk55sKVtpJh7" target="_blank"
+									class="location-link">New York City, US 纽约</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/1Gegubk55sKVtpJh7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Grand Teton National Park, US 大提顿国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/GzJbo4BNGooyow4YA" target="_blank"
+									class="location-link">Grand Teton National Park, US 大提顿国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/GzJbo4BNGooyow4YA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Yellowstone National Park, US 黄石国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/6LxBx7NxoFzM89NV6" target="_blank"
+									class="location-link">Yellowstone National Park, US 黄石国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/6LxBx7NxoFzM89NV6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item"
+							data-location="Grand Canyon National Park (North Rim), US 大峡谷国家公园(北缘)"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/xJaKxSaBDkW96Hty9" target="_blank"
+									class="location-link">Grand Canyon National Park (North Rim), US 大峡谷国家公园(北缘)</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/xJaKxSaBDkW96Hty9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Zion National Park, US 锡安国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Nifn9HdhtSMdwKwu6" target="_blank"
+									class="location-link">Zion National Park, US 锡安国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Nifn9HdhtSMdwKwu6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Bryce Canyon National Park, US 布莱斯峡谷国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Xgmrme2p8jLz8znK8" target="_blank"
+									class="location-link">Bryce Canyon National Park, US 布莱斯峡谷国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Xgmrme2p8jLz8znK8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Canyonlands National Park, US 峡谷地国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/DDrkMSbT3CYn3Dbh6" target="_blank"
+									class="location-link">Canyonlands National Park, US 峡谷地国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/DDrkMSbT3CYn3Dbh6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Arches National Park, US 拱门国家公园"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/AWSoohALq4gYghpt7" target="_blank"
+									class="location-link">Arches National Park, US 拱门国家公园</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/AWSoohALq4gYghpt7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Monument Valley, US 纪念碑谷" data-month="August / 八月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/YeER9zfeb7jPGQSw9" target="_blank"
+									class="location-link">Monument Valley, US 纪念碑谷</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/YeER9zfeb7jPGQSw9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Upper Antelope Canyon, US 上羚羊谷"
+							data-month="August / 八月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/ss8TndwEFpYF1Dqn8" target="_blank"
+									class="location-link">Upper Antelope Canyon, US 上羚羊谷</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/ss8TndwEFpYF1Dqn8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Lake Powell, US 鲍威尔湖" data-month="August / 八月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">🏖️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/MTJSMtB1QATAvyuW9" target="_blank"
+									class="location-link">Lake Powell, US 鲍威尔湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/MTJSMtB1QATAvyuW9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Horseshoe Bend, US 马蹄湾" data-month="August / 八月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">August / 八月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/4xbJj28jBwwrawwBA" target="_blank"
+									class="location-link">Horseshoe Bend, US 马蹄湾</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/4xbJj28jBwwrawwBA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item"
+							data-location="Grand Canyon National Park (South Rim), US 大峡谷国家公园(南缘)"
+							data-month="July / 七月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">⛰️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/vz6vsWdKxg49b8JR8" target="_blank"
+									class="location-link">Grand Canyon National Park (South Rim), US 大峡谷国家公园(南缘)</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/vz6vsWdKxg49b8JR8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Hoover Dam, US 胡佛水坝" data-month="July / 七月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Phg33eHD2g8Tf6E66" target="_blank"
+									class="location-link">Hoover Dam, US 胡佛水坝</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Phg33eHD2g8Tf6E66" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Las Vegas, US 拉斯维加斯" data-month="July / 七月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">July / 七月</span>
+								<span class="card-icon">🏙️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Wdk1iLkEwtg21yr68" target="_blank"
+									class="location-link">Las Vegas, US 拉斯维加斯</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Wdk1iLkEwtg21yr68" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Pompeii, IT 庞贝" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/Tmc5cJZs8k3LZy579" target="_blank"
+									class="location-link">Pompeii, IT 庞贝</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/Tmc5cJZs8k3LZy579" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Paestum, IT 帕埃斯图姆" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/N75eZVct3UcYrQcGA" target="_blank"
+									class="location-link">Paestum, IT 帕埃斯图姆</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/N75eZVct3UcYrQcGA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Southern Peninsula, IS 冰岛西南区" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/yeB2HswLzcxNPenp7" target="_blank"
+									class="location-link">Southern Peninsula, IS 冰岛西南区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/yeB2HswLzcxNPenp7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Western Region, IS 冰岛西部区" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/6vD8aP91T1fj5ptv7" target="_blank"
+									class="location-link">Western Region, IS 冰岛西部区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/6vD8aP91T1fj5ptv7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Westfjords, IS 冰岛西峡湾区" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/LdMvTTpw4kuLpcoV7" target="_blank"
+									class="location-link">Westfjords, IS 冰岛西峡湾区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/LdMvTTpw4kuLpcoV7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Northwestern Region, IS 冰岛西北区"
+							data-month="June / 六月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/vMxteCkiHdaiKVwu9" target="_blank"
+									class="location-link">Northwestern Region, IS 冰岛西北区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/vMxteCkiHdaiKVwu9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Northeastern Region, IS 冰岛东北区"
+							data-month="June / 六月" data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/dLhBa3nmLaBqWUXW9" target="_blank"
+									class="location-link">Northeastern Region, IS 冰岛东北区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/dLhBa3nmLaBqWUXW9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Eastern Region, IS 冰岛东部区" data-month="June / 六月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">June / 六月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/orXSrAkAMgLgCMKR9" target="_blank"
+									class="location-link">Eastern Region, IS 冰岛东部区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/orXSrAkAMgLgCMKR9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Southern Region, IS 冰岛南部区" data-month="May / 五月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/3yGqiXtupkEHV9xj7" target="_blank"
+									class="location-link">Southern Region, IS 冰岛南部区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/3yGqiXtupkEHV9xj7" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Capital Region, IS 冰岛大雷克雅未克区" data-month="May / 五月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">May / 五月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/BeLECB5u9nb2tgo29" target="_blank"
+									class="location-link">Capital Region, IS 冰岛大雷克雅未克区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/BeLECB5u9nb2tgo29" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Wolfgangsee, AT 沃尔夫冈湖" data-month="March / 三月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">March / 三月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/fZYsVYno2P1qFX8m8" target="_blank"
+									class="location-link">Wolfgangsee, AT 沃尔夫冈湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/fZYsVYno2P1qFX8m8" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Hallstatt, AT 哈尔施塔特" data-month="March / 三月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">March / 三月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/DGqL4r8aUV5EQ5gTA" target="_blank"
+									class="location-link">Hallstatt, AT 哈尔施塔特</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/DGqL4r8aUV5EQ5gTA" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Königssee, DE 国王湖" data-month="March / 三月"
+							data-year="2016">
+							<div class="card-header">
+								<span class="card-date">March / 三月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/3WrUDDm3PLJPTk21A" target="_blank"
+									class="location-link">Königssee, DE 国王湖</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/3WrUDDm3PLJPTk21A" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section class="year-section" data-year="2015">
+					<h2 class="year-title">2015</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item" data-location="Matterhorn Region, CH 马特宏峰地区"
+							data-month="December / 十二月" data-year="2015">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/m5VPKkJe7i5JwQrx9" target="_blank"
+									class="location-link">Matterhorn Region, CH 马特宏峰地区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/m5VPKkJe7i5JwQrx9" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Lucerne, CH 卢塞恩" data-month="December / 十二月"
+							data-year="2015">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/uYKekvp2onTgk77y5" target="_blank"
+									class="location-link">Lucerne, CH 卢塞恩</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/uYKekvp2onTgk77y5" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Jungfrau Region, CH 少女峰地区"
+							data-month="December / 十二月" data-year="2015">
+							<div class="card-header">
+								<span class="card-date">December / 十二月</span>
+								<span class="card-icon">✈️</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/HkGxKhnEjKovLUyy6" target="_blank"
+									class="location-link">Jungfrau Region, CH 少女峰地区</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/HkGxKhnEjKovLUyy6" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+						<li class="travel-card-item" data-location="Maulbronn Monastery, DE 毛尔布龙修道院"
+							data-month="October / 十月" data-year="2015">
+							<div class="card-header">
+								<span class="card-date">October / 十月</span>
+								<span class="card-icon">🏰</span>
+							</div>
+							<div class="card-body">
+								<a href="https://goo.gl/photos/sgAg4J7oa2sS8b717" target="_blank"
+									class="location-link">Maulbronn Monastery, DE 毛尔布龙修道院</a>
+							</div>
+							<div class="card-footer">
+								<a href="https://goo.gl/photos/sgAg4J7oa2sS8b717" target="_blank"
+									class="gallery-btn">View Album &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+			</div>
+
+			<div class="travels-container" id="games-container" style="display: none;">
+				<section class="category-section">
+					<h2 class="year-title">Games</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item">
+							<div class="card-header">
+								<span class="card-date">Game</span>
+								<span class="card-icon">🤠</span>
+							</div>
+							<div class="card-body">
+								<a href="games/shoot_game/index.html" target="_blank" class="location-link">Wild West
+									Duel</a>
+								<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">A
+									high-stakes fast-paced western duel. Face off against a smart bandit bot in
+									single-player mode, or challenge a friend in local multiplayer showdowns.</p>
+							</div>
+							<div class="card-footer">
+								<a href="games/shoot_game/index.html" target="_blank" class="gallery-btn">Play Game
+									&rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
+			</div>
+
+			<div class="travels-container" id="tools-container" style="display: none;">
+				<section class="category-section">
+					<h2 class="year-title">Tools</h2>
+					<ul class="travel-grid">
+						<li class="travel-card-item">
+							<div class="card-header">
+								<span class="card-date">Tool</span>
+								<span class="card-icon">📱</span>
+							</div>
+							<div class="card-body">
+								<a href="tools/qr_code_generator/index.html" target="_blank" class="location-link">QR
+									Code Studio</a>
+								<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">An
+									interactive utility to generate beautiful QR codes. Customize dots, corners, colors,
+									gradients, and embed logos for scannable, stylized designs.</p>
+							</div>
+							<div class="card-footer">
+								<a href="tools/qr_code_generator/index.html" target="_blank" class="gallery-btn">Open
+									Tool &rarr;</a>
+							</div>
+						</li>
+					</ul>
+				</section>
 			</div>
 
 			<div class="no-results" id="no-results">
@@ -1756,7 +2230,7 @@
 			</div>
 
 			<footer class="footer-note">
-				&copy; 2026 Zhiyang Chen. Layout designed with dedication.
+				&copy; 2026 Yangyang. Layout designed with dedication.
 			</footer>
 		</main>
 	</div>
@@ -1765,13 +2239,13 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			const searchInput = document.getElementById('search-input');
 			const filterTabsContainer = document.getElementById('filter-tabs');
-			const yearSections = document.querySelectorAll('.year-section');
+			const yearSections = document.querySelectorAll('#travels-container .year-section');
 			const cards = document.querySelectorAll('.travel-card-item');
 			const noResults = document.getElementById('no-results');
 
 			// Extract all years dynamically to build the filter bar
 			const years = Array.from(yearSections).map(sec => sec.getAttribute('data-year'));
-			
+
 			// Generate and append filter tag buttons
 			years.forEach(year => {
 				const btn = document.createElement('button');
@@ -1803,17 +2277,16 @@
 					sectionCards.forEach(card => {
 						const location = card.getAttribute('data-location').toLowerCase();
 						const month = card.getAttribute('data-month').toLowerCase();
-						
+
 						const matchesSearch = location.includes(searchQuery) || month.includes(searchQuery);
 
 						if (matchesSearch) {
 							card.style.display = 'flex';
-							card.classList.add('fade-in');
+							card.style.setProperty('--card-index', visibleCardsOverall);
 							visibleCardsInSection++;
 							visibleCardsOverall++;
 						} else {
 							card.style.display = 'none';
-							card.classList.remove('fade-in');
 						}
 					});
 
@@ -1846,7 +2319,70 @@
 				searchQuery = e.target.value.toLowerCase().trim();
 				filterContent();
 			});
+
+			// Category toggling logic
+			const travelsContainer = document.getElementById('travels-container');
+			const gamesContainer = document.getElementById('games-container');
+			const toolsContainer = document.getElementById('tools-container');
+			const travelControls = document.getElementById('travel-controls');
+
+			const switchCategory = (category) => {
+				// Update sidebar stats active style
+				document.querySelectorAll('.stats .stat-item').forEach(item => {
+					item.classList.remove('active');
+				});
+				const activeStat = document.getElementById(`stat-${category}`);
+				if (activeStat) {
+					activeStat.classList.add('active');
+				}
+
+				// Show/hide containers and controls-card
+				if (category === 'travels') {
+					travelsContainer.style.display = 'flex';
+					gamesContainer.style.display = 'none';
+					toolsContainer.style.display = 'none';
+					travelControls.style.display = 'block';
+					noResults.style.display = 'none';
+					filterContent();
+				} else if (category === 'games') {
+					travelsContainer.style.display = 'none';
+					gamesContainer.style.display = 'flex';
+					toolsContainer.style.display = 'none';
+					travelControls.style.display = 'none';
+					noResults.style.display = 'none';
+					gamesContainer.querySelectorAll('.travel-card-item').forEach((card, idx) => {
+						card.style.setProperty('--card-index', idx);
+					});
+				} else if (category === 'tools') {
+					travelsContainer.style.display = 'none';
+					gamesContainer.style.display = 'none';
+					toolsContainer.style.display = 'flex';
+					travelControls.style.display = 'none';
+					noResults.style.display = 'none';
+					toolsContainer.querySelectorAll('.travel-card-item').forEach((card, idx) => {
+						card.style.setProperty('--card-index', idx);
+					});
+				}
+			};
+
+			// Focus search on '/' keypress
+			document.addEventListener('keydown', (e) => {
+				if (e.key === '/' && document.activeElement !== searchInput) {
+					e.preventDefault();
+					searchInput.focus();
+				}
+			});
+
+			// Handle sidebar stats clicks to switch tabs
+			const statAlbums = document.getElementById('stat-travels');
+			const statGames = document.getElementById('stat-games');
+			const statTools = document.getElementById('stat-tools');
+
+			if (statAlbums) statAlbums.addEventListener('click', () => switchCategory('travels'));
+			if (statGames) statGames.addEventListener('click', () => switchCategory('games'));
+			if (statTools) statTools.addEventListener('click', () => switchCategory('tools'));
 		});
 	</script>
 </body>
+
 </html>
