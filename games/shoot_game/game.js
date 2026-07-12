@@ -72,6 +72,7 @@ class Game {
         this.bombLvl = parseInt(localStorage.getItem('wild_west_bomb_level')) || 1;
         this.aiDifficulty = parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1;
         this.lastPrestigeChoiceTime = parseInt(localStorage.getItem('wild_west_prestige_time')) || 0;
+        this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
 
         // Language setup
         this.currentLanguage = localStorage.getItem('wild_west_lang') || 'original';
@@ -500,6 +501,30 @@ class Game {
         this.updateShopUI();
         this.updateModeVisibility();
 
+        // Shop Upgrades: Daily Reward
+        const claimDailyBtn = document.getElementById('claim-daily-btn');
+        if (claimDailyBtn) {
+            claimDailyBtn.addEventListener('click', () => {
+                if (!this.canClaimDaily()) {
+                    audio.playRicochet();
+                    claimDailyBtn.classList.add('shake');
+                    setTimeout(() => claimDailyBtn.classList.remove('shake'), 400);
+                    return;
+                }
+                const result = this.claimDailyReward();
+                if (result.success) {
+                    audio.playCoinSound();
+                    
+                    const popupMsg = result.isJackpot 
+                        ? this.t('shop-daily-reward-jackpot-popup', { val: result.coinsWon })
+                        : this.t('shop-daily-reward-popup', { val: result.coinsWon });
+                    
+                    this.showToast(popupMsg);
+                    this.updateShopUI();
+                }
+            });
+        }
+
         // Shop Upgrades: +1 HP
         const buyHpBtn = document.getElementById('buy-hp-btn');
         buyHpBtn.addEventListener('click', () => {
@@ -799,6 +824,36 @@ class Game {
         const displayedCoins = (this.coins === Infinity || this.coins >= 99999999) ? "Unendlich" : this.coins;
         document.getElementById('shop-coins-val').textContent = displayedCoins;
 
+        // --- Daily Reward ---
+        const claimDailyBtn = document.getElementById('claim-daily-btn');
+        const dailyDescContainer = document.getElementById('shop-daily-desc-container');
+        if (claimDailyBtn && dailyDescContainer) {
+            const isJackpotToday = this.isLastDayOfMonth();
+            if (isJackpotToday) {
+                dailyDescContainer.innerHTML = this.t('shop-daily-desc-today-jackpot');
+                dailyDescContainer.style.color = '#ff9500';
+                dailyDescContainer.style.fontWeight = 'bold';
+            } else {
+                dailyDescContainer.innerHTML = this.t('shop-daily-desc');
+                dailyDescContainer.style.color = '#bfa17c';
+                dailyDescContainer.style.fontWeight = 'normal';
+            }
+
+            if (this.canClaimDaily()) {
+                claimDailyBtn.textContent = this.t('shop-daily-btn-claim');
+                claimDailyBtn.disabled = false;
+                claimDailyBtn.className = 'btn btn-gold btn-shop';
+                claimDailyBtn.style.opacity = '1';
+                claimDailyBtn.style.cursor = 'pointer';
+            } else {
+                claimDailyBtn.textContent = this.t('shop-daily-btn-claimed');
+                claimDailyBtn.disabled = true;
+                claimDailyBtn.className = 'btn btn-toggle-inactive btn-shop';
+                claimDailyBtn.style.opacity = '0.5';
+                claimDailyBtn.style.cursor = 'default';
+            }
+        }
+
         // Render descriptions from templates so that the span IDs are present
         const hpDescContainer = document.getElementById('shop-hp-desc-container');
         hpDescContainer.innerHTML = this.t('shop-hp-desc', { val: `<span id="shop-hp-lvl">${this.hpUpgrades}</span>` }) + ` <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span>`;
@@ -1001,6 +1056,73 @@ class Game {
         }
 
         this.updatePrestigeUI();
+    }
+
+    getTodayDateString() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    isLastDayOfMonth() {
+        const today = new Date();
+        const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        return tomorrow.getDate() === 1;
+    }
+
+    canClaimDaily() {
+        const todayStr = this.getTodayDateString();
+        return this.lastDailyClaim !== todayStr;
+    }
+
+    claimDailyReward() {
+        if (!this.canClaimDaily()) {
+            return { success: false, reason: 'already_claimed' };
+        }
+
+        const isJackpot = this.isLastDayOfMonth();
+        let coinsWon = 0;
+        if (isJackpot) {
+            coinsWon = Math.floor(Math.random() * 101) + 100;
+        } else {
+            coinsWon = Math.floor(Math.random() * 21) + 10;
+        }
+
+        this.coins += coinsWon;
+        const todayStr = this.getTodayDateString();
+        this.lastDailyClaim = todayStr;
+
+        localStorage.setItem('wild_west_coins', this.coins);
+        localStorage.setItem('wild_west_last_daily_claim', this.lastDailyClaim);
+
+        return { success: true, coinsWon, isJackpot };
+    }
+
+    showToast(message) {
+        const existingToast = document.querySelector('.toast-notification');
+        if (existingToast) {
+            existingToast.remove();
+        }
+
+        const toast = document.createElement('div');
+        toast.className = 'toast-notification';
+        toast.innerHTML = `<span>${message}</span>`;
+        
+        const container = document.getElementById('game-container');
+        if (container) {
+            container.appendChild(toast);
+            toast.offsetHeight;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 2500);
+        }
     }
 
     updateWeaponsUI() {
