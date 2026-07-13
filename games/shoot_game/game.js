@@ -1058,31 +1058,30 @@ class Game {
         this.updatePrestigeUI();
     }
 
-    getTodayDateString() {
-        const today = new Date();
+    getTodayDateString(today = new Date()) {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
 
-    isLastDayOfMonth() {
-        const today = new Date();
+    isLastDayOfMonth(today = new Date()) {
         const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         return tomorrow.getDate() === 1;
     }
 
-    canClaimDaily() {
-        const todayStr = this.getTodayDateString();
+    canClaimDaily(today = new Date()) {
+        const todayStr = this.getTodayDateString(today);
         return this.lastDailyClaim !== todayStr;
     }
 
     claimDailyReward() {
-        if (!this.canClaimDaily()) {
+        const now = new Date();
+        if (!this.canClaimDaily(now)) {
             return { success: false, reason: 'already_claimed' };
         }
 
-        const isJackpot = this.isLastDayOfMonth();
+        const isJackpot = this.isLastDayOfMonth(now);
         let coinsWon = 0;
         if (isJackpot) {
             coinsWon = Math.floor(Math.random() * 101) + 100;
@@ -1091,7 +1090,7 @@ class Game {
         }
 
         this.coins += coinsWon;
-        const todayStr = this.getTodayDateString();
+        const todayStr = this.getTodayDateString(now);
         this.lastDailyClaim = todayStr;
 
         localStorage.setItem('wild_west_coins', this.coins);
