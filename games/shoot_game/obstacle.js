@@ -55,13 +55,12 @@ export class Obstacle {
         ctx.strokeStyle = '#1b4332';
         ctx.lineWidth = 3;
 
-        // Trunk
+        // Trunk fill
         ctx.beginPath();
         ctx.roundRect(-8, -25, 16, 45, [8, 8, 2, 2]);
         ctx.fill();
-        ctx.stroke();
 
-        // Left arm
+        // Left arm fill
         ctx.beginPath();
         ctx.moveTo(-6, -5);
         ctx.quadraticCurveTo(-18, -5, -18, -15);
@@ -72,9 +71,8 @@ export class Obstacle {
         ctx.lineTo(-6, -13);
         ctx.closePath();
         ctx.fill();
-        ctx.stroke();
 
-        // Right arm
+        // Right arm fill
         ctx.beginPath();
         ctx.moveTo(6, 5);
         ctx.quadraticCurveTo(18, 5, 18, -5);
@@ -85,6 +83,37 @@ export class Obstacle {
         ctx.lineTo(6, -3);
         ctx.closePath();
         ctx.fill();
+
+        // Disable shadows for outlines and needles to keep them sharp
+        ctx.shadowColor = 'transparent';
+
+        // Trunk stroke
+        ctx.beginPath();
+        ctx.roundRect(-8, -25, 16, 45, [8, 8, 2, 2]);
+        ctx.stroke();
+
+        // Left arm stroke
+        ctx.beginPath();
+        ctx.moveTo(-6, -5);
+        ctx.quadraticCurveTo(-18, -5, -18, -15);
+        ctx.lineTo(-18, -22);
+        ctx.quadraticCurveTo(-18, -27, -13, -27);
+        ctx.quadraticCurveTo(-8, -27, -8, -22);
+        ctx.lineTo(-8, -13);
+        ctx.lineTo(-6, -13);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Right arm stroke
+        ctx.beginPath();
+        ctx.moveTo(6, 5);
+        ctx.quadraticCurveTo(18, 5, 18, -5);
+        ctx.lineTo(18, -12);
+        ctx.quadraticCurveTo(18, -17, 13, -17);
+        ctx.quadraticCurveTo(8, -17, 8, -12);
+        ctx.lineTo(8, -3);
+        ctx.lineTo(6, -3);
+        ctx.closePath();
         ctx.stroke();
 
         // Draw needles
@@ -134,9 +163,15 @@ export class Obstacle {
         ctx.strokeStyle = '#2b0914';
         ctx.lineWidth = 3;
 
+        // Body fill (inherits shadow)
         ctx.beginPath();
         ctx.roundRect(-15, -20, 30, 40, [6, 6, 6, 6]);
         ctx.fill();
+
+        // Disable shadow for outlines, text, and fuse to keep them pixel-perfect
+        ctx.shadowColor = 'transparent';
+
+        // Body stroke
         ctx.stroke();
 
         ctx.strokeStyle = '#f4a261';
@@ -218,31 +253,50 @@ export class Obstacle {
         ctx.strokeStyle = '#371c04';
         ctx.lineWidth = 3;
 
-        // Bottom box
+        // Bottom box fill
         ctx.beginPath();
         ctx.roundRect(-20, -6, 40, 22, [0, 0, 4, 4]);
         ctx.fill();
-        ctx.stroke();
 
-        // Top lid
-        ctx.fillStyle = '#834c1b'; // lighter wood top
+        // Top lid fill
+        ctx.fillStyle = '#5c300a'; // Slightly darker top
         ctx.beginPath();
         ctx.roundRect(-20, -20, 40, 14, [6, 6, 0, 0]);
         ctx.fill();
-        ctx.stroke();
 
-        // Golden structural bands
-        ctx.fillStyle = '#d4af37'; // gold
-        ctx.fillRect(-15, -20, 4, 36);
-        ctx.fillRect(11, -20, 4, 36);
-
-        // Lock panel
+        // Golden bands fills
         ctx.fillStyle = '#ffd700';
-        ctx.strokeStyle = '#8b7500';
-        ctx.lineWidth = 1.2;
+        ctx.fillRect(-15, -6, 4, 22);
+        ctx.fillRect(11, -6, 4, 22);
+        ctx.fillRect(-15, -20, 4, 14);
+        ctx.fillRect(11, -20, 4, 14);
+
+        // Lock plate fill
+        ctx.fillStyle = '#ffd700';
         ctx.beginPath();
         ctx.rect(-5, -6, 10, 10);
         ctx.fill();
+
+        // Disable shadow for outlines and lock details to keep them sharp
+        ctx.shadowColor = 'transparent';
+
+        // Bottom box stroke
+        ctx.strokeStyle = '#371c04';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.roundRect(-20, -6, 40, 22, [0, 0, 4, 4]);
+        ctx.stroke();
+
+        // Top lid stroke
+        ctx.beginPath();
+        ctx.roundRect(-20, -20, 40, 14, [6, 6, 0, 0]);
+        ctx.stroke();
+
+        // Lock plate stroke
+        ctx.strokeStyle = '#371c04';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.rect(-5, -6, 10, 10);
         ctx.stroke();
 
         // Keyhole
