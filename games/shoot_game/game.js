@@ -2309,25 +2309,44 @@ class Game {
         // 3b. Draw ground spikes
         this.groundSpikes.forEach(s => s.draw(this.ctx));
 
-        // 4. Draw obstacles
-        this.obstacles.forEach(o => o.draw(this.ctx));
+        // 4. Draw depth-sorted entities (obstacles, tumbleweeds, sheriff, players, helper AIs)
+        const depthSorted = [];
 
-        // 5. Draw tumbleweeds
-        this.tumbleweeds.forEach(t => t.draw(this.ctx));
-
-        // 6. Draw Sheriff if active
-        if (this.sheriffActive) {
-            this.drawSheriff(this.ctx);
-        }
-
-        // 7. Draw players
-        this.player1.draw(this.ctx);
-        this.player2.draw(this.ctx);
-        this.helperAIs.forEach(helper => {
-            if (helper.health > 0) {
-                helper.draw(this.ctx);
+        this.obstacles.forEach(o => {
+            if (!o.destroyed) {
+                depthSorted.push({ y: o.y, draw: (ctx) => o.draw(ctx) });
             }
         });
+
+        this.tumbleweeds.forEach(t => {
+            if (!t.destroyed) {
+                depthSorted.push({ y: t.y, draw: (ctx) => t.draw(ctx) });
+            }
+        });
+
+        if (this.sheriffActive) {
+            depthSorted.push({ y: this.sheriffY, draw: (ctx) => this.drawSheriff(ctx) });
+        }
+
+        if (this.player1 && this.player1.health > 0) {
+            depthSorted.push({ y: this.player1.y, draw: (ctx) => this.player1.draw(ctx) });
+        }
+
+        if (this.player2 && this.player2.health > 0) {
+            depthSorted.push({ y: this.player2.y, draw: (ctx) => this.player2.draw(ctx) });
+        }
+
+        this.helperAIs.forEach(helper => {
+            if (helper.health > 0) {
+                depthSorted.push({ y: helper.y, draw: (ctx) => helper.draw(ctx) });
+            }
+        });
+
+        // Sort by y coordinate (draw back-to-front for proper depth sorting)
+        depthSorted.sort((a, b) => a.y - b.y);
+
+        // Draw sorted entities
+        depthSorted.forEach(item => item.draw(this.ctx));
 
         // 8. Draw bullets
         this.bullets.forEach(b => b.draw(this.ctx));

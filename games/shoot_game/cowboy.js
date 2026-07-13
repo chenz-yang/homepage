@@ -159,7 +159,7 @@ export class Cowboy {
         // Sand playfield boundaries
         const minX = 40;
         const maxX = width - 40;
-        const minY = 95;
+        const minY = 105;
         const maxY = height - 40;
 
         if (this.x < minX) this.x = minX;
