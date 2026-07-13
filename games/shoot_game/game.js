@@ -2521,30 +2521,46 @@ class Game {
         const leftX = 15;
         const rightX = this.canvas.width - 15;
 
-        // Draw horizontal rails
+        // Draw horizontal rails (Symmetrically positioned)
         ctx.fillRect(leftX, topY + 4, rightX - leftX, 3);
         ctx.fillRect(leftX, topY + 12, rightX - leftX, 3);
-        ctx.fillRect(leftX, bottomY - 14, rightX - leftX, 3);
-        ctx.fillRect(leftX, bottomY - 6, rightX - leftX, 3);
+        ctx.fillRect(leftX, bottomY - 15, rightX - leftX, 3);
+        ctx.fillRect(leftX, bottomY - 7, rightX - leftX, 3);
 
+        // Draw vertical rails (Symmetrically positioned)
         ctx.fillRect(leftX + 4, topY, 3, bottomY - topY);
         ctx.fillRect(leftX + 12, topY, 3, bottomY - topY);
-        ctx.fillRect(rightX - 14, topY, 3, bottomY - topY);
-        ctx.fillRect(rightX - 6, topY, 3, bottomY - topY);
+        ctx.fillRect(rightX - 15, topY, 3, bottomY - topY);
+        ctx.fillRect(rightX - 7, topY, 3, bottomY - topY);
 
-        // Draw posts
+        // Draw posts (Clear shadows before stroking to prevent blurry double-shadow pixels)
         const postInterval = 60;
         for (let x = leftX; x <= rightX; x += postInterval) {
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
             ctx.fillRect(x - 4, topY, 8, 20);
-            ctx.strokeRect(x - 4, topY, 8, 20);
             ctx.fillRect(x - 4, bottomY - 20, 8, 20);
+
+            ctx.shadowColor = 'transparent';
+            ctx.strokeRect(x - 4, topY, 8, 20);
             ctx.strokeRect(x - 4, bottomY - 20, 8, 20);
         }
 
+        // Explicitly draw corner posts at rightX
+        ctx.shadowColor = 'rgba(0,0,0,0.25)';
+        ctx.fillRect(rightX - 4, topY, 8, 20);
+        ctx.fillRect(rightX - 4, bottomY - 20, 8, 20);
+
+        ctx.shadowColor = 'transparent';
+        ctx.strokeRect(rightX - 4, topY, 8, 20);
+        ctx.strokeRect(rightX - 4, bottomY - 20, 8, 20);
+
         for (let y = topY; y <= bottomY; y += postInterval) {
+            ctx.shadowColor = 'rgba(0,0,0,0.25)';
             ctx.fillRect(leftX, y - 4, 20, 8);
-            ctx.strokeRect(leftX, y - 4, 20, 8);
             ctx.fillRect(rightX - 20, y - 4, 20, 8);
+
+            ctx.shadowColor = 'transparent';
+            ctx.strokeRect(leftX, y - 4, 20, 8);
             ctx.strokeRect(rightX - 20, y - 4, 20, 8);
         }
 

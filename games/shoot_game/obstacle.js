@@ -182,14 +182,17 @@ export class Obstacle {
         ctx.strokeStyle = '#321f0b';
         ctx.lineWidth = 2;
 
+        // Draw fills first (inheriting shadow)
         ctx.fillRect(-16, -20, 6, 40);
-        ctx.strokeRect(-16, -20, 6, 40);
         ctx.fillRect(10, -20, 6, 40);
-        ctx.strokeRect(10, -20, 6, 40);
-
         ctx.fillRect(-20, -12, 40, 7);
-        ctx.strokeRect(-20, -12, 40, 7);
         ctx.fillRect(-20, 5, 40, 7);
+
+        // Disable shadows for stroke operations to prevent blurry double shadows
+        ctx.shadowColor = 'transparent';
+        ctx.strokeRect(-16, -20, 6, 40);
+        ctx.strokeRect(10, -20, 6, 40);
+        ctx.strokeRect(-20, -12, 40, 7);
         ctx.strokeRect(-20, 5, 40, 7);
 
         if (this.health < 3) {
