@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Yangyang's Homepage</title>
-	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
 	<div id="wrap">
 		<aside id="header">
 			<div id="header-links">
-				<img src="images/yangyang.png" alt="Yangyang" />
+				<img src="images/yangyang.png" alt="Yangyang">
 			</div>
 			<h1 id="logo-text">Yangyang</h1>
 			<p class="intro-bio">
@@ -46,11 +46,11 @@
 				<div class="search-container">
 					<span class="search-icon">🔍</span>
 					<input type="text" id="search-input" class="search-input"
-						placeholder="Search travel destinations, months..." />
+						placeholder="Search travel destinations, months...">
 					<span class="search-shortcut-hint">/</span>
 				</div>
-				<div class="filter-tabs" id="filter-tabs" style="margin-top: 1rem;">
-					<button class="tab-btn active" data-filter="all">All Trips</button>
+				<div class="filter-tabs" id="filter-tabs">
+					<button type="button" class="tab-btn active" data-filter="all">All Trips</button>
 				</div>
 			</div>
 
@@ -2187,7 +2187,7 @@
 							<div class="card-body">
 								<a href="games/shoot_game/index.html" target="_blank" class="location-link">Wild West
 									Duel</a>
-								<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">A
+								<p class="card-description">A
 									high-stakes fast-paced western duel. Face off against a smart bandit bot in
 									single-player mode, or challenge a friend in local multiplayer showdowns.</p>
 							</div>
@@ -2212,7 +2212,7 @@
 							<div class="card-body">
 								<a href="tools/qr_code_generator/index.html" target="_blank" class="location-link">QR
 									Code Studio</a>
-								<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.5rem;">An
+								<p class="card-description">An
 									interactive utility to generate beautiful QR codes. Customize dots, corners, colors,
 									gradients, and embed logos for scannable, stylized designs.</p>
 							</div>
@@ -2249,6 +2249,7 @@
 			// Generate and append filter tag buttons
 			years.forEach(year => {
 				const btn = document.createElement('button');
+				btn.type = 'button';
 				btn.className = 'tab-btn';
 				btn.setAttribute('data-filter', year);
 				btn.textContent = year;

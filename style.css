@@ -358,6 +358,7 @@ body::after {
   gap: 0.5rem;
   overflow-x: auto;
   padding-bottom: 0.25rem;
+  margin-top: 1rem;
 }
 
 .filter-tabs::-webkit-scrollbar {
@@ -499,6 +500,12 @@ body::after {
 
 .card-body {
   margin-bottom: 1.25rem;
+}
+
+.card-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
 }
 
 .location-link {
