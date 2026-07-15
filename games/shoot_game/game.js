@@ -529,6 +529,7 @@ class Game {
         const buyHpBtn = document.getElementById('buy-hp-btn');
         buyHpBtn.addEventListener('click', () => {
             if (this.hpUpgrades >= 10) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 10 + this.hpUpgrades * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -559,6 +560,7 @@ class Game {
         const buyDoppelCountBtn = document.getElementById('buy-doppel-count-btn');
         buyDoppelCountBtn.addEventListener('click', () => {
             if (this.doppelgangerCount >= 3) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 30 + this.doppelgangerCount * 30; // 30, 60, 90
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -582,6 +584,7 @@ class Game {
         const buyDoppelLvlBtn = document.getElementById('buy-doppel-lvl-btn');
         buyDoppelLvlBtn.addEventListener('click', () => {
             if (this.doppelgangerLvl >= 5) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 30 + this.doppelgangerLvl * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -612,6 +615,7 @@ class Game {
         const buyLaserBtn = document.getElementById('buy-laser-btn');
         buyLaserBtn.addEventListener('click', () => {
             if (this.lasergunLvl >= 5) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 50 + this.lasergunLvl * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -632,6 +636,7 @@ class Game {
         const buyRapidBtn = document.getElementById('buy-rapid-btn');
         buyRapidBtn.addEventListener('click', () => {
             if (this.rapidLvl >= 5) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.rapidLvl * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -652,6 +657,7 @@ class Game {
         const buyHeavyBtn = document.getElementById('buy-heavy-btn');
         buyHeavyBtn.addEventListener('click', () => {
             if (this.heavyLvl >= 5) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.heavyLvl * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -672,6 +678,7 @@ class Game {
         const buyBombBtn = document.getElementById('buy-bomb-btn');
         buyBombBtn.addEventListener('click', () => {
             if (this.bombLvl >= 5) return;
+            this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.bombLvl * 10;
             if (this.coins >= cost) {
                 this.coins -= cost;
@@ -1071,12 +1078,16 @@ class Game {
     }
 
     canClaimDaily(today = new Date()) {
+        const freshClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
         const todayStr = this.getTodayDateString(today);
-        return this.lastDailyClaim !== todayStr;
+        return freshClaim !== todayStr;
     }
 
     claimDailyReward() {
         const now = new Date();
+        this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
+        this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
+
         if (!this.canClaimDaily(now)) {
             return { success: false, reason: 'already_claimed' };
         }
