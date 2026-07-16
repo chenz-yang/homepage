@@ -12,7 +12,7 @@ export class Bullet {
         this.maxTrailLength = 12;
 
         // Dynamic properties based on weapon type
-        const isPlayerAligned = owner.role === 'player1' || owner.role === 'helper_ai';
+        const isPlayerAligned = owner.role === 'player1' || owner.role === 'player2' || owner.role === 'helper_ai';
         if (type === 'heavy') {
             const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
             this.speed = 7.5 + (lvl - 1) * 1.0;
@@ -48,9 +48,9 @@ export class Bullet {
             this.trail.shift();
         }
 
-        // Apply wind (horizontal deflection) on level 3, 5, 7, and 10
+        // Apply wind (vertical deflection) on level 3, 5, 7, and 10
         if ([3, 5, 7, 10].includes(game.level)) {
-            this.vx += game.wind * 0.007;
+            this.vy += game.currentWind * 0.007;
         }
 
         // Move bullet
@@ -155,7 +155,7 @@ export class Bullet {
             if (dist < this.radius + target.radius) {
                 target.takeDamage(this.damage, game);
                 if (this.type === 'bomb') {
-                    this.explodeBombOnOpponent(game, this.x, this.y);
+                    this.explodeBombOnOpponent(game, this.x, this.y, target);
                 } else {
                     const sparkCount = this.type === 'laser' ? 18 : (this.type === 'heavy' ? 25 : 12);
                     const sparkColor = this.type === 'laser' ? '#00ffff' : '#d90429';
@@ -166,7 +166,7 @@ export class Bullet {
         }
     }
 
-    explodeBombOnOpponent(game, x, y) {
+    explodeBombOnOpponent(game, x, y, directTarget = null) {
         this.destroyed = true;
         audio.playExplosion();
         game.triggerScreenShake(12, 18);
@@ -188,6 +188,25 @@ export class Bullet {
                 gravity: -0.01 // float upwards
             });
         }
+
+        // Deal splash damage to nearby entities and obstacles
+        const splashRadius = 70;
+        const targets = [game.player1, game.player2, ...game.helperAIs];
+        targets.forEach(player => {
+            if (!player || player.health <= 0 || player === directTarget || player === this.owner) return;
+            const dist = Math.hypot(player.x - x, player.y - y);
+            if (dist < splashRadius) {
+                player.takeDamage(2, game);
+            }
+        });
+
+        game.obstacles.forEach(other => {
+            if (other.destroyed) return;
+            const dist = Math.hypot(other.x - x, other.y - y);
+            if (dist < splashRadius) {
+                other.takeDamage(2, game);
+            }
+        });
     }
 
     draw(ctx) {

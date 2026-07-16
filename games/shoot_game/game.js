@@ -71,6 +71,7 @@ class Game {
         this.heavyLvl = parseInt(localStorage.getItem('wild_west_heavy_level')) || 1;
         this.bombLvl = parseInt(localStorage.getItem('wild_west_bomb_level')) || 1;
         this.aiDifficulty = parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1;
+        this.prestigeCount = parseInt(localStorage.getItem('wild_west_prestige_count')) || 0;
         this.lastPrestigeChoiceTime = parseInt(localStorage.getItem('wild_west_prestige_time')) || 0;
         this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
 
@@ -534,8 +535,10 @@ class Game {
             if (this.coins >= cost) {
                 this.coins -= cost;
                 this.hpUpgrades++;
+                this.hpActive = true;
                 localStorage.setItem('wild_west_coins', this.coins);
                 localStorage.setItem('wild_west_hp_upgrade', this.hpUpgrades);
+                localStorage.setItem('wild_west_hp_active', this.hpActive);
                 audio.playCoinSound();
                 this.updateShopUI();
             } else {
@@ -565,9 +568,7 @@ class Game {
             if (this.coins >= cost) {
                 this.coins -= cost;
                 this.doppelgangerCount++;
-                if (this.doppelgangerCount === 1) {
-                    this.doppelgangerActive = true;
-                }
+                this.doppelgangerActive = true;
                 localStorage.setItem('wild_west_coins', this.coins);
                 localStorage.setItem('wild_west_doppelganger_count', this.doppelgangerCount);
                 localStorage.setItem('wild_west_doppelganger_active', this.doppelgangerActive);
@@ -717,6 +718,9 @@ class Game {
             this.heavyLvl = 1;
             this.bombLvl = 1;
             this.lastPrestigeChoiceTime = 0;
+            
+            this.prestigeCount++;
+            localStorage.setItem('wild_west_prestige_count', this.prestigeCount);
 
             localStorage.removeItem('wild_west_coins');
             localStorage.removeItem('wild_west_hp_upgrade');
@@ -869,7 +873,7 @@ class Game {
         doppelCountValContainer.innerHTML = this.t('shop-doppel-desc', { count: `<span id="shop-doppel-count-val">${this.doppelgangerCount}</span>` }) + ` <span id="shop-doppel-status"></span>`;
 
         const doppelLvlValContainer = document.getElementById('shop-doppel-lvl-container');
-        const doppelHp = this.doppelgangerLvl > 0 ? (2 + this.doppelgangerLvl) : 3;
+        const doppelHp = 10 + this.doppelgangerLvl * 5;
         const doppelCdr = this.doppelgangerLvl > 0 ? `${(this.doppelgangerLvl - 1) * 10}%` : '0%';
         doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
             hp: `<span id="shop-doppel-hp-val">${doppelHp}</span>`,
@@ -1198,6 +1202,11 @@ class Game {
         
         if (hasEverything) {
             prestigePanel.classList.remove('hidden');
+            const titleEl = prestigePanel.querySelector('.prestige-title');
+            if (titleEl) {
+                const baseTitle = this.t('prestige-title');
+                titleEl.innerHTML = this.prestigeCount > 0 ? `${baseTitle} (Lvl ${this.prestigeCount})` : baseTitle;
+            }
             if (!this.lastPrestigeChoiceTime) {
                 this.lastPrestigeChoiceTime = Date.now();
                 localStorage.setItem('wild_west_prestige_time', this.lastPrestigeChoiceTime);
@@ -1632,7 +1641,7 @@ class Game {
             for (let i = 0; i < this.doppelgangerCount; i++) {
                 const spawnY = 300 - (this.doppelgangerCount - 1) * 60 + i * 120;
                 const helper = new Cowboy(100, spawnY, 'helper_ai', this.p1Weapon);
-                helper.maxHealth = 2 + this.doppelgangerLvl; // Level 1: 3 HP, Level 5: 7 HP!
+                helper.maxHealth = 10 + this.doppelgangerLvl * 5; // Level 1: 15 HP, Level 5: 35 HP!
                 helper.health = helper.maxHealth;
                 this.helperAIs.push(helper);
             }
@@ -1774,7 +1783,18 @@ class Game {
                 this.spawnObstacle(750, this.canvas.height / 2 + 80, 'chest');
                 this.spawnObstacle(250, this.canvas.height / 2 + 30, 'chest');
                 this.spawnObstacle(950, this.canvas.height / 2 + 30, 'chest');
-                break;
+        }
+
+        // Guarantee at least one full HP chest in every game
+        const chests = this.obstacles.filter(obs => obs.type === 'chest');
+        if (chests.length > 0) {
+            const hasFullHP = chests.some(c => c.isFullHP);
+            if (!hasFullHP) {
+                const randomChest = chests[Math.floor(Math.random() * chests.length)];
+                randomChest.isFullHP = true;
+                randomChest.health = 30;
+                randomChest.maxHealth = 30;
+            }
         }
 
         if (lvlName) {
@@ -1795,7 +1815,11 @@ class Game {
     }
 
     spawnObstacle(x, y, type) {
-        this.obstacles.push(new Obstacle(x, y, type));
+        let isFullHP = false;
+        if (type === 'chest') {
+            isFullHP = Math.random() < 0.35; // 35% chance to spawn a red full-HP chest
+        }
+        this.obstacles.push(new Obstacle(x, y, type, isFullHP));
     }
 
     triggerScreenShake(intensity = 8, frames = 15) {
@@ -1894,6 +1918,14 @@ class Game {
                 this.checkEntityCollision(this.player2, helper);
             }
         });
+        // Check collisions between helper AIs to prevent stacking
+        for (let i = 0; i < this.helperAIs.length; i++) {
+            for (let j = i + 1; j < this.helperAIs.length; j++) {
+                if (this.helperAIs[i].health > 0 && this.helperAIs[j].health > 0) {
+                    this.checkEntityCollision(this.helperAIs[i], this.helperAIs[j]);
+                }
+            }
+        }
         this.checkEntityCollision(this.player1, this.player2);
     }
 
@@ -1932,10 +1964,22 @@ class Game {
         if (dist < minDist) {
             const pushAngle = Math.atan2(c1.y - c2.y, c1.x - c2.x);
             const overlap = minDist - dist;
-            c1.x += Math.cos(pushAngle) * overlap * 0.5;
-            c1.y += Math.sin(pushAngle) * overlap * 0.5;
-            c2.x -= Math.cos(pushAngle) * overlap * 0.5;
-            c2.y -= Math.sin(pushAngle) * overlap * 0.5;
+
+            const nextX1 = c1.x + Math.cos(pushAngle) * overlap * 0.5;
+            const nextY1 = c1.y + Math.sin(pushAngle) * overlap * 0.5;
+            if (!c1.checkObstacleCollision(nextX1, nextY1, this)) {
+                c1.x = nextX1;
+                c1.y = nextY1;
+                c1.clampToField(this.canvas.width, this.canvas.height);
+            }
+
+            const nextX2 = c2.x - Math.cos(pushAngle) * overlap * 0.5;
+            const nextY2 = c2.y - Math.sin(pushAngle) * overlap * 0.5;
+            if (!c2.checkObstacleCollision(nextX2, nextY2, this)) {
+                c2.x = nextX2;
+                c2.y = nextY2;
+                c2.clampToField(this.canvas.width, this.canvas.height);
+            }
         }
     }
 
@@ -2195,7 +2239,8 @@ class Game {
 
             // Earn coins if PvE mode
             if (this.mode === 'pve') {
-                const coinsEarned = this.aiDifficulty >= 5 ? 5 : 3;
+                const baseCoins = this.aiDifficulty;
+                const coinsEarned = Math.round(baseCoins * (1 + this.prestigeCount * 0.5));
                 this.coins += coinsEarned;
                 localStorage.setItem('wild_west_coins', this.coins);
                 

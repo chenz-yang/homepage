@@ -36,7 +36,7 @@ export const TRANSLATIONS = {
         "wep-pts-3": "3 Pkt",
         
         "level-title": "3. Welten einstellen",
-        "level-label": "Level",
+        "level-label": "Welt",
         "difficulty-title": "4. KI-Schwierigkeit einstellen",
         "difficulty-label": "Schwierigkeit",
         "level-1-name": "Sunny Prairie",
@@ -70,7 +70,7 @@ export const TRANSLATIONS = {
         "shop-doppel-hp-cdr": "HP: {hp} | CD-R: {cdr}% (Stufe {lvl}/5)",
         "shop-doppel-lvl-title": "Doppelgänger-Stufe",
         "shop-laser-title": "Lasergun",
-        "shop-laser-desc": "Neon-Laser (Lvl {lvl}):",
+        "shop-laser-desc": "Neon-Laser:",
         "shop-rapid-title": "Schnell-Pistole",
         "shop-rapid-desc": "Schaden: {dmg} | CD: {cd}ms (Lvl {lvl})",
         "shop-heavy-title": "Langsam-Pistole",
@@ -102,7 +102,7 @@ export const TRANSLATIONS = {
         "qr-menu-desc": "Scanne den Code mit deinem Smartphone oder Tablet!",
 
         "cheat-sheet-p1": "🤠 P1: WASD (Bewegen) | Q/E (Zielen) | Leertaste (Schießen)",
-        "cheat-sheet-p2": "💀 P2/KI: Pfeiltasten (Bewegen) | U/O (Zielen) | Eingabe (Schießen)",
+        "cheat-sheet-p2": "💀 P2/KI: Pfeiltasten (Bewegen) | U/O (Zielen) | I (Schießen)",
         "start-duel-btn": "Duell Starten!",
         
         // Gameplay Screen
@@ -204,7 +204,7 @@ export const TRANSLATIONS = {
         "shop-doppel-hp-cdr": "生命: {hp} | 冷却缩减: {cdr}% (等级 {lvl}/5)",
         "shop-doppel-lvl-title": "分身等级",
         "shop-laser-title": "激光枪",
-        "shop-laser-desc": "霓虹激光 (等级 {lvl}):",
+        "shop-laser-desc": "霓虹激光:",
         "shop-rapid-title": "快速手枪",
         "shop-rapid-desc": "伤害: {dmg} | 冷却: {cd}毫秒 (等级 {lvl})",
         "shop-heavy-title": "重型手枪",
@@ -236,7 +236,7 @@ export const TRANSLATIONS = {
         "qr-menu-desc": "使用您的手机或平板扫描此二维码！",
 
         "cheat-sheet-p1": "🤠 玩家1: WASD (移动) | Q/E (瞄准) | 空格键 (射击)",
-        "cheat-sheet-p2": "💀 玩家2/AI: 方向键 (移动) | U/O (瞄准) | 回车键 (射击)",
+        "cheat-sheet-p2": "💀 玩家2/AI: 方向键 (移动) | U/O (瞄准) | I 键 (射击)",
         "start-duel-btn": "开始决斗！",
         
         // Gameplay Screen

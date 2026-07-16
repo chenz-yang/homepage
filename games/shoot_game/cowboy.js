@@ -42,10 +42,12 @@ export class Cowboy {
         this.targetX = x;
         this.targetY = y;
         this.dodgeCooldown = 0;
+        this.spacePressed = false;
+        this.iPressed = false;
     }
 
     setWeaponProperties() {
-        const isPlayerAligned = this.role === 'player1' || this.role === 'helper_ai';
+        const isPlayerAligned = this.role === 'player1' || this.role === 'player2' || this.role === 'helper_ai';
         if (this.weaponType === 'heavy') {
             const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
             this.shootCooldown = 1500 - (lvl - 1) * 200; // Level 1: 1500ms, Level 5: 700ms!
@@ -276,7 +278,7 @@ export class Cowboy {
         if (keys['o'] || keys['O']) this.angle += rotSpeed;
 
         // Shoot
-        if (keys['Enter']) {
+        if (keys['i'] || keys['I']) {
             this.shoot(game);
         }
     }
@@ -371,6 +373,7 @@ export class Cowboy {
         let baseCooldown = 250; // rapid default
         if (this.weaponType === 'heavy') baseCooldown = 1500;
         else if (this.weaponType === 'bomb') baseCooldown = 2000;
+        else if (this.weaponType === 'laser') baseCooldown = 400;
 
         // Cooldown and Speed scale progressively up to level 10
         const mults = [2.2, 1.9, 1.6, 1.35, 1.15, 0.95, 0.85, 0.75, 0.65, 0.55];

@@ -2,20 +2,22 @@
 import { audio } from './audio.js?v=41';
 
 export class Obstacle {
-    constructor(x, y, type) {
+    constructor(x, y, type, isFullHP = false) {
         this.x = x;
         this.y = y;
         this.type = type; // 'cactus', 'tnt', 'fence', 'chest'
         this.destroyed = false;
         this.flashCount = 0; // For TNT flashing before explosion
         this.isTriggered = false;
+        this.isFullHP = isFullHP;
 
         // Custom bounds and health for chests
         if (type === 'chest') {
             this.width = 44;
             this.height = 36;
             this.radius = 22;
-            this.health = 5; // chests always have 5 points
+            this.health = isFullHP ? 30 : 5; // full HP boxes have 30 PKT, small ones only 5
+            this.maxHealth = this.health;
         } else {
             this.width = 40;
             this.height = 40;
@@ -248,9 +250,9 @@ export class Obstacle {
         ctx.save();
         ctx.translate(this.x, this.y);
 
-        // Brown wooden box base
-        ctx.fillStyle = '#6c3b10'; // Rich dark wood
-        ctx.strokeStyle = '#371c04';
+        // Box base color
+        ctx.fillStyle = this.isFullHP ? '#d90429' : '#6c3b10'; // Red vs Rich dark wood
+        ctx.strokeStyle = this.isFullHP ? '#5d0000' : '#371c04';
         ctx.lineWidth = 3;
 
         // Bottom box fill
@@ -259,7 +261,7 @@ export class Obstacle {
         ctx.fill();
 
         // Top lid fill
-        ctx.fillStyle = '#5c300a'; // Slightly darker top
+        ctx.fillStyle = this.isFullHP ? '#a4161a' : '#5c300a'; // Slightly darker top
         ctx.beginPath();
         ctx.roundRect(-20, -20, 40, 14, [6, 6, 0, 0]);
         ctx.fill();
@@ -281,7 +283,7 @@ export class Obstacle {
         ctx.shadowColor = 'transparent';
 
         // Bottom box stroke
-        ctx.strokeStyle = '#371c04';
+        ctx.strokeStyle = this.isFullHP ? '#5d0000' : '#371c04';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.roundRect(-20, -6, 40, 22, [0, 0, 4, 4]);
@@ -293,7 +295,7 @@ export class Obstacle {
         ctx.stroke();
 
         // Lock plate stroke
-        ctx.strokeStyle = '#371c04';
+        ctx.strokeStyle = this.isFullHP ? '#5d0000' : '#371c04';
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.rect(-5, -6, 10, 10);
@@ -308,26 +310,40 @@ export class Obstacle {
 
         ctx.restore();
 
-        // Draw Health Indicators above the chest (5 gold stars/dots)
+        // Draw Health Indicators above the chest
         this.drawChestHealth(ctx);
     }
 
     drawChestHealth(ctx) {
         ctx.save();
         ctx.translate(this.x, this.y - 28);
-        const spacing = 8;
-        const startX = -((5 - 1) * spacing) / 2;
-        for (let i = 0; i < 5; i++) {
-            ctx.beginPath();
-            ctx.arc(startX + i * spacing, 0, 3, 0, Math.PI * 2);
-            if (i < this.health) {
-                ctx.fillStyle = '#ffd700';
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = '#ffd700';
-            } else {
-                ctx.fillStyle = 'rgba(60, 40, 30, 0.4)';
+        
+        if (this.isFullHP) {
+            // Draw a red progress bar above the 30 HP chest
+            const barWidth = 40;
+            const barHeight = 4;
+            ctx.fillStyle = 'rgba(60, 40, 30, 0.4)';
+            ctx.fillRect(-barWidth / 2, -barHeight / 2, barWidth, barHeight);
+            
+            const pct = Math.max(0, Math.min(1, this.health / this.maxHealth));
+            ctx.fillStyle = '#d90429';
+            ctx.fillRect(-barWidth / 2, -barHeight / 2, barWidth * pct, barHeight);
+        } else {
+            // Original dot rendering for 5 HP chest
+            const spacing = 8;
+            const startX = -((5 - 1) * spacing) / 2;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                ctx.arc(startX + i * spacing, 0, 3, 0, Math.PI * 2);
+                if (i < this.health) {
+                    ctx.fillStyle = '#ffd700';
+                    ctx.shadowBlur = 4;
+                    ctx.shadowColor = '#ffd700';
+                } else {
+                    ctx.fillStyle = 'rgba(60, 40, 30, 0.4)';
+                }
+                ctx.fill();
             }
-            ctx.fill();
         }
         ctx.restore();
     }
@@ -347,6 +363,7 @@ export class Obstacle {
 
             // Spawn wood chips
             if (game && game.particles) {
+                const woodColor = this.isFullHP ? '#ba181b' : '#6c3b10';
                 for (let i = 0; i < 6; i++) {
                     game.particles.push({
                         x: this.x,
@@ -354,7 +371,7 @@ export class Obstacle {
                         vx: (Math.random() - 0.5) * 5,
                         vy: (Math.random() - 0.5) * 5 - 1,
                         radius: 2 + Math.random() * 3,
-                        color: '#6c3b10', // Dark wood debris
+                        color: woodColor,
                         alpha: 1,
                         decay: 0.02 + Math.random() * 0.02,
                         gravity: 0.15
@@ -370,16 +387,23 @@ export class Obstacle {
                 audio.playChestOpen();
                 game.triggerScreenShake(8, 12);
 
-                // Roll random healing reward: 1 to 3 hearts
-                const reward = Math.floor(Math.random() * 3) + 1;
+                // Heal amount: full HP for red chest, +1-3 HP for small chest
+                let reward = 0;
+                if (this.isFullHP) {
+                    if (bulletOwner) {
+                        reward = bulletOwner.maxHealth - bulletOwner.health;
+                    }
+                } else {
+                    reward = Math.floor(Math.random() * 3) + 1;
+                }
 
-                if (bulletOwner) {
-                    // Cap at the cowboy's actual maximum health (including upgrades)
+                if (bulletOwner && reward > 0) {
                     bulletOwner.health = Math.min(bulletOwner.maxHealth, bulletOwner.health + reward);
                 }
 
-                // Spawn glorious golden sparkle particles
+                // Spawn glorious golden/red sparkle particles
                 if (game && game.particles) {
+                    const sparkleColor = this.isFullHP ? '#ff4d6d' : '#ffd700';
                     for (let i = 0; i < 20; i++) {
                         const angle = Math.random() * Math.PI * 2;
                         const speed = 0.5 + Math.random() * 4.0;
@@ -389,7 +413,7 @@ export class Obstacle {
                             vx: Math.cos(angle) * speed,
                             vy: Math.sin(angle) * speed - 1.5,
                             radius: 3.5 + Math.random() * 4.0,
-                            color: '#ffd700', // Sparkling Gold stars
+                            color: sparkleColor,
                             alpha: 1.0,
                             decay: 0.012 + Math.random() * 0.015,
                             gravity: -0.03 // float upwards
@@ -561,9 +585,13 @@ export class Tumbleweed {
             const minDist = this.radius + player.radius;
             if (dist < minDist) {
                 const pushAngle = Math.atan2(player.y - this.y, player.x - this.x);
-                player.x += Math.cos(pushAngle) * 1.5;
-                player.y += Math.sin(pushAngle) * 1.5;
-                player.clampToField(game.canvas.width, game.canvas.height);
+                const nextX = player.x + Math.cos(pushAngle) * 1.5;
+                const nextY = player.y + Math.sin(pushAngle) * 1.5;
+                if (!player.checkObstacleCollision(nextX, nextY, game)) {
+                    player.x = nextX;
+                    player.y = nextY;
+                    player.clampToField(game.canvas.width, game.canvas.height);
+                }
             }
         });
     }
