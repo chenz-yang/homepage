@@ -321,6 +321,10 @@ export class Cowboy {
         if (game.keys['s'] || game.keys['S']) pvy = player.speed;
         if (game.keys['a'] || game.keys['A']) pvx = -player.speed;
         if (game.keys['d'] || game.keys['D']) pvx = player.speed;
+        if (pvx !== 0 && pvy !== 0) {
+            pvx *= 0.7071;
+            pvy *= 0.7071;
+        }
         return { x: pvx, y: pvy };
     }
 

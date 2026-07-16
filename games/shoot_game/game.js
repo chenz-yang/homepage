@@ -822,21 +822,20 @@ class Game {
         const qrCopyBtn = document.getElementById('qr-copy-btn');
         const qrLinkInput = document.getElementById('qr-link-input');
         if (qrCopyBtn && qrLinkInput) {
-            qrCopyBtn.addEventListener('click', () => {
+            qrCopyBtn.addEventListener('click', async () => {
                 qrLinkInput.select();
                 qrLinkInput.setSelectionRange(0, 99999);
                 try {
-                    navigator.clipboard.writeText(qrLinkInput.value).then(() => {
-                        qrCopyBtn.textContent = this.t('qr-copied');
-                        qrCopyBtn.classList.remove('btn-gold');
-                        qrCopyBtn.classList.add('btn-toggle-active');
-                        audio.playCoinSound();
-                        setTimeout(() => {
-                            qrCopyBtn.textContent = this.t('qr-btn-copy');
-                            qrCopyBtn.classList.remove('btn-toggle-active');
-                            qrCopyBtn.classList.add('btn-gold');
-                        }, 2000);
-                    });
+                    await navigator.clipboard.writeText(qrLinkInput.value);
+                    qrCopyBtn.textContent = this.t('qr-copied');
+                    qrCopyBtn.classList.remove('btn-gold');
+                    qrCopyBtn.classList.add('btn-toggle-active');
+                    audio.playCoinSound();
+                    setTimeout(() => {
+                        qrCopyBtn.textContent = this.t('qr-btn-copy');
+                        qrCopyBtn.classList.remove('btn-toggle-active');
+                        qrCopyBtn.classList.add('btn-gold');
+                    }, 2000);
                 } catch (err) {
                     document.execCommand('copy');
                     qrCopyBtn.textContent = this.t('qr-copied');
@@ -870,7 +869,7 @@ class Game {
     }
 
     updateShopUI() {
-        const displayedCoins = (this.coins === Infinity || this.coins >= 99999999) ? "Unendlich" : this.coins;
+        const displayedCoins = (this.coins === Infinity || this.coins >= 99999999) ? this.t('shop-infinite') : this.coins;
         document.getElementById('shop-coins-val').textContent = displayedCoins;
 
         // --- Daily Reward ---
@@ -1980,7 +1979,8 @@ class Game {
             container.appendChild(star);
         };
 
-        renderStars('p1-hearts', this.player1 ? this.player1.health : (50 + this.hpUpgrades), this.player1 ? this.player1.maxHealth : (50 + this.hpUpgrades));
+        const defaultP1Health = 50 + (this.hpActive ? this.hpUpgrades : 0);
+        renderStars('p1-hearts', this.player1 ? this.player1.health : defaultP1Health, this.player1 ? this.player1.maxHealth : defaultP1Health);
         renderStars('p2-hearts', this.player2 ? this.player2.health : 50, this.player2 ? this.player2.maxHealth : 50);
 
         const windText = document.getElementById('wind-text');
@@ -2016,14 +2016,9 @@ class Game {
     }
 
     isOnBridge(x, y) {
-        const waterMinX = 540;
-        const waterMaxX = 660;
-        if (x >= waterMinX && x <= waterMaxX) {
-            const onBridgeNorth = (y >= 180 && y <= 280);
-            const onBridgeSouth = (y >= 520 && y <= 620);
-            return onBridgeNorth || onBridgeSouth;
-        }
-        return false;
+        const onBridgeNorth = (y >= 180 && y <= 280);
+        const onBridgeSouth = (y >= 520 && y <= 620);
+        return onBridgeNorth || onBridgeSouth;
     }
 
     isInTunnel(x, y) {
@@ -2035,7 +2030,8 @@ class Game {
     isPositionInWater(x, y) {
         const waterMinX = 550;
         const waterMaxX = 650;
-        if (x >= waterMinX && x <= waterMaxX) {
+        const radius = 20; // Cowboy's radius
+        if (x + radius >= waterMinX && x - radius <= waterMaxX) {
             if (!this.isOnBridge(x, y) && !this.isInTunnel(x, y)) {
                 return true;
             }

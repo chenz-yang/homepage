@@ -62,6 +62,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. Shop & Upgrades",
         "shop-balance": "Saldo:",
+        "shop-infinite": "Unendlich",
         "shop-max": "Max",
         "shop-hp-title": "+1 Start-Leben",
         "shop-hp-desc": "Käufe: +{val} LP (Max 10)",
@@ -101,8 +102,8 @@ export const TRANSLATIONS = {
         "qr-copied": "Kopiert!",
         "qr-menu-desc": "Scanne den Code mit deinem Smartphone oder Tablet!",
 
-        "cheat-sheet-p1": "🤠 P1: WASD (Bewegen) | Q/E (Zielen) | Leertaste (Schießen)",
-        "cheat-sheet-p2": "💀 P2/KI: Pfeiltasten (Bewegen) | U/O (Zielen) | I (Schießen)",
+        "cheat-sheet-p1": "🤠 P1: <strong>WASD</strong> (Bewegen) | <strong>Q/E</strong> (Zielen) | <strong>Leertaste</strong> (Schießen)",
+        "cheat-sheet-p2": "💀 P2/KI: <strong>Pfeiltasten</strong> (Bewegen) | <strong>U/O</strong> (Zielen) | <strong>I</strong> (Schießen)",
         "start-duel-btn": "Duell Starten!",
         
         // Gameplay Screen
@@ -196,6 +197,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. 商店与升级",
         "shop-balance": "余额:",
+        "shop-infinite": "无限",
         "shop-max": "满级",
         "shop-hp-title": "+1 初始生命",
         "shop-hp-desc": "已购: +{val} 生命值 (最大 10)",
@@ -235,8 +237,8 @@ export const TRANSLATIONS = {
         "qr-copied": "已复制！",
         "qr-menu-desc": "使用您的手机或平板扫描此二维码！",
 
-        "cheat-sheet-p1": "🤠 玩家1: WASD (移动) | Q/E (瞄准) | 空格键 (射击)",
-        "cheat-sheet-p2": "💀 玩家2/AI: 方向键 (移动) | U/O (瞄准) | I 键 (射击)",
+        "cheat-sheet-p1": "🤠 玩家1: <strong>WASD</strong> (移动) | <strong>Q/E</strong> (瞄准) | <strong>空格键</strong> (射击)",
+        "cheat-sheet-p2": "💀 玩家2/AI: <strong>方向键</strong> (移动) | <strong>U/O</strong> (瞄准) | <strong>I 键</strong> (射击)",
         "start-duel-btn": "开始决斗！",
         
         // Gameplay Screen
