@@ -491,8 +491,15 @@ export class Obstacle {
                 player.takeDamage(1, game);
                 const pushAngle = Math.atan2(player.y - this.y, player.x - this.x);
                 const pushForce = (1 - dist / explosionRadius) * 15;
-                player.x += Math.cos(pushAngle) * pushForce;
-                player.y += Math.sin(pushAngle) * pushForce;
+                
+                // Kollisionsprüfung für den Rückstoß-Schritt
+                const nextX = player.x + Math.cos(pushAngle) * pushForce;
+                const nextY = player.y + Math.sin(pushAngle) * pushForce;
+                
+                if (!player.checkObstacleCollision(nextX, nextY, game)) {
+                    player.x = nextX;
+                    player.y = nextY;
+                }
                 player.clampToField(game.canvas.width, game.canvas.height);
             }
         });
@@ -505,6 +512,9 @@ export class Obstacle {
                     if (!other.isTriggered) {
                         other.isTriggered = true;
                         other.flashCount = 2 + Math.floor(Math.random() * 5);
+                    } else {
+                        // Wenn bereits gezündet, beschleunige die Explosion
+                        other.flashCount = Math.min(other.flashCount, 2 + Math.floor(Math.random() * 3));
                     }
                 } else {
                     other.takeDamage(3, game);

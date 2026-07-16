@@ -257,7 +257,7 @@ export const TRANSLATIONS = {
         "go-p2-win-pvp-subtitle": "{oppName} 战胜了 {p1Name}。",
         "go-p2-win-ki-subtitle": "下一次瞄准点！",
         "go-victory-default-subtitle": "西部最快的手指",
-        "go-reward-banner": "获得 +{val} 金币！",
+        "go-reward-banner": "🪙 获得 +{val} 金币！",
         "go-rematch-btn": "再战一局",
         "go-menu-btn": "主菜单",
         

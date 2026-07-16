@@ -67,19 +67,26 @@ export class Bullet {
             return;
         }
 
-        // Collision with outer borders
+        // Collision with outer borders (bypassed when spawning/near the owner)
         const playTop = 65;
         const playBottom = game.canvas.height - 20;
         const playLeft = 20;
         const playRight = game.canvas.width - 20;
 
-        if (this.y < playTop || this.y > playBottom || this.x < playLeft || this.x > playRight) {
-            this.destroyWithSparks(game, this.x, this.y, '#ffd27d');
-            audio.playRicochet();
-            if (this.type === 'bomb' && Math.random() < 0.3) {
-                game.summonSheriff();
+        const distFromOwner = Math.hypot(this.x - this.owner.x, this.y - this.owner.y);
+        if (distFromOwner > 32) {
+            if (this.y < playTop || this.y > playBottom || this.x < playLeft || this.x > playRight) {
+                if (this.type === 'bomb') {
+                    this.explodeBombOnOpponent(game, this.x, this.y);
+                } else {
+                    this.destroyWithSparks(game, this.x, this.y, '#ffd27d');
+                    audio.playRicochet();
+                }
+                if (this.type === 'bomb' && Math.random() < 0.3) {
+                    game.summonSheriff();
+                }
+                return;
             }
-            return;
         }
 
         // Collision with obstacles
@@ -105,9 +112,13 @@ export class Bullet {
 
             if (hit) {
                 obstacle.takeDamage(this.damage, game, this.owner);
-                const sparkColor = this.type === 'laser' ? '#00ffff' : (obstacle.type === 'cactus' ? '#2d6a4f' : '#ffd27d');
-                const sparkCount = this.type === 'laser' ? 12 : 6;
-                this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
+                if (this.type === 'bomb') {
+                    this.explodeBombOnOpponent(game, this.x, this.y);
+                } else {
+                    const sparkColor = this.type === 'laser' ? '#00ffff' : (obstacle.type === 'cactus' ? '#2d6a4f' : '#ffd27d');
+                    const sparkCount = this.type === 'laser' ? 12 : 6;
+                    this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
+                }
                 if (this.type === 'bomb' && obstacle.type !== 'chest' && Math.random() < 0.3) {
                     game.summonSheriff();
                 }
@@ -121,9 +132,13 @@ export class Bullet {
             const dist = Math.hypot(this.x - tumble.x, this.y - tumble.y);
             if (dist < this.radius + tumble.radius) {
                 tumble.takeDamage(1, game);
-                const sparkColor = this.type === 'laser' ? '#00ffff' : '#bfa17c';
-                const sparkCount = this.type === 'laser' ? 12 : 6;
-                this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
+                if (this.type === 'bomb') {
+                    this.explodeBombOnOpponent(game, this.x, this.y);
+                } else {
+                    const sparkColor = this.type === 'laser' ? '#00ffff' : '#bfa17c';
+                    const sparkCount = this.type === 'laser' ? 12 : 6;
+                    this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
+                }
                 if (this.type === 'bomb' && Math.random() < 0.3) {
                     game.summonSheriff();
                 }
@@ -193,8 +208,14 @@ export class Bullet {
         // Deal splash damage to nearby entities and obstacles
         const splashRadius = 70;
         const targets = [game.player1, game.player2, ...game.helperAIs];
+        const isOwnerPlayerAligned = this.owner.role === 'player1' || this.owner.role === 'helper_ai';
         targets.forEach(player => {
             if (!player || player.health <= 0 || player === directTarget || player === this.owner) return;
+            
+            // Prevent friendly fire by checking if target is on the same team as the bomb owner
+            const isTargetPlayerAligned = player.role === 'player1' || player.role === 'helper_ai';
+            if (isOwnerPlayerAligned === isTargetPlayerAligned) return;
+            
             const dist = Math.hypot(player.x - x, player.y - y);
             if (dist < splashRadius) {
                 player.takeDamage(2, game);

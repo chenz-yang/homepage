@@ -601,12 +601,20 @@ export class Cowboy {
     findNearestCover(game) {
         let bestCover = null;
         let minDist = Infinity;
+        
+        // Bestimme, ob die Entität links- oder rechtsseitig spielt
+        const isLeftAligned = this.role === 'player1' || this.role === 'helper_ai';
+        
         game.obstacles.forEach(o => {
             if (o.type === 'cactus' && !o.destroyed) {
-                const dist = Math.hypot(this.x - o.x, this.y - o.y);
-                if (dist < minDist) {
-                    minDist = dist;
-                    bestCover = o;
+                // Kakteen nur auf der eigenen Flussseite berücksichtigen (Fluss-Mitte ist ca. 600)
+                const isOnOurSide = isLeftAligned ? (o.x < 550) : (o.x > 650);
+                if (isOnOurSide) {
+                    const dist = Math.hypot(this.x - o.x, this.y - o.y);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        bestCover = o;
+                    }
                 }
             }
         });

@@ -52,6 +52,8 @@ class Game {
         // Audio state
         this.isMuted = false;
 
+        this.menuLoopRunning = false;
+
         // Tumbleweed spawn controller
         this.tumbleweedSpawnTimer = 0;
 
@@ -134,9 +136,11 @@ class Game {
             const serverDateStr = response.headers.get('Date');
             if (serverDateStr) {
                 const serverTime = new Date(serverDateStr).getTime();
-                const localTime = Date.now();
-                this.timeOffset = serverTime - localTime;
-                console.log(`Time synchronized. Offset: ${this.timeOffset}ms`);
+                if (!isNaN(serverTime)) {
+                    const localTime = Date.now();
+                    this.timeOffset = serverTime - localTime;
+                    console.log(`Time synchronized. Offset: ${this.timeOffset}ms`);
+                }
             }
         } catch (e) {
             console.warn("Could not synchronize time with server, falling back to local time:", e);
@@ -762,10 +766,8 @@ class Game {
             localStorage.removeItem('wild_west_hp_upgrade');
             localStorage.removeItem('wild_west_hp_active');
             localStorage.removeItem('wild_west_doppelganger_count');
-            localStorage.removeItem('wild_west_doppelganger_upgrade');
             localStorage.removeItem('wild_west_doppelganger_level');
-            localStorage.removeItem('wild_west_doppelganger_active');
-            localStorage.removeItem('wild_west_lasergun_unlocked');
+            localStorage.setItem('wild_west_doppelganger_active', 'false');
             localStorage.removeItem('wild_west_lasergun_level');
             localStorage.removeItem('wild_west_rapid_level');
             localStorage.removeItem('wild_west_heavy_level');
@@ -1556,6 +1558,8 @@ class Game {
     }
 
     startMenuLoop() {
+        if (this.menuLoopRunning) return;
+        this.menuLoopRunning = true;
         const dustContainer = document.getElementById('dust-particles');
         const ctx = dustContainer ? dustContainer.getContext('2d') : null;
         
@@ -1571,6 +1575,7 @@ class Game {
         let lastTickTime = Date.now();
         const tick = () => {
             if (this.state !== 'menu') {
+                this.menuLoopRunning = false;
                 window.removeEventListener('resize', resizeCanvas);
                 if (ctx && dustContainer) {
                     ctx.clearRect(0, 0, dustContainer.width, dustContainer.height);
@@ -1985,9 +1990,9 @@ class Game {
             const displaySpeed = Math.round(Math.abs(this.currentWind) * 8);
             windText.textContent = this.t('hud-wind', { speed: displaySpeed });
             if (this.currentWind > 0) {
-                windArrow.style.transform = 'rotate(0deg)';
+                windArrow.style.transform = 'rotate(90deg)'; // points down
             } else {
-                windArrow.style.transform = 'rotate(180deg)';
+                windArrow.style.transform = 'rotate(-90deg)'; // points up
             }
         }
     }
@@ -2264,20 +2269,20 @@ class Game {
         });
         this.particles = this.particles.filter(p => p.alpha > 0);
 
-        // Update wind lines animation
+        // Update wind lines animation (vertically)
         if ([3, 5, 7, 10].includes(this.level)) {
             const dir = this.currentWind > 0 ? 1 : -1;
             const wSpeed = Math.abs(this.currentWind) * 0.6;
             
             this.windLines.forEach(l => {
-                l.x += dir * (l.speed + wSpeed);
+                l.y += dir * (l.speed + wSpeed);
                 
-                if (dir > 0 && l.x > this.canvas.width) {
-                    l.x = -l.len;
-                    l.y = 70 + Math.random() * (this.canvas.height - 110);
-                } else if (dir < 0 && l.x + l.len < 0) {
-                    l.x = this.canvas.width;
-                    l.y = 70 + Math.random() * (this.canvas.height - 110);
+                if (dir > 0 && l.y > this.canvas.height) {
+                    l.y = -l.len;
+                    l.x = Math.random() * this.canvas.width;
+                } else if (dir < 0 && l.y + l.len < 0) {
+                    l.y = this.canvas.height;
+                    l.x = Math.random() * this.canvas.width;
                 }
             });
         }
@@ -2429,7 +2434,7 @@ class Game {
         this.ctx.lineWidth = 2;
         this.ctx.strokeRect(530, 340, 140, 120);
 
-        // 3. Draw wind lines (under cowboys)
+        // 3. Draw wind lines (under cowboys, vertically)
         if ([3, 5, 7, 10].includes(this.level)) {
             this.ctx.save();
             this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
@@ -2437,7 +2442,7 @@ class Game {
             this.windLines.forEach(l => {
                 this.ctx.beginPath();
                 this.ctx.moveTo(l.x, l.y);
-                this.ctx.lineTo(l.x + l.len, l.y);
+                this.ctx.lineTo(l.x, l.y + l.len);
                 this.ctx.stroke();
             });
             this.ctx.restore();
