@@ -60,19 +60,19 @@ class Game {
             localStorage.setItem('wild_west_coins', '0');
             savedCoins = '0';
         }
-        this.coins = parseInt(savedCoins) || 0;
-        this.hpUpgrades = parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0;
+        this.coins = Math.max(0, parseInt(savedCoins) || 0);
+        this.hpUpgrades = Math.max(0, Math.min(10, parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0));
         this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
-        this.doppelgangerCount = parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0;
-        this.doppelgangerLvl = parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0;
+        this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
+        this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0));
         this.doppelgangerActive = localStorage.getItem('wild_west_doppelganger_active') !== 'false';
-        this.lasergunLvl = parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0;
-        this.rapidLvl = parseInt(localStorage.getItem('wild_west_rapid_level')) || 1;
-        this.heavyLvl = parseInt(localStorage.getItem('wild_west_heavy_level')) || 1;
-        this.bombLvl = parseInt(localStorage.getItem('wild_west_bomb_level')) || 1;
-        this.aiDifficulty = parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1;
-        this.prestigeCount = parseInt(localStorage.getItem('wild_west_prestige_count')) || 0;
-        this.lastPrestigeChoiceTime = parseInt(localStorage.getItem('wild_west_prestige_time')) || 0;
+        this.lasergunLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0));
+        this.rapidLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_rapid_level')) || 1));
+        this.heavyLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_heavy_level')) || 1));
+        this.bombLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_bomb_level')) || 1));
+        this.aiDifficulty = Math.max(1, Math.min(10, parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1));
+        this.prestigeCount = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_count')) || 0);
+        this.lastPrestigeChoiceTime = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_time')) || 0);
         this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
 
         // Language setup
@@ -105,6 +105,9 @@ class Game {
         this.moveTouchId = null;
         this.aimTouchId = null;
 
+        this.timeOffset = 0;
+        this.syncTime();
+
         this.initDOM();
         this.initInput();
         this.createMenuDust();
@@ -123,6 +126,25 @@ class Game {
             el.offsetHeight; // triggers layout repaint
             el.style.opacity = originalOpacity;
         });
+    }
+
+    async syncTime() {
+        try {
+            const response = await fetch(window.location.href, { method: 'HEAD', cache: 'no-cache' });
+            const serverDateStr = response.headers.get('Date');
+            if (serverDateStr) {
+                const serverTime = new Date(serverDateStr).getTime();
+                const localTime = Date.now();
+                this.timeOffset = serverTime - localTime;
+                console.log(`Time synchronized. Offset: ${this.timeOffset}ms`);
+            }
+        } catch (e) {
+            console.warn("Could not synchronize time with server, falling back to local time:", e);
+        }
+    }
+
+    getSecureTime() {
+        return new Date(Date.now() + this.timeOffset);
     }
 
     t(key, replacements = {}) {
@@ -529,6 +551,7 @@ class Game {
         // Shop Upgrades: +1 HP
         const buyHpBtn = document.getElementById('buy-hp-btn');
         buyHpBtn.addEventListener('click', () => {
+            this.hpUpgrades = Math.max(0, Math.min(10, parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0));
             if (this.hpUpgrades >= 10) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 10 + this.hpUpgrades * 10;
@@ -551,6 +574,7 @@ class Game {
         // HP Upgrade Toggle Button
         const toggleHpBtn = document.getElementById('toggle-hp-btn');
         toggleHpBtn.addEventListener('click', () => {
+            this.hpUpgrades = Math.max(0, Math.min(10, parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0));
             if (this.hpUpgrades > 0) {
                 this.hpActive = !this.hpActive;
                 localStorage.setItem('wild_west_hp_active', this.hpActive);
@@ -562,6 +586,7 @@ class Game {
         // Shop Upgrades: Doppelganger Count
         const buyDoppelCountBtn = document.getElementById('buy-doppel-count-btn');
         buyDoppelCountBtn.addEventListener('click', () => {
+            this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
             if (this.doppelgangerCount >= 3) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 30 + this.doppelgangerCount * 30; // 30, 60, 90
@@ -584,7 +609,13 @@ class Game {
         // Shop Upgrades: Doppelganger Level (Upgrade)
         const buyDoppelLvlBtn = document.getElementById('buy-doppel-lvl-btn');
         buyDoppelLvlBtn.addEventListener('click', () => {
-            if (this.doppelgangerLvl >= 5) return;
+            this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0));
+            if (this.doppelgangerCount === 0 || this.doppelgangerLvl >= 5) {
+                audio.playRicochet();
+                buyDoppelLvlBtn.classList.add('shake');
+                setTimeout(() => buyDoppelLvlBtn.classList.remove('shake'), 400);
+                return;
+            }
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 30 + this.doppelgangerLvl * 10;
             if (this.coins >= cost) {
@@ -604,6 +635,7 @@ class Game {
         // Doppelganger Toggle Button
         const toggleDoppelBtn = document.getElementById('toggle-doppel-btn');
         toggleDoppelBtn.addEventListener('click', () => {
+            this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
             if (this.doppelgangerCount > 0) {
                 this.doppelgangerActive = !this.doppelgangerActive;
                 localStorage.setItem('wild_west_doppelganger_active', this.doppelgangerActive);
@@ -615,6 +647,7 @@ class Game {
         // Shop Upgrades: Lasergun Buy/Upgrade
         const buyLaserBtn = document.getElementById('buy-laser-btn');
         buyLaserBtn.addEventListener('click', () => {
+            this.lasergunLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0));
             if (this.lasergunLvl >= 5) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = 50 + this.lasergunLvl * 10;
@@ -636,6 +669,7 @@ class Game {
         // Shop Upgrades: Schnell Buy/Upgrade
         const buyRapidBtn = document.getElementById('buy-rapid-btn');
         buyRapidBtn.addEventListener('click', () => {
+            this.rapidLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_rapid_level')) || 1));
             if (this.rapidLvl >= 5) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.rapidLvl * 10;
@@ -657,6 +691,7 @@ class Game {
         // Shop Upgrades: Langsam Buy/Upgrade
         const buyHeavyBtn = document.getElementById('buy-heavy-btn');
         buyHeavyBtn.addEventListener('click', () => {
+            this.heavyLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_heavy_level')) || 1));
             if (this.heavyLvl >= 5) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.heavyLvl * 10;
@@ -678,6 +713,7 @@ class Game {
         // Shop Upgrades: Bombe Buy/Upgrade
         const buyBombBtn = document.getElementById('buy-bomb-btn');
         buyBombBtn.addEventListener('click', () => {
+            this.bombLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_bomb_level')) || 1));
             if (this.bombLvl >= 5) return;
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             const cost = this.bombLvl * 10;
@@ -699,7 +735,7 @@ class Game {
         // Prestige buttons click listeners
         const prestigeKeepBtn = document.getElementById('prestige-keep-btn');
         prestigeKeepBtn.addEventListener('click', () => {
-            this.lastPrestigeChoiceTime = Date.now();
+            this.lastPrestigeChoiceTime = this.getSecureTime().getTime();
             localStorage.setItem('wild_west_prestige_time', this.lastPrestigeChoiceTime);
             audio.playCoinSound();
             this.updateShopUI();
@@ -874,7 +910,7 @@ class Game {
 
         const doppelLvlValContainer = document.getElementById('shop-doppel-lvl-container');
         const doppelHp = 10 + this.doppelgangerLvl * 5;
-        const doppelCdr = this.doppelgangerLvl > 0 ? `${(this.doppelgangerLvl - 1) * 10}%` : '0%';
+        const doppelCdr = this.doppelgangerLvl > 0 ? (this.doppelgangerLvl - 1) * 10 : 0;
         doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
             hp: `<span id="shop-doppel-hp-val">${doppelHp}</span>`,
             cdr: `<span id="shop-doppel-cdr-val">${doppelCdr}</span>`,
@@ -986,7 +1022,13 @@ class Game {
 
         // --- Doppelganger Level ---
         const buyDoppelLvlBtn = document.getElementById('buy-doppel-lvl-btn');
-        if (this.doppelgangerLvl >= 5) {
+        if (this.doppelgangerCount === 0) {
+            buyDoppelLvlBtn.disabled = true;
+            buyDoppelLvlBtn.style.opacity = '0.5';
+            buyDoppelLvlBtn.style.cursor = 'default';
+            const cost = 30 + this.doppelgangerLvl * 10;
+            buyDoppelLvlBtn.textContent = `${cost} 🪙`;
+        } else if (this.doppelgangerLvl >= 5) {
             buyDoppelLvlBtn.textContent = this.t('shop-max');
             buyDoppelLvlBtn.disabled = true;
             buyDoppelLvlBtn.style.opacity = '0.5';
@@ -1069,26 +1111,26 @@ class Game {
         this.updatePrestigeUI();
     }
 
-    getTodayDateString(today = new Date()) {
+    getTodayDateString(today = this.getSecureTime()) {
         const year = today.getFullYear();
         const month = String(today.getMonth() + 1).padStart(2, '0');
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
 
-    isLastDayOfMonth(today = new Date()) {
+    isLastDayOfMonth(today = this.getSecureTime()) {
         const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         return tomorrow.getDate() === 1;
     }
 
-    canClaimDaily(today = new Date()) {
+    canClaimDaily(today = this.getSecureTime()) {
         const freshClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
         const todayStr = this.getTodayDateString(today);
         return freshClaim !== todayStr;
     }
 
     claimDailyReward() {
-        const now = new Date();
+        const now = this.getSecureTime();
         this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
         this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
 
@@ -1167,32 +1209,37 @@ class Game {
             }
         }
 
-        // Dynamically update Player 1's weapon points display with actual upgraded damage values
+        // Dynamically update Player 1 and Player 2's weapon points display with actual upgraded damage values
         const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
         
-        const p1RapidPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="rapid"] .wep-pts');
-        if (p1RapidPts) {
-            const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
-            p1RapidPts.textContent = `${rapidDmg}${ptsUnit}`;
-        }
-        
-        const p1HeavyPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="heavy"] .wep-pts');
-        if (p1HeavyPts) {
-            const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
-            p1HeavyPts.textContent = `${heavyDmg}${ptsUnit}`;
-        }
-        
-        const p1BombPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="bomb"] .wep-pts');
-        if (p1BombPts) {
-            const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
-            p1BombPts.textContent = `${bombDmg}${ptsUnit}`;
-        }
-        
-        const p1LaserPts = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="laser"] .wep-pts');
-        if (p1LaserPts) {
-            const laserDmg = this.lasergunLvl >= 5 ? 5 : (this.lasergunLvl >= 3 ? 4 : 3);
-            p1LaserPts.textContent = `${laserDmg}${ptsUnit}`;
-        }
+        const updateWepPts = (player) => {
+            const rapidPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="rapid"] .wep-pts`);
+            if (rapidPts) {
+                const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
+                rapidPts.textContent = `${rapidDmg}${ptsUnit}`;
+            }
+            
+            const heavyPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="heavy"] .wep-pts`);
+            if (heavyPts) {
+                const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
+                heavyPts.textContent = `${heavyDmg}${ptsUnit}`;
+            }
+            
+            const bombPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="bomb"] .wep-pts`);
+            if (bombPts) {
+                const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
+                bombPts.textContent = `${bombDmg}${ptsUnit}`;
+            }
+            
+            const laserPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="laser"] .wep-pts`);
+            if (laserPts) {
+                const laserDmg = this.lasergunLvl >= 5 ? 5 : (this.lasergunLvl >= 3 ? 4 : 3);
+                laserPts.textContent = `${laserDmg}${ptsUnit}`;
+            }
+        };
+        updateWepPts('p1');
+        updateWepPts('p2');
+
         this.forceRepaint();
     }
 
@@ -1208,7 +1255,7 @@ class Game {
                 titleEl.innerHTML = this.prestigeCount > 0 ? `${baseTitle} (Lvl ${this.prestigeCount})` : baseTitle;
             }
             if (!this.lastPrestigeChoiceTime) {
-                this.lastPrestigeChoiceTime = Date.now();
+                this.lastPrestigeChoiceTime = this.getSecureTime().getTime();
                 localStorage.setItem('wild_west_prestige_time', this.lastPrestigeChoiceTime);
             }
             this.updatePrestigeTimer();
@@ -1219,7 +1266,7 @@ class Game {
 
     updatePrestigeTimer() {
         if (!this.lastPrestigeChoiceTime) return;
-        const elapsed = Date.now() - this.lastPrestigeChoiceTime;
+        const elapsed = this.getSecureTime().getTime() - this.lastPrestigeChoiceTime;
         const totalDuration = 20 * 60 * 1000; // 20 minutes in ms
         const remaining = Math.max(0, totalDuration - elapsed);
 
@@ -1509,18 +1556,52 @@ class Game {
     }
 
     startMenuLoop() {
+        const dustContainer = document.getElementById('dust-particles');
+        const ctx = dustContainer ? dustContainer.getContext('2d') : null;
+        
+        const resizeCanvas = () => {
+            if (dustContainer) {
+                dustContainer.width = window.innerWidth;
+                dustContainer.height = window.innerHeight;
+            }
+        };
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
         let lastTickTime = Date.now();
         const tick = () => {
-            if (this.state !== 'menu') return;
-
-            this.menuDust.forEach(p => {
-                p.x += p.vx;
-                p.y += p.vy;
-                if (p.x > window.innerWidth) {
-                    p.x = -10;
-                    p.y = Math.random() * window.innerHeight;
+            if (this.state !== 'menu') {
+                window.removeEventListener('resize', resizeCanvas);
+                if (ctx && dustContainer) {
+                    ctx.clearRect(0, 0, dustContainer.width, dustContainer.height);
                 }
-            });
+                return;
+            }
+
+            if (ctx && dustContainer) {
+                ctx.clearRect(0, 0, dustContainer.width, dustContainer.height);
+                this.menuDust.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x > dustContainer.width) {
+                        p.x = -10;
+                        p.y = Math.random() * dustContainer.height;
+                    }
+                    ctx.fillStyle = `rgba(229, 169, 59, ${p.alpha})`; // warm golden dust
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            } else {
+                this.menuDust.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.x > window.innerWidth) {
+                        p.x = -10;
+                        p.y = Math.random() * window.innerHeight;
+                    }
+                });
+            }
 
             const now = Date.now();
             if (now - lastTickTime >= 1000) {
@@ -1623,16 +1704,16 @@ class Game {
         this.setupLevel();
 
         // Spawn Cowboys: P1 is Black, P2/AI is White
-        this.player1 = new Cowboy(120, this.canvas.height / 2 + 30, 'player1', this.p1Weapon);
+        this.player1 = new Cowboy(120, this.canvas.height / 2 + 30, 'player1', this.p1Weapon, this);
         this.player1.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
         this.player1.health = this.player1.maxHealth;
         
         if (this.mode === 'pvp') {
-            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', this.p2Weapon);
+            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', this.p2Weapon, this);
         } else {
             // Level 10 KI boss utilizes the Lasergun for maximum lethality!
             const aiWeapon = this.aiDifficulty === 10 ? 'laser' : this.p2Weapon;
-            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon);
+            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon, this);
         }
 
         // Spawn helper AI doppelgangers if unlocked, active & in single-player PvE mode
@@ -1640,7 +1721,7 @@ class Game {
         if (this.mode === 'pve' && this.doppelgangerUnlocked && this.doppelgangerActive) {
             for (let i = 0; i < this.doppelgangerCount; i++) {
                 const spawnY = 300 - (this.doppelgangerCount - 1) * 60 + i * 120;
-                const helper = new Cowboy(100, spawnY, 'helper_ai', this.p1Weapon);
+                const helper = new Cowboy(100, spawnY, 'helper_ai', this.p1Weapon, this);
                 helper.maxHealth = 10 + this.doppelgangerLvl * 5; // Level 1: 15 HP, Level 5: 35 HP!
                 helper.health = helper.maxHealth;
                 this.helperAIs.push(helper);

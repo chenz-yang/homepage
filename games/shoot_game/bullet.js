@@ -13,23 +13,24 @@ export class Bullet {
 
         // Dynamic properties based on weapon type
         const isPlayerAligned = owner.role === 'player1' || owner.role === 'player2' || owner.role === 'helper_ai';
+        const actualGame = owner.game || window.game;
         if (type === 'heavy') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.heavyLvl || 1) : 1;
             this.speed = 7.5 + (lvl - 1) * 1.0;
             this.damage = lvl >= 5 ? 4 : (lvl >= 3 ? 3 : 2);
             this.radius = 6.0;
         } else if (type === 'bomb') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.bombLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.bombLvl || 1) : 1;
             this.speed = 8.5 + (lvl - 1) * 1.0;
             this.damage = lvl >= 5 ? 4 : (lvl >= 3 ? 3 : 2);
             this.radius = 5.0;
         } else if (type === 'laser') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.lasergunLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.lasergunLvl || 1) : 1;
             this.damage = lvl >= 5 ? 5 : (lvl >= 3 ? 4 : 3);
             this.speed = 16.0 + (lvl - 1) * 2.0;
             this.radius = 2.0;
         } else {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.rapidLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.rapidLvl || 1) : 1;
             this.speed = 11.0 + (lvl - 1) * 1.0;
             this.damage = lvl >= 4 ? 2 : 1;
             this.radius = 3.5;
@@ -60,7 +61,7 @@ export class Bullet {
         // Check offscreen boundaries
         if (this.x < 0 || this.x > game.canvas.width || this.y < 0 || this.y > game.canvas.height) {
             this.destroyed = true;
-            if (this.type === 'bomb') {
+            if (this.type === 'bomb' && Math.random() < 0.3) {
                 game.summonSheriff();
             }
             return;
@@ -75,7 +76,7 @@ export class Bullet {
         if (this.y < playTop || this.y > playBottom || this.x < playLeft || this.x > playRight) {
             this.destroyWithSparks(game, this.x, this.y, '#ffd27d');
             audio.playRicochet();
-            if (this.type === 'bomb') {
+            if (this.type === 'bomb' && Math.random() < 0.3) {
                 game.summonSheriff();
             }
             return;
@@ -107,7 +108,7 @@ export class Bullet {
                 const sparkColor = this.type === 'laser' ? '#00ffff' : (obstacle.type === 'cactus' ? '#2d6a4f' : '#ffd27d');
                 const sparkCount = this.type === 'laser' ? 12 : 6;
                 this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
-                if (this.type === 'bomb' && obstacle.type !== 'chest') {
+                if (this.type === 'bomb' && obstacle.type !== 'chest' && Math.random() < 0.3) {
                     game.summonSheriff();
                 }
                 return;
@@ -123,7 +124,7 @@ export class Bullet {
                 const sparkColor = this.type === 'laser' ? '#00ffff' : '#bfa17c';
                 const sparkCount = this.type === 'laser' ? 12 : 6;
                 this.destroyWithSparks(game, this.x, this.y, sparkColor, sparkCount);
-                if (this.type === 'bomb') {
+                if (this.type === 'bomb' && Math.random() < 0.3) {
                     game.summonSheriff();
                 }
                 return;

@@ -427,95 +427,96 @@ class AudioSynth {
         let nextStepTime = ctx.currentTime + 0.1;
 
         const playStep = () => {
-            if (this.muted) return;
             const time = nextStepTime;
 
-            // 1. Acoustic Gallop Bassline (Root-Fifth in D Minor: D -> A)
-            // Gallop rhythm: step % 4 === 0 or step % 4 === 2 or step % 4 === 3
-            if (step % 4 === 0 || step % 4 === 2 || step % 4 === 3) {
-                const bassOsc = ctx.createOscillator();
-                const bassGain = ctx.createGain();
-                
-                bassOsc.type = 'triangle';
-                const freq = (step % 4 === 0) ? 73.42 : 110.00; // D2 or A2
-                bassOsc.frequency.setValueAtTime(freq, time);
+            if (!this.muted) {
+                // 1. Acoustic Gallop Bassline (Root-Fifth in D Minor: D -> A)
+                // Gallop rhythm: step % 4 === 0 or step % 4 === 2 or step % 4 === 3
+                if (step % 4 === 0 || step % 4 === 2 || step % 4 === 3) {
+                    const bassOsc = ctx.createOscillator();
+                    const bassGain = ctx.createGain();
+                    
+                    bassOsc.type = 'triangle';
+                    const freq = (step % 4 === 0) ? 73.42 : 110.00; // D2 or A2
+                    bassOsc.frequency.setValueAtTime(freq, time);
 
-                bassGain.gain.setValueAtTime(0, time);
-                bassGain.gain.linearRampToValueAtTime(0.20, time + 0.02);
-                bassGain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+                    bassGain.gain.setValueAtTime(0, time);
+                    bassGain.gain.linearRampToValueAtTime(0.20, time + 0.02);
+                    bassGain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
 
-                const filter = ctx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(150, time);
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(150, time);
 
-                bassOsc.connect(filter);
-                filter.connect(bassGain);
-                bassGain.connect(ctx.destination);
+                    bassOsc.connect(filter);
+                    filter.connect(bassGain);
+                    bassGain.connect(ctx.destination);
 
-                bassOsc.start(time);
-                bassOsc.stop(time + 0.22);
-            }
+                    bassOsc.start(time);
+                    bassOsc.stop(time + 0.22);
+                }
 
-            // 2. Rimshot/Horse Hoof Percussion (Noise) on offbeats
-            if (step % 2 === 1) {
-                const drum = ctx.createBufferSource();
-                drum.buffer = this.createNoiseBuffer();
+                // 2. Rimshot/Horse Hoof Percussion (Noise) on offbeats
+                if (step % 2 === 1) {
+                    const drum = ctx.createBufferSource();
+                    drum.buffer = this.createNoiseBuffer();
 
-                const drumFilter = ctx.createBiquadFilter();
-                drumFilter.type = 'bandpass';
-                drumFilter.frequency.setValueAtTime(400, time);
+                    const drumFilter = ctx.createBiquadFilter();
+                    drumFilter.type = 'bandpass';
+                    drumFilter.frequency.setValueAtTime(400, time);
 
-                const drumGain = ctx.createGain();
-                drumGain.gain.setValueAtTime(0.03, time);
-                drumGain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+                    const drumGain = ctx.createGain();
+                    drumGain.gain.setValueAtTime(0.03, time);
+                    drumGain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
 
-                drum.connect(drumFilter);
-                drumFilter.connect(drumGain);
-                drumGain.connect(ctx.destination);
+                    drum.connect(drumFilter);
+                    drumFilter.connect(drumGain);
+                    drumGain.connect(ctx.destination);
 
-                drum.start(time);
-                drum.stop(time + 0.08);
-            }
+                    drum.start(time);
+                    drum.stop(time + 0.08);
+                }
 
-            // 3. Whistle Melody (Classic spaghetti western theme motif in D minor scale)
-            // 32-step loop
-            const melody = [
-                293.66, 0, 349.23, 0, 293.66, 0, 0, 0, // D4, F4, D4
-                392.00, 0, 293.66, 0, 349.23, 0, 0, 0, // G4, D4, F4
-                440.00, 0, 523.25, 0, 440.00, 0, 0, 0, // A4, C5, A4
-                392.00, 349.23, 293.66, 0, 0, 0, 0, 0  // G4, F4, D4
-            ];
+                // 3. Whistle Melody (Classic spaghetti western theme motif in D minor scale)
+                // 32-step loop
+                const melody = [
+                    293.66, 0, 349.23, 0, 293.66, 0, 0, 0, // D4, F4, D4
+                    392.00, 0, 293.66, 0, 349.23, 0, 0, 0, // G4, D4, F4
+                    440.00, 0, 523.25, 0, 440.00, 0, 0, 0, // A4, C5, A4
+                    392.00, 349.23, 293.66, 0, 0, 0, 0, 0  // G4, F4, D4
+                ];
 
-            const noteFreq = melody[step % 32];
-            if (noteFreq > 0) {
-                const whistle = ctx.createOscillator();
-                const whistleGain = ctx.createGain();
+                const noteFreq = melody[step % 32];
+                if (noteFreq > 0) {
+                    const whistle = ctx.createOscillator();
+                    const whistleGain = ctx.createGain();
 
-                whistle.type = 'sine';
-                // Pitch up for whistling register
-                whistle.frequency.setValueAtTime(noteFreq * 1.5, time);
+                    whistle.type = 'sine';
+                    // Pitch up for whistling register
+                    whistle.frequency.setValueAtTime(noteFreq * 1.5, time);
 
-                // Whistle vibrato LFO
-                const lfo = ctx.createOscillator();
-                const lfoGain = ctx.createGain();
-                lfo.frequency.setValueAtTime(7.5, time);
-                lfoGain.gain.setValueAtTime(12, time);
-                
-                lfo.connect(lfoGain);
-                lfoGain.connect(whistle.frequency);
+                    // Whistle vibrato LFO
+                    const lfo = ctx.createOscillator();
+                    const lfoGain = ctx.createGain();
+                    lfo.frequency.setValueAtTime(7.5, time);
+                    lfoGain.gain.setValueAtTime(12, time);
+                    
+                    lfo.connect(lfoGain);
+                    lfoGain.connect(whistle.frequency);
 
-                whistleGain.gain.setValueAtTime(0, time);
-                whistleGain.gain.linearRampToValueAtTime(0.05, time + 0.05);
-                whistleGain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+                    whistleGain.gain.setValueAtTime(0, time);
+                    whistleGain.gain.linearRampToValueAtTime(0.05, time + 0.05);
+                    whistleGain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
 
-                whistle.connect(whistleGain);
-                whistleGain.connect(ctx.destination);
+                    whistle.connect(whistleGain);
+                    whistleGain.connect(ctx.destination);
 
-                lfo.start(time);
-                whistle.start(time);
-                
-                lfo.stop(time + 0.45);
-                whistle.stop(time + 0.45);
+                    lfo.start(time);
+                    whistle.start(time);
+                    
+                    lfo.stop(time + 0.45);
+                    whistle.stop(time + 0.45);
+                }
             }
 
             step++;

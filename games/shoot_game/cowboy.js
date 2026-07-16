@@ -3,11 +3,12 @@ import { Bullet } from './bullet.js?v=41';
 import { audio } from './audio.js?v=41';
 
 export class Cowboy {
-    constructor(x, y, role, weaponType = 'rapid') {
+    constructor(x, y, role, weaponType = 'rapid', game = null) {
         this.x = x;
         this.y = y;
         this.role = role; // 'player1', 'player2', 'ai', 'helper_ai'
         this.weaponType = weaponType; // 'rapid', 'heavy', 'bomb'
+        this.game = game;
         
         // Colors updated: Player 1 is Black, Player 2 & AI are White, helper_ai is translucent black
         if (role === 'helper_ai') {
@@ -29,7 +30,7 @@ export class Cowboy {
         this.lastShotTime = 0;
         
         // Cooldown based on weapon type
-        this.setWeaponProperties();
+        this.setWeaponProperties(game);
 
         this.walkCycle = 0;
         this.isMoving = false;
@@ -46,22 +47,23 @@ export class Cowboy {
         this.iPressed = false;
     }
 
-    setWeaponProperties() {
+    setWeaponProperties(game = this.game) {
         const isPlayerAligned = this.role === 'player1' || this.role === 'player2' || this.role === 'helper_ai';
+        const actualGame = game || window.game;
         if (this.weaponType === 'heavy') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.heavyLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.heavyLvl || 1) : 1;
             this.shootCooldown = 1500 - (lvl - 1) * 200; // Level 1: 1500ms, Level 5: 700ms!
             this.bulletSpeed = 7.5 + (lvl - 1) * 1.0;
         } else if (this.weaponType === 'bomb') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.bombLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.bombLvl || 1) : 1;
             this.shootCooldown = 2000 - (lvl - 1) * 250; // Level 1: 2000ms, Level 5: 1000ms!
             this.bulletSpeed = 8.5 + (lvl - 1) * 1.0;
         } else if (this.weaponType === 'laser') {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.lasergunLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.lasergunLvl || 1) : 1;
             this.shootCooldown = 450 - lvl * 50; // Level 1: 400ms, Level 5: 200ms!
             this.bulletSpeed = 16.0 + (lvl - 1) * 2.0;
         } else {
-            const lvl = (window.game && isPlayerAligned) ? (window.game.rapidLvl || 1) : 1;
+            const lvl = (actualGame && isPlayerAligned) ? (actualGame.rapidLvl || 1) : 1;
             this.shootCooldown = 250 - (lvl - 1) * 20; // Level 1: 250ms, Level 5: 170ms!
             this.bulletSpeed = 11.0 + (lvl - 1) * 1.0;
         }
@@ -673,7 +675,8 @@ export class Cowboy {
     // DRAW METHOD
     draw(ctx) {
         if (this.health <= 0) return;
-        if (window.game && window.game.isInTunnel && window.game.isInTunnel(this.x, this.y)) {
+        const actualGame = this.game || window.game;
+        if (actualGame && actualGame.isInTunnel && actualGame.isInTunnel(this.x, this.y)) {
             return; // Im Tunnel unsichtbar!
         }
 
@@ -715,7 +718,8 @@ export class Cowboy {
     drawAimGuide(ctx) {
         ctx.save();
         
-        const isJoystickAiming = (this.role === 'player1' && window.game && window.game.joystickAim && window.game.joystickAim.active);
+        const actualGame = this.game || window.game;
+        const isJoystickAiming = (this.role === 'player1' && actualGame && actualGame.joystickAim && actualGame.joystickAim.active);
         
         if (isJoystickAiming) {
             // Draw a prominent, glowing red laser guide line matching the red joystick
