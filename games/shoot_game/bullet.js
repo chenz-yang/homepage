@@ -172,6 +172,9 @@ export class Bullet {
                 target.takeDamage(this.damage, game);
                 if (this.type === 'bomb') {
                     this.explodeBombOnOpponent(game, this.x, this.y, target);
+                    if (Math.random() < 0.3) {
+                        game.summonSheriff();
+                    }
                 } else {
                     const sparkCount = this.type === 'laser' ? 18 : (this.type === 'heavy' ? 25 : 12);
                     const sparkColor = this.type === 'laser' ? '#00ffff' : '#d90429';
