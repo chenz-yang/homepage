@@ -2173,6 +2173,7 @@ class Game {
 
     spawnSheriffSparks(player) {
         if (!player || player.health <= 0) return;
+        if (this.isInTunnel(player.x, player.y)) return;
         const angle = Math.atan2(player.y - this.sheriffY, player.x - this.sheriffX);
         const dist = Math.hypot(player.x - this.sheriffX, player.y - this.sheriffY);
 
@@ -2243,10 +2244,14 @@ class Game {
                 });
 
                 // Apply damage
-                this.player1.takeDamage(1, this);
-                this.player2.takeDamage(1, this);
+                if (!this.isInTunnel(this.player1.x, this.player1.y)) {
+                    this.player1.takeDamage(1, this);
+                }
+                if (!this.isInTunnel(this.player2.x, this.player2.y)) {
+                    this.player2.takeDamage(1, this);
+                }
                 this.helperAIs.forEach(helper => {
-                    if (helper.health > 0) {
+                    if (helper.health > 0 && !this.isInTunnel(helper.x, helper.y)) {
                         helper.takeDamage(1, this);
                     }
                 });
