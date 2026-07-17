@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=41';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=41';
-import { audio } from './audio.js?v=41';
-import { TRANSLATIONS } from './translations.js?v=41';
+import { Cowboy } from './cowboy.js?v=42';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=42';
+import { audio } from './audio.js?v=42';
+import { TRANSLATIONS } from './translations.js?v=42';
 
-console.log("Wild West Duel - Loaded version 41");
+console.log("Wild West Duel - Loaded version 42");
 
 class Game {
     constructor() {
@@ -854,7 +854,7 @@ class Game {
         if (qrModal) {
             qrModal.classList.add('active');
             
-            const currentURL = window.location.href;
+            const currentURL = 'https://yang.zchen.org/games/shoot_game/index.html';
             if (qrLinkInput) {
                 qrLinkInput.value = currentURL;
             }
@@ -1325,6 +1325,9 @@ class Game {
 
         window.addEventListener('blur', () => {
             this.keys = {};
+            if (this.state === 'playing') {
+                this.togglePause();
+            }
         });
 
         // Touch events for mobile/touch screen joysticks
@@ -1518,6 +1521,15 @@ class Game {
         document.addEventListener('visibilitychange', () => {
             if (document.visibilityState === 'visible') {
                 this.forceRepaint();
+                if (this.state === 'playing' && !this.isMuted) {
+                    audio.startBGM();
+                }
+            } else {
+                if (this.state === 'playing') {
+                    this.togglePause();
+                } else {
+                    audio.stopBGM();
+                }
             }
         });
 
@@ -1714,6 +1726,8 @@ class Game {
         
         if (this.mode === 'pvp') {
             this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', this.p2Weapon, this);
+            this.player2.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
+            this.player2.health = this.player2.maxHealth;
         } else {
             // Level 10 KI boss utilizes the Lasergun for maximum lethality!
             const aiWeapon = this.aiDifficulty === 10 ? 'laser' : this.p2Weapon;
@@ -1980,8 +1994,9 @@ class Game {
         };
 
         const defaultP1Health = 50 + (this.hpActive ? this.hpUpgrades : 0);
+        const defaultP2Health = this.mode === 'pvp' ? defaultP1Health : 50;
         renderStars('p1-hearts', this.player1 ? this.player1.health : defaultP1Health, this.player1 ? this.player1.maxHealth : defaultP1Health);
-        renderStars('p2-hearts', this.player2 ? this.player2.health : 50, this.player2 ? this.player2.maxHealth : 50);
+        renderStars('p2-hearts', this.player2 ? this.player2.health : defaultP2Health, this.player2 ? this.player2.maxHealth : defaultP2Health);
 
         const windText = document.getElementById('wind-text');
         const windArrow = document.getElementById('wind-arrow');

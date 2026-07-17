@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=41';
-import { audio } from './audio.js?v=41';
+import { Bullet } from './bullet.js?v=42';
+import { audio } from './audio.js?v=42';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -362,7 +362,7 @@ export class Cowboy {
 
         // Aim at enemy (with slight wind compensation if wind levels)
         const dist = Math.hypot(opponent.x - this.x, opponent.y - this.y);
-        const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.wind * dist * 0.05 : 0;
+        const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.currentWind * dist * 0.05 : 0;
         this.angle = Math.atan2(opponent.y + windOffset - this.y, opponent.x - this.x);
 
         // Shoot at enemy
@@ -427,7 +427,7 @@ export class Cowboy {
 
             // Aim at player, compensate for wind on Level 3
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
-            const windOffset = (lvl === 3 && [3, 5, 7, 10].includes(game.level)) ? -game.wind * dist * 0.05 : 0;
+            const windOffset = (lvl === 3 && [3, 5, 7, 10].includes(game.level)) ? -game.currentWind * dist * 0.05 : 0;
             this.angle = Math.atan2(player.y + windOffset - this.y, player.x - this.x);
 
             // Shoot when lined up
@@ -466,7 +466,7 @@ export class Cowboy {
 
             // Aim compensating for wind if applicable
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
-            const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.wind * dist * 0.05 : 0;
+            const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.currentWind * dist * 0.05 : 0;
             this.angle = Math.atan2(player.y + windOffset - this.y, player.x - this.x);
 
             if (Math.random() < 0.04) {
@@ -477,6 +477,22 @@ export class Cowboy {
         // --- LEVEL 6 & 7: PREDICTIVE AIMING & BULLET EVASION ---
         else if (lvl === 6 || lvl === 7) {
             this.handleEvasion(game);
+
+            // FALLBACK TARGET MOVEMENT WHEN NOT DODGING
+            if (this.dodgeCooldown <= 0) {
+                let coverObs = lvl === 7 ? this.findNearestCover(game) : null;
+                if (coverObs && Math.random() < 0.7) {
+                    this.targetX = coverObs.x + 35;
+                    this.targetY = coverObs.y;
+                } else {
+                    if (this.aiDecisionTimer <= 0) {
+                        this.aiDecisionTimer = 30 + Math.random() * 40;
+                        this.targetX = game.canvas.width * 0.75 + (Math.random() - 0.5) * 80;
+                        this.targetY = player.y + (Math.random() - 0.5) * 150;
+                    }
+                }
+            }
+
             this.moveTowardsTarget(game);
 
             // Predictive Aiming
@@ -484,7 +500,7 @@ export class Cowboy {
             const t = dist / this.bulletSpeed; // travel time
             
             const playerVel = this.getPlayerVelocity(game);
-            const windOffset = (lvl === 7 && [3, 5, 7, 10].includes(game.level)) ? -game.wind * dist * 0.05 : 0;
+            const windOffset = (lvl === 7 && [3, 5, 7, 10].includes(game.level)) ? -game.currentWind * dist * 0.05 : 0;
 
             const predX = player.x + playerVel.x * t * 0.8;
             const predY = player.y + playerVel.y * t * 0.8 + windOffset;
@@ -526,7 +542,7 @@ export class Cowboy {
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
             const t = dist / this.bulletSpeed;
             const playerVel = this.getPlayerVelocity(game);
-            const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.wind * dist * 0.05 : 0;
+            const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.currentWind * dist * 0.05 : 0;
 
             const predX = player.x + playerVel.x * t * 0.85;
             const predY = player.y + playerVel.y * t * 0.85 + windOffset;
@@ -576,7 +592,7 @@ export class Cowboy {
                 const dist = Math.hypot(player.x - this.x, player.y - this.y);
                 const t = dist / this.bulletSpeed;
                 const playerVel = this.getPlayerVelocity(game);
-                const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.wind * dist * 0.05 : 0;
+                const windOffset = [3, 5, 7, 10].includes(game.level) ? -game.currentWind * dist * 0.05 : 0;
 
                 const predX = player.x + playerVel.x * t * 0.95;
                 const predY = player.y + playerVel.y * t * 0.95 + windOffset;

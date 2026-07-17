@@ -822,8 +822,8 @@ body {
     color: #a58e74 !important;
 }
 
-/* Toggle button styles (Green Outline) */
-.btn-toggle-active, .btn-toggle-inactive {
+/* Toggle button styles (Green Outline for Active, Red/Gray for Inactive) */
+.btn-toggle-active {
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
@@ -832,9 +832,30 @@ body {
     box-shadow: none !important;
     text-shadow: none !important;
 }
-.btn-toggle-active:hover, .btn-toggle-inactive:hover {
+.btn-toggle-active:hover {
     background: rgba(46, 204, 113, 0.1) !important;
     transform: translateY(-2px) !important;
+}
+
+.btn-toggle-inactive {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    color: #e74c3c !important;
+    border: 2px solid #e74c3c !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+.btn-toggle-inactive:hover {
+    background: rgba(231, 76, 60, 0.1) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Generic Disabled Button Styles */
+.btn:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }
 
 /* Prestige Panel Overlay */

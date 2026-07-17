@@ -3,6 +3,7 @@ class AudioSynth {
     constructor() {
         this.ctx = null;
         this.muted = false;
+        this.noiseBuffer = null;
 
         const unlock = () => {
             if (!this.ctx) {
@@ -41,12 +42,14 @@ class AudioSynth {
     // Custom noise generator helper for gunshots and explosions
     createNoiseBuffer() {
         if (!this.ctx) return null;
+        if (this.noiseBuffer) return this.noiseBuffer;
         const bufferSize = this.ctx.sampleRate * 2; // 2 seconds of noise
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < bufferSize; i++) {
             data[i] = Math.random() * 2 - 1;
         }
+        this.noiseBuffer = buffer;
         return buffer;
     }
 
