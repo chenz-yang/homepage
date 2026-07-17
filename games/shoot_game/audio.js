@@ -66,7 +66,8 @@ class AudioSynth {
         osc.frequency.setValueAtTime(800, now);
         osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
 
-        oscGain.gain.setValueAtTime(0.4, now);
+        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.linearRampToValueAtTime(0.4, now + 0.003);
         oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
 
         osc.connect(oscGain);
@@ -82,7 +83,8 @@ class AudioSynth {
         noiseFilter.frequency.exponentialRampToValueAtTime(100, now + 0.2);
 
         const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.6, now);
+        noiseGain.gain.setValueAtTime(0, now);
+        noiseGain.gain.linearRampToValueAtTime(0.6, now + 0.005);
         noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
 
         noise.connect(noiseFilter);
@@ -108,7 +110,8 @@ class AudioSynth {
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.exponentialRampToValueAtTime(50, now + 0.18);
 
-        oscGain.gain.setValueAtTime(0.8, now);
+        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.linearRampToValueAtTime(0.8, now + 0.004);
         oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
 
         osc.connect(oscGain);
@@ -124,7 +127,8 @@ class AudioSynth {
         noiseFilter.frequency.exponentialRampToValueAtTime(40, now + 0.45);
 
         const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0.8, now);
+        noiseGain.gain.setValueAtTime(0, now);
+        noiseGain.gain.linearRampToValueAtTime(0.8, now + 0.005);
         noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
 
         noise.connect(noiseFilter);
@@ -151,7 +155,8 @@ class AudioSynth {
         osc.frequency.setValueAtTime(120, now);
         osc.frequency.linearRampToValueAtTime(60, now + 0.15);
 
-        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.3, now + 0.004);
         gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
 
         // Lowpass filter to make it sound muffled
@@ -182,7 +187,8 @@ class AudioSynth {
         osc.frequency.exponentialRampToValueAtTime(2000, now + 0.05);
         osc.frequency.exponentialRampToValueAtTime(600, now + 0.35);
 
-        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.15, now + 0.004);
         gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
 
@@ -221,7 +227,8 @@ class AudioSynth {
         filter.frequency.exponentialRampToValueAtTime(20, now + 1.2);
 
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(1.0, now);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(1.0, now + 0.01);
         gain.gain.linearRampToValueAtTime(0.7, now + 0.1);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
 
@@ -236,7 +243,8 @@ class AudioSynth {
         subOsc.frequency.setValueAtTime(80, now);
         subOsc.frequency.linearRampToValueAtTime(30, now + 0.5);
 
-        subGain.gain.setValueAtTime(0.6, now);
+        subGain.gain.setValueAtTime(0, now);
+        subGain.gain.linearRampToValueAtTime(0.6, now + 0.01);
         subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
         const subFilter = ctx.createBiquadFilter();
@@ -403,7 +411,8 @@ class AudioSynth {
         osc.frequency.setValueAtTime(100, now);
         osc.frequency.exponentialRampToValueAtTime(320, now + 0.12);
 
-        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(0.2, now + 0.004);
         gain.gain.exponentialRampToValueAtTime(0.005, now + 0.16);
 
         const filter = ctx.createBiquadFilter();
@@ -469,7 +478,8 @@ class AudioSynth {
                     drumFilter.frequency.setValueAtTime(400, time);
 
                     const drumGain = ctx.createGain();
-                    drumGain.gain.setValueAtTime(0.03, time);
+                    drumGain.gain.setValueAtTime(0, time);
+                    drumGain.gain.linearRampToValueAtTime(0.03, time + 0.004);
                     drumGain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
 
                     drum.connect(drumFilter);
@@ -527,7 +537,7 @@ class AudioSynth {
         };
 
         const scheduler = () => {
-            if (nextStepTime < ctx.currentTime) {
+            if (nextStepTime < ctx.currentTime - 0.15) {
                 nextStepTime = ctx.currentTime;
             }
             while (nextStepTime < ctx.currentTime + 0.1) {

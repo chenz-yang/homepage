@@ -146,6 +146,7 @@ class Game {
                     const localTime = Date.now();
                     this.timeOffset = serverTime - localTime;
                     console.log(`Time synchronized. Offset: ${this.timeOffset}ms`);
+                    this.updateShopUI();
                 }
             }
         } catch (e) {
@@ -213,6 +214,12 @@ class Game {
         if (p1Input) p1Input.value = this.p1Name;
         if (p2Input) p2Input.value = this.mode === 'pvp' ? this.p2Name : this.p2NamePvE;
 
+        // Translate all elements with data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            el.innerHTML = this.t(key);
+        });
+
         // Update name labels & weapon title dynamically
         const p2Label = document.getElementById('p2-label-text');
         const p2WepTitle = document.getElementById('p2-weapon-title');
@@ -229,11 +236,6 @@ class Game {
         const p1Label = document.getElementById('p1-label-text');
         if (p1Label) p1Label.textContent = `${this.p1Name}${this.t('suffix-black')}`;
 
-        // Translate all elements with data-i18n
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            el.innerHTML = this.t(key);
-        });
 
         // Refresh dynamically rendered layouts
         this.updateShopUI();
@@ -864,7 +866,7 @@ class Game {
         if (qrModal) {
             qrModal.classList.add('active');
             
-            const currentURL = 'https://yang.zchen.org/games/shoot_game/index.html';
+            const currentURL = window.location.protocol.startsWith('http') ? window.location.href : 'https://yang.zchen.org/games/shoot_game/index.html';
             if (qrLinkInput) {
                 qrLinkInput.value = currentURL;
             }
@@ -1775,7 +1777,6 @@ class Game {
 
         switch(this.level) {
             case 1:
-                lvlName.textContent = 'Level 1: Sunny Prairie';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(350, this.canvas.height / 2 - 80, 'chest');
@@ -1784,7 +1785,6 @@ class Game {
                 this.spawnObstacle(800, this.canvas.height / 2 - 40, 'chest');
                 break;
             case 2:
-                lvlName.textContent = 'Level 2: Cactus Canyon';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(350, this.canvas.height / 2 - 80, 'cactus');
@@ -1795,7 +1795,6 @@ class Game {
                 this.spawnObstacle(780, this.canvas.height / 2 - 60, 'cactus');
                 break;
             case 3:
-                lvlName.textContent = 'Level 3: Windy Valley';
                 windInd.classList.remove('hidden');
                 this.wind = (Math.random() > 0.5 ? 1 : -1) * (4 + Math.random() * 5);
                 this.spawnObstacle(350, this.canvas.height / 2 - 40, 'cactus');
@@ -1805,7 +1804,6 @@ class Game {
                 this.spawnObstacle(320, this.canvas.height / 2 + 140, 'chest');
                 break;
             case 4:
-                lvlName.textContent = 'Level 4: Dynamite Junction';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(300, this.canvas.height / 2 + 30, 'tnt');
@@ -1820,7 +1818,6 @@ class Game {
                 this.spawnObstacle(1000, this.canvas.height / 2 + 80, 'tnt');
                 break;
             case 5:
-                lvlName.textContent = 'Level 5: Tombstone Showdown';
                 windInd.classList.remove('hidden');
                 this.wind = (Math.random() > 0.5 ? 1 : -1) * (6 + Math.random() * 6);
                 
@@ -1834,7 +1831,6 @@ class Game {
                 this.spawnObstacle(750, this.canvas.height / 2 + 30, 'fence');
                 break;
             case 6:
-                lvlName.textContent = 'Level 6: Desert Fortress';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(300, this.canvas.height / 2 + 30, 'fence');
@@ -1847,7 +1843,6 @@ class Game {
                 this.spawnObstacle(850, this.canvas.height / 2 - 60, 'fence');
                 break;
             case 7:
-                lvlName.textContent = 'Level 7: Windstorm Ruins';
                 windInd.classList.remove('hidden');
                 this.wind = (Math.random() > 0.5 ? 1 : -1) * (8 + Math.random() * 6);
                 this.spawnObstacle(300, this.canvas.height / 2 - 80, 'cactus');
@@ -1859,7 +1854,6 @@ class Game {
                 this.spawnObstacle(920, this.canvas.height / 2 + 80, 'chest');
                 break;
             case 8:
-                lvlName.textContent = 'Level 8: TNT Minefield';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(300, this.canvas.height / 2 + 30, 'tnt');
@@ -1872,7 +1866,6 @@ class Game {
                 this.spawnObstacle(950, this.canvas.height / 2 + 30, 'chest');
                 break;
             case 9:
-                lvlName.textContent = 'Level 9: Tumbleweed Alley';
                 windInd.classList.add('hidden');
                 this.wind = 0;
                 this.spawnObstacle(350, this.canvas.height / 2 + 30, 'cactus');
@@ -1883,7 +1876,6 @@ class Game {
                 this.spawnObstacle(950, this.canvas.height / 2 + 30, 'chest');
                 break;
             case 10:
-                lvlName.textContent = 'Level 10: Armageddon Duel';
                 windInd.classList.remove('hidden');
                 this.wind = (Math.random() > 0.5 ? 1 : -1) * (10 + Math.random() * 8);
                 this.spawnObstacle(350, this.canvas.height / 2 + 30, 'tnt');
