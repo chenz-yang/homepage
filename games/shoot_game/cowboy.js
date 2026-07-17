@@ -317,13 +317,19 @@ export class Cowboy {
         const player = game.player1;
         let pvx = 0, pvy = 0;
         if (!player) return { x: 0, y: 0 };
-        if (game.keys['w'] || game.keys['W']) pvy = -player.speed;
-        if (game.keys['s'] || game.keys['S']) pvy = player.speed;
-        if (game.keys['a'] || game.keys['A']) pvx = -player.speed;
-        if (game.keys['d'] || game.keys['D']) pvx = player.speed;
-        if (pvx !== 0 && pvy !== 0) {
-            pvx *= 0.7071;
-            pvy *= 0.7071;
+        
+        if (game.joystickMove && game.joystickMove.active) {
+            pvx = game.joystickMove.x * player.speed;
+            pvy = game.joystickMove.y * player.speed;
+        } else {
+            if (game.keys['w'] || game.keys['W']) pvy = -player.speed;
+            if (game.keys['s'] || game.keys['S']) pvy = player.speed;
+            if (game.keys['a'] || game.keys['A']) pvx = -player.speed;
+            if (game.keys['d'] || game.keys['D']) pvx = player.speed;
+            if (pvx !== 0 && pvy !== 0) {
+                pvx *= 0.7071;
+                pvy *= 0.7071;
+            }
         }
         return { x: pvx, y: pvy };
     }
@@ -657,14 +663,16 @@ export class Cowboy {
             }
         }
 
-        // Search for incoming player bullets
+        // Search for incoming enemy bullets
         const dangerBullet = game.bullets.find(b => {
             if (b.owner === this || b.destroyed) return false;
             
-            if (b.vx > 0) { // Bullet moving right
+            // Check if bullet is moving towards this entity
+            const isMovingTowards = (b.vx > 0 && this.x > b.x) || (b.vx < 0 && this.x < b.x);
+            if (isMovingTowards) {
                 const distY = Math.abs(b.y - this.y);
-                const distX = this.x - b.x;
-                if (distX > 0 && distX < 250 && distY < 50) {
+                const distX = Math.abs(this.x - b.x);
+                if (distX < 250 && distY < 50) {
                     return true;
                 }
             }

@@ -2110,6 +2110,9 @@ class Game {
                 // Avoid water
                 if (this.isPositionInWater(x, y)) continue;
 
+                // Avoid tunnel
+                if (this.isInTunnel(x, y)) continue;
+
                 // Avoid existing obstacles
                 let tooClose = false;
                 for (let obs of this.obstacles) {

@@ -226,7 +226,7 @@ export class Bullet {
             if (other.destroyed) return;
             const dist = Math.hypot(other.x - x, other.y - y);
             if (dist < splashRadius) {
-                other.takeDamage(2, game);
+                other.takeDamage(2, game, this.owner);
             }
         });
     }
