@@ -146,26 +146,30 @@ export class Bullet {
             }
         }
 
-        // Collision with targets (differentiating friendly helper AI vs player and opponent)
+        // Collision with targets (everyone can potentially be hit!)
         let targets = [];
-        if (this.owner.role === 'player1' || this.owner.role === 'helper_ai') {
-            if (game.player2 && game.player2.health > 0) {
-                targets.push(game.player2);
-            }
-        } else {
-            if (game.player1 && game.player1.health > 0) {
-                targets.push(game.player1);
-            }
-            game.helperAIs.forEach(helper => {
-                if (helper.health > 0) {
-                    targets.push(helper);
-                }
-            });
+        if (game.player1 && game.player1.health > 0) {
+            targets.push(game.player1);
         }
+        if (game.player2 && game.player2.health > 0) {
+            targets.push(game.player2);
+        }
+        game.helperAIs.forEach(helper => {
+            if (helper.health > 0) {
+                targets.push(helper);
+            }
+        });
 
         for (let target of targets) {
             if (game && game.isInTunnel && game.isInTunnel(target.x, target.y)) {
                 continue; // Can't be hit inside the tunnel (under the roof)!
+            }
+            // A bullet cannot hit its own shooter immediately on spawn (within 32 pixels)
+            if (target === this.owner) {
+                const distFromOwner = Math.hypot(this.x - this.owner.x, this.y - this.owner.y);
+                if (distFromOwner <= 32) {
+                    continue;
+                }
             }
             const dist = Math.hypot(this.x - target.x, this.y - target.y);
             if (dist < this.radius + target.radius) {
@@ -211,14 +215,10 @@ export class Bullet {
         // Deal splash damage to nearby entities and obstacles
         const splashRadius = 70;
         const targets = [game.player1, game.player2, ...game.helperAIs];
-        const isOwnerPlayerAligned = this.owner.role === 'player1' || this.owner.role === 'helper_ai';
         targets.forEach(player => {
-            if (!player || player.health <= 0 || player === directTarget || player === this.owner) return;
+            if (!player || player.health <= 0 || player === directTarget) return;
             
-            // Prevent friendly fire by checking if target is on the same team as the bomb owner
-            const isTargetPlayerAligned = player.role === 'player1' || player.role === 'helper_ai';
-            if (isOwnerPlayerAligned === isTargetPlayerAligned) return;
-            
+            // Allow splash damage to hit anyone (including the shooter/allies), friendly fire is fully enabled!
             const dist = Math.hypot(player.x - x, player.y - y);
             if (dist < splashRadius) {
                 player.takeDamage(2, game);

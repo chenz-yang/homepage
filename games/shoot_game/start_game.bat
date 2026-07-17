@@ -12,8 +12,8 @@ where python >nul 2>nul
 if %ERRORLEVEL% equ 0 (
     echo Python wurde gefunden. Starte Webserver minimiert auf Port 8000...
     start /min "" python -m http.server 8000
-    timeout /t 1 >nul
-    start "" "http://localhost:8000/index.html"
+    ping -n 2 127.0.0.1 >nul
+    start msedge "https://yang.zchen.org/games/shoot_game/index.html"
     goto end
 )
 
@@ -22,8 +22,8 @@ where npx >nul 2>nul
 if %ERRORLEVEL% equ 0 (
     echo Node.js/npx wurde gefunden. Starte Webserver minimiert auf Port 8000...
     start /min "" npx http-server -p 8000
-    timeout /t 2 >nul
-    start "" "http://localhost:8000/index.html"
+    ping -n 3 127.0.0.1 >nul
+    start msedge "https://yang.zchen.org/games/shoot_game/index.html"
     goto end
 )
 

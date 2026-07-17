@@ -67,6 +67,10 @@ class Game {
         this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
         this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
         this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0));
+        if (this.doppelgangerCount > 0 && this.doppelgangerLvl === 0) {
+            this.doppelgangerLvl = 1;
+            localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+        }
         this.doppelgangerActive = localStorage.getItem('wild_west_doppelganger_active') !== 'false';
         this.lasergunLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0));
         this.rapidLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_rapid_level')) || 1));
@@ -106,6 +110,8 @@ class Game {
         this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
         this.moveTouchId = null;
         this.aimTouchId = null;
+
+        this.lastCoinsEarned = 0;
 
         this.timeOffset = 0;
         this.syncTime();
@@ -258,7 +264,7 @@ class Game {
                     
                     // Update reward banner translation dynamically if in PvE mode
                     if (this.mode === 'pve') {
-                        const coinsEarned = this.aiDifficulty >= 5 ? 5 : 3;
+                        const coinsEarned = this.lastCoinsEarned || (this.aiDifficulty >= 5 ? 5 : 3);
                         const rewardBanner = document.getElementById('coins-reward-banner');
                         if (rewardBanner) {
                             rewardBanner.innerHTML = this.t('go-reward-banner', { val: coinsEarned });
@@ -601,6 +607,10 @@ class Game {
                 localStorage.setItem('wild_west_coins', this.coins);
                 localStorage.setItem('wild_west_doppelganger_count', this.doppelgangerCount);
                 localStorage.setItem('wild_west_doppelganger_active', this.doppelgangerActive);
+                if (this.doppelgangerLvl === 0) {
+                    this.doppelgangerLvl = 1;
+                    localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+                }
                 audio.playCoinSound();
                 this.updateShopUI();
             } else {
@@ -1737,6 +1747,10 @@ class Game {
         // Spawn helper AI doppelgangers if unlocked, active & in single-player PvE mode
         this.helperAIs = [];
         if (this.mode === 'pve' && this.doppelgangerUnlocked && this.doppelgangerActive) {
+            if (this.doppelgangerLvl === 0) {
+                this.doppelgangerLvl = 1;
+                localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+            }
             for (let i = 0; i < this.doppelgangerCount; i++) {
                 const spawnY = 300 - (this.doppelgangerCount - 1) * 60 + i * 120;
                 const helper = new Cowboy(100, spawnY, 'helper_ai', this.p1Weapon, this);
@@ -2347,6 +2361,7 @@ class Game {
                 const baseCoins = this.aiDifficulty;
                 const coinsEarned = Math.round(baseCoins * (1 + this.prestigeCount * 0.5));
                 this.coins += coinsEarned;
+                this.lastCoinsEarned = coinsEarned;
                 localStorage.setItem('wild_west_coins', this.coins);
                 
                 if (rewardBanner) {
