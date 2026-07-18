@@ -97,7 +97,7 @@
 
         <div class="cheat-card">
             <div class="cheat-title">2. Prestige-Countdown überspringen (Im Hauptmenü einfügen):</div>
-            <div class="code-box" id="code2">game.lastPrestigeChoiceTime = Date.now() - 21 * 60 * 1000;</div>
+            <div class="code-box" id="code2">game.lastPrestigeChoiceTime = Date.now() - 21 * 60 * 1000; localStorage.setItem('wild_west_prestige_time', game.lastPrestigeChoiceTime);</div>
             <button class="copy-btn" onclick="copyCode('code2', this)">Code kopieren</button>
         </div>
 

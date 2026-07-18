@@ -301,6 +301,15 @@ class Game {
                 diffSection.classList.add('hidden');
             }
         }
+
+        const p2WepCol = document.getElementById('p2-weapon-select-col');
+        if (p2WepCol) {
+            if (this.mode === 'pve') {
+                p2WepCol.classList.add('hidden');
+            } else {
+                p2WepCol.classList.remove('hidden');
+            }
+        }
     }
 
     initDOM() {
@@ -1741,6 +1750,13 @@ class Game {
             this.player2.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
             this.player2.health = this.player2.maxHealth;
         } else {
+            // Randomly pick AI weapon for PvE mode
+            const availableWeapons = ['rapid', 'heavy', 'bomb'];
+            if (this.lasergunUnlocked) {
+                availableWeapons.push('laser');
+            }
+            this.p2Weapon = availableWeapons[Math.floor(Math.random() * availableWeapons.length)];
+
             // Level 10 KI boss utilizes the Lasergun for maximum lethality!
             const aiWeapon = this.aiDifficulty === 10 ? 'laser' : this.p2Weapon;
             this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon, this);
