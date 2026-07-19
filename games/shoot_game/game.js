@@ -3,129 +3,143 @@ import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js';
 import { audio } from './audio.js';
 import { TRANSLATIONS } from './translations.js';
 
-const GAME_VERSION = '106';
+const GAME_VERSION = '107';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
+
+const safeStorage = {
+    getItem(key) {
+        try {
+            return localStorage.getItem(key);
+        } catch (e) {
+            console.warn("safeStorage getItem error:", key, e);
+            return null;
+        }
+    },
+    setItem(key, val) {
+        try {
+            localStorage.setItem(key, val);
+        } catch (e) {
+            console.warn("safeStorage setItem error:", key, e);
+        }
+    }
+};
 
 class Game {
     constructor() {
-        this.canvas = document.getElementById('game-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        
-        // Game States
-        this.mode = 'pve'; // 'pve' or 'pvp'
-        this.level = 1;
-        this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
-        this.keys = {};
-        
-        // Weapons (default: P1 rapid, P2/KI random)
-        this.p1Weapon = 'rapid';
-        this.p2Weapon = 'random';
+        try {
+            this.canvas = document.getElementById('game-canvas');
+            this.ctx = this.canvas.getContext('2d');
+            
+            // Game States
+            this.mode = 'pve'; // 'pve' or 'pvp'
+            this.level = 1;
+            this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
+            this.keys = {};
+            
+            // Weapons (default: P1 rapid, P2/KI random)
+            this.p1Weapon = 'rapid';
+            this.p2Weapon = 'random';
 
-        // Entities
-        this.player1 = null;
-        this.player2 = null;
-        this.bullets = [];
-        this.obstacles = [];
-        this.tumbleweeds = [];
-        this.groundSpikes = [];
-        this.particles = [];
-        this.spikeSpawnTimer = 0;
-        
-        // Sheriff Summon State
-        this.sheriffActive = false;
-        this.sheriffTimer = 0;
-        this.sheriffX = 0;
-        this.sheriffY = 0;
+            // Entities
+            this.player1 = null;
+            this.player2 = null;
+            this.bullets = [];
+            this.obstacles = [];
+            this.tumbleweeds = [];
+            this.groundSpikes = [];
+            this.particles = [];
+            this.spikeSpawnTimer = 0;
+            
+            // Sheriff Summon State
+            this.sheriffActive = false;
+            this.sheriffTimer = 0;
+            this.sheriffX = 0;
+            this.sheriffY = 0;
 
-        // Wind variables
-        this.wind = 0; // target wind velocity (-10 to 10)
-        this.currentWind = 0; // interpolated wind velocity
-        this.windTime = 0;
-        this.windLines = [];
-        
-        // Screen Shake
-        this.shakeTimer = 0;
-        this.shakeIntensity = 0;
-        
-        // Floating Dust in menu
-        this.menuDust = [];
-        
-        // Audio state
-        this.isMuted = false;
+            // Wind variables
+            this.wind = 0;
+            this.currentWind = 0;
+            this.windTime = 0;
+            this.windLines = [];
+            
+            // Screen Shake
+            this.shakeTimer = 0;
+            this.shakeIntensity = 0;
+            
+            // Floating Dust in menu
+            this.menuDust = [];
+            
+            // Audio state
+            this.isMuted = false;
+            this.menuLoopRunning = false;
+            this.tumbleweedSpawnTimer = 0;
 
-        this.menuLoopRunning = false;
+            let savedCoins = safeStorage.getItem('wild_west_coins');
+            if (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) {
+                safeStorage.setItem('wild_west_coins', '0');
+                savedCoins = '0';
+            }
+            this.coins = Math.max(0, parseInt(savedCoins) || 0);
+            this.hpUpgrades = Math.max(0, Math.min(10, parseInt(safeStorage.getItem('wild_west_hp_upgrade')) || 0));
+            this.hpActive = safeStorage.getItem('wild_west_hp_active') !== 'false';
+            this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(safeStorage.getItem('wild_west_doppelganger_count')) || 0));
+            this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(safeStorage.getItem('wild_west_doppelganger_level')) || 0));
+            if (this.doppelgangerCount > 0 && this.doppelgangerLvl === 0) {
+                this.doppelgangerLvl = 1;
+                safeStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+            }
+            this.doppelgangerActive = safeStorage.getItem('wild_west_doppelganger_active') !== 'false';
+            this.lasergunLvl = Math.max(0, Math.min(5, parseInt(safeStorage.getItem('wild_west_lasergun_level')) || 0));
+            this.rapidLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_rapid_level')) || 1));
+            this.heavyLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_heavy_level')) || 1));
+            this.bombLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_bomb_level')) || 1));
+            this.aiDifficulty = Math.max(1, Math.min(10, parseInt(safeStorage.getItem('wild_west_ai_difficulty')) || 1));
+            this.prestigeCount = Math.max(0, parseInt(safeStorage.getItem('wild_west_prestige_count')) || 0);
+            this.lastPrestigeChoiceTime = Math.max(0, parseInt(safeStorage.getItem('wild_west_prestige_time')) || 0);
+            this.lastDailyClaim = safeStorage.getItem('wild_west_last_daily_claim') || '';
 
-        // Tumbleweed spawn controller
-        this.tumbleweedSpawnTimer = 0;
+            // Language setup
+            this.currentLanguage = safeStorage.getItem('wild_west_lang') || 'original';
 
-        let savedCoins = localStorage.getItem('wild_west_coins');
-        if (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) {
-            localStorage.setItem('wild_west_coins', '0');
-            savedCoins = '0';
+            // Detect mobile device
+            this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                                  (navigator.maxTouchPoints > 0 && (/iPad/i.test(navigator.userAgent) || /Macintosh/i.test(navigator.userAgent)));
+            
+            this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
+            this.hasPhysicalKeyboard = !this.isMobileDevice;
+
+            const defaultP1 = this.t('default-p1-name');
+            const defaultP2 = this.t('default-p2-name');
+            const defaultP2PvE = this.t('default-p2-name-ki');
+
+            this.p1Name = safeStorage.getItem('wild_west_p1_name') || defaultP1;
+            this.p2Name = safeStorage.getItem('wild_west_p2_name') || defaultP2;
+            this.p2NamePvE = safeStorage.getItem('wild_west_p2_name_pve') || defaultP2PvE;
+
+            this.helperAIs = [];
+
+            this.joystickMove = { x: 0, y: 0, active: false };
+            this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+            this.moveTouchId = null;
+            this.aimTouchId = null;
+
+            this.lastCoinsEarned = 0;
+            this.toastTimeout = null;
+            this.toastRemoveTimeout = null;
+            this.coinSoundTimeout = null;
+
+            this.timeOffset = 0;
+            this.syncTime();
+
+            this.initDOM();
+            this.initInput();
+            this.createMenuDust();
+            this.startMenuLoop();
+            this.setLanguage(this.currentLanguage);
+            this.forceRepaint();
+        } catch(e) {
+            console.error("Critical Game constructor error:", e);
         }
-        this.coins = Math.max(0, parseInt(savedCoins) || 0);
-        this.hpUpgrades = Math.max(0, Math.min(10, parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0));
-        this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
-        this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
-        this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0));
-        if (this.doppelgangerCount > 0 && this.doppelgangerLvl === 0) {
-            this.doppelgangerLvl = 1;
-            localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
-        }
-        this.doppelgangerActive = localStorage.getItem('wild_west_doppelganger_active') !== 'false';
-        this.lasergunLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0));
-        this.rapidLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_rapid_level')) || 1));
-        this.heavyLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_heavy_level')) || 1));
-        this.bombLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_bomb_level')) || 1));
-        this.aiDifficulty = Math.max(1, Math.min(10, parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1));
-        this.prestigeCount = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_count')) || 0);
-        this.lastPrestigeChoiceTime = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_time')) || 0);
-        this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
-
-        // Language setup
-        this.currentLanguage = localStorage.getItem('wild_west_lang') || 'original';
-
-        // Detect mobile device (smartphone or tablet like iPad)
-        this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                              (navigator.maxTouchPoints > 0 && (/iPad/i.test(navigator.userAgent) || /Macintosh/i.test(navigator.userAgent)));
-        
-        // Detect smartphone specifically (mobile device with small screen dimension)
-        this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
-
-        // A device has a physical keyboard if it's NOT a mobile device
-        this.hasPhysicalKeyboard = !this.isMobileDevice;
-
-        // Player names persistent stats with language defaults
-        const defaultP1 = this.t('default-p1-name');
-        const defaultP2 = this.t('default-p2-name');
-        const defaultP2PvE = this.t('default-p2-name-ki');
-
-        this.p1Name = localStorage.getItem('wild_west_p1_name') || defaultP1;
-        this.p2Name = localStorage.getItem('wild_west_p2_name') || defaultP2;
-        this.p2NamePvE = localStorage.getItem('wild_west_p2_name_pve') || defaultP2PvE;
-
-        this.helperAIs = [];
-
-        // Joystick inputs for mobile/touch play
-        this.joystickMove = { x: 0, y: 0, active: false };
-        this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
-        this.moveTouchId = null;
-        this.aimTouchId = null;
-
-        this.lastCoinsEarned = 0;
-        this.toastTimeout = null;
-        this.toastRemoveTimeout = null;
-        this.coinSoundTimeout = null;
-
-        this.timeOffset = 0;
-        this.syncTime();
-
-        this.initDOM();
-        this.initInput();
-        this.createMenuDust();
-        this.startMenuLoop();
-        this.setLanguage(this.currentLanguage);
-        this.forceRepaint();
     }
 
     forceRepaint() {
@@ -963,27 +977,27 @@ class Game {
 
         // Render descriptions from templates so that the span IDs are present
         const hpDescContainer = document.getElementById('shop-hp-desc-container');
-        hpDescContainer.innerHTML = this.t('shop-hp-desc', { val: `<span id="shop-hp-lvl">${this.hpUpgrades}</span>` }) + ` <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span>`;
+        if (hpDescContainer) hpDescContainer.innerHTML = this.t('shop-hp-desc', { val: `<span id="shop-hp-lvl">${this.hpUpgrades}</span>` }) + ` <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span>`;
 
         const doppelCountValContainer = document.getElementById('shop-doppel-count-container');
-        doppelCountValContainer.innerHTML = this.t('shop-doppel-desc', { count: `<span id="shop-doppel-count-val">${this.doppelgangerCount}</span>` }) + ` <span id="shop-doppel-status"></span>`;
+        if (doppelCountValContainer) doppelCountValContainer.innerHTML = this.t('shop-doppel-desc', { count: `<span id="shop-doppel-count-val">${this.doppelgangerCount}</span>` }) + ` <span id="shop-doppel-status"></span>`;
 
         const doppelLvlValContainer = document.getElementById('shop-doppel-lvl-container');
         const doppelHp = 10 + this.doppelgangerLvl * 5;
         const doppelCdr = this.doppelgangerLvl > 0 ? (this.doppelgangerLvl - 1) * 10 : 0;
-        doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
+        if (doppelLvlValContainer) doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
             hp: `<span id="shop-doppel-hp-val">${doppelHp}</span>`,
             cdr: `<span id="shop-doppel-cdr-val">${doppelCdr}</span>`,
             lvl: `<span id="shop-doppel-lvl-val">${this.doppelgangerLvl}</span>`
         });
 
         const laserDescContainer = document.getElementById('shop-laser-desc-container');
-        laserDescContainer.innerHTML = this.t('shop-laser-desc', { lvl: `<span id="shop-laser-lvl">${this.lasergunLvl}</span>` }) + ` <span id="shop-laser-status"></span>`;
+        if (laserDescContainer) laserDescContainer.innerHTML = this.t('shop-laser-desc', { lvl: `<span id="shop-laser-lvl">${this.lasergunLvl}</span>` }) + ` <span id="shop-laser-status"></span>`;
 
         const rapidDescContainer = document.getElementById('shop-rapid-desc-container');
         const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
         const rapidCd = 250 - (this.rapidLvl - 1) * 20;
-        rapidDescContainer.innerHTML = this.t('shop-rapid-desc', {
+        if (rapidDescContainer) rapidDescContainer.innerHTML = this.t('shop-rapid-desc', {
             dmg: `<span id="shop-rapid-dmg">${rapidDmg}</span>`,
             cd: `<span id="shop-rapid-cd">${rapidCd}</span>`,
             lvl: `<span id="shop-rapid-lvl">${this.rapidLvl}</span>`
@@ -992,7 +1006,7 @@ class Game {
         const heavyDescContainer = document.getElementById('shop-heavy-desc-container');
         const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
         const heavyCd = 1500 - (this.heavyLvl - 1) * 200;
-        heavyDescContainer.innerHTML = this.t('shop-heavy-desc', {
+        if (heavyDescContainer) heavyDescContainer.innerHTML = this.t('shop-heavy-desc', {
             dmg: `<span id="shop-heavy-dmg">${heavyDmg}</span>`,
             cd: `<span id="shop-heavy-cd">${heavyCd}</span>`,
             lvl: `<span id="shop-heavy-lvl">${this.heavyLvl}</span>`
@@ -1001,7 +1015,7 @@ class Game {
         const bombDescContainer = document.getElementById('shop-bomb-desc-container');
         const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
         const bombCd = 2000 - (this.bombLvl - 1) * 250;
-        bombDescContainer.innerHTML = this.t('shop-bomb-desc', {
+        if (bombDescContainer) bombDescContainer.innerHTML = this.t('shop-bomb-desc', {
             dmg: `<span id="shop-bomb-dmg">${bombDmg}</span>`,
             cd: `<span id="shop-bomb-cd">${bombCd}</span>`,
             lvl: `<span id="shop-bomb-lvl">${this.bombLvl}</span>`
