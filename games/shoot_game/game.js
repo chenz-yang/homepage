@@ -1752,21 +1752,21 @@ class Game {
         if (this.mode === 'pve' && this.p2Weapon && this.p2Weapon !== 'random') {
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
             if (this.coins < 15) {
-                const startBtn = document.getElementById('start-game-btn');
-                if (startBtn) {
-                    startBtn.classList.add('shake');
-                    setTimeout(() => startBtn.classList.remove('shake'), 400);
-                }
+                this.p2Weapon = 'random';
+                document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
+                const randomBtn = document.querySelector('.weapon-btn[data-player="p2"][data-weapon="random"]');
+                if (randomBtn) randomBtn.classList.add('p2-wep-active');
+                this.updateP2WeaponBadges();
                 audio.playRicochet();
                 this.showToast(this.t('toast-ki-wep-not-enough'));
-                return;
+            } else {
+                this.coins -= 15;
+                localStorage.setItem('wild_west_coins', this.coins);
+                audio.playCoinSound();
+                this.updateHUD();
+                this.updateShopUI();
+                this.showToast(this.t('toast-ki-wep-bought'));
             }
-            this.coins -= 15;
-            localStorage.setItem('wild_west_coins', this.coins);
-            audio.playCoinSound();
-            this.updateHUD();
-            this.updateShopUI();
-            this.showToast(this.t('toast-ki-wep-bought'));
         }
 
         if (this.coinSoundTimeout) {
