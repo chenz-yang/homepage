@@ -3,7 +3,7 @@ import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js';
 import { audio } from './audio.js';
 import { TRANSLATIONS } from './translations.js';
 
-const GAME_VERSION = '104';
+const GAME_VERSION = '105';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
