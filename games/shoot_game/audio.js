@@ -5,12 +5,21 @@ class AudioSynth {
         this.muted = false;
         this.noiseBuffer = null;
 
+        const removeUnlock = () => {
+            window.removeEventListener('click', unlock);
+            window.removeEventListener('touchstart', unlock);
+            window.removeEventListener('touchend', unlock);
+        };
+
         const unlock = () => {
             if (!this.ctx) {
                 this.init();
             }
             if (this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
                 this.ctx.resume().catch(e => console.warn("Failed to resume AudioContext on gesture:", e));
+            }
+            if (this.ctx && this.ctx.state === 'running') {
+                removeUnlock();
             }
         };
 

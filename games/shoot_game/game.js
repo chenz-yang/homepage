@@ -1,9 +1,10 @@
-import { Cowboy } from './cowboy.js?v=42';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=42';
-import { audio } from './audio.js?v=42';
-import { TRANSLATIONS } from './translations.js?v=42';
+import { Cowboy } from './cowboy.js?v=49';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=49';
+import { audio } from './audio.js?v=49';
+import { TRANSLATIONS } from './translations.js?v=49';
 
-console.log("Wild West Duel - Loaded version 42");
+const GAME_VERSION = '49';
+console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
     constructor() {
@@ -16,9 +17,9 @@ class Game {
         this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
         this.keys = {};
         
-        // Weapons (default: rapid)
+        // Weapons (default: P1 rapid, P2/KI random)
         this.p1Weapon = 'rapid';
-        this.p2Weapon = 'rapid';
+        this.p2Weapon = 'random';
 
         // Entities
         this.player1 = null;
@@ -112,6 +113,9 @@ class Game {
         this.aimTouchId = null;
 
         this.lastCoinsEarned = 0;
+        this.toastTimeout = null;
+        this.toastRemoveTimeout = null;
+        this.coinSoundTimeout = null;
 
         this.timeOffset = 0;
         this.syncTime();
@@ -265,11 +269,10 @@ class Game {
                     subtitle.textContent = this.t('go-p1-win-subtitle');
                     
                     // Update reward banner translation dynamically if in PvE mode
-                    if (this.mode === 'pve') {
-                        const coinsEarned = this.lastCoinsEarned || (this.aiDifficulty >= 5 ? 5 : 3);
+                    if (this.mode === 'pve' && this.lastCoinsEarned > 0) {
                         const rewardBanner = document.getElementById('coins-reward-banner');
-                        if (rewardBanner) {
-                            rewardBanner.innerHTML = this.t('go-reward-banner', { val: coinsEarned });
+                        if (rewardBanner && !rewardBanner.classList.contains('hidden')) {
+                            rewardBanner.innerHTML = this.t('go-reward-banner', { val: this.lastCoinsEarned });
                         }
                     }
                 }
@@ -313,6 +316,9 @@ class Game {
     }
 
     initDOM() {
+        const versionBadge = document.getElementById('version-badge');
+        if (versionBadge) versionBadge.textContent = `v${GAME_VERSION}`;
+
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
         if (this.isMobileDevice) {
@@ -447,6 +453,7 @@ class Game {
                     if (p2NameLabel) p2NameLabel.textContent = this.t('label-p2-name-ki');
                     if (p2Input) p2Input.value = this.p2NamePvE;
                 }
+                this.updateP2WeaponBadges();
                 this.updateModeVisibility();
             });
         });
@@ -464,12 +471,42 @@ class Game {
                     document.querySelectorAll('.weapon-btn[data-player="p1"]').forEach(b => b.classList.remove('p1-wep-active'));
                     btn.classList.add('p1-wep-active');
                     this.p1Weapon = weapon;
+                    audio.playRicochet();
                 } else {
-                    document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
-                    btn.classList.add('p2-wep-active');
-                    this.p2Weapon = weapon;
+                    if (this.mode === 'pve') {
+                        if (weapon === 'random') {
+                            document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
+                            btn.classList.add('p2-wep-active');
+                            this.p2Weapon = 'random';
+                            audio.playRicochet();
+                        } else {
+                            if (this.p2Weapon === weapon) {
+                                return;
+                            }
+                            if (this.coins >= 15) {
+                                this.coins -= 15;
+                                localStorage.setItem('wild_west_coins', this.coins);
+                                document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
+                                btn.classList.add('p2-wep-active');
+                                this.p2Weapon = weapon;
+                                audio.playCoinSound();
+                                this.updateHUD();
+                                this.updateShopUI();
+                                this.showToast(this.t('toast-ki-wep-bought'));
+                            } else {
+                                btn.classList.add('shake');
+                                setTimeout(() => btn.classList.remove('shake'), 400);
+                                audio.playRicochet();
+                                this.showToast(this.t('toast-ki-wep-not-enough'));
+                            }
+                        }
+                    } else {
+                        document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
+                        btn.classList.add('p2-wep-active');
+                        this.p2Weapon = weapon;
+                        audio.playRicochet();
+                    }
                 }
-                audio.playRicochet(); // click sound cue
             });
         });
 
@@ -796,7 +833,7 @@ class Game {
             localStorage.removeItem('wild_west_prestige_time');
 
             this.p1Weapon = 'rapid';
-            this.p2Weapon = 'rapid';
+            this.p2Weapon = 'random';
 
             // Reset UI states
             document.querySelectorAll('.weapon-btn[data-player="p1"]').forEach(b => {
@@ -805,7 +842,7 @@ class Game {
             });
             document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => {
                 b.classList.remove('p2-wep-active');
-                if (b.getAttribute('data-weapon') === 'rapid') b.classList.add('p2-wep-active');
+                if (b.getAttribute('data-weapon') === 'random') b.classList.add('p2-wep-active');
             });
 
             audio.playWesternWhistle();
@@ -891,7 +928,10 @@ class Game {
 
     updateShopUI() {
         const displayedCoins = (this.coins === Infinity || this.coins >= 99999999) ? this.t('shop-infinite') : this.coins;
-        document.getElementById('shop-coins-val').textContent = displayedCoins;
+        const shopCoinsEl = document.getElementById('shop-coins-val');
+        if (shopCoinsEl) shopCoinsEl.textContent = displayedCoins;
+        const headerCoinsEl = document.getElementById('header-coins-val');
+        if (headerCoinsEl) headerCoinsEl.textContent = displayedCoins;
 
         // --- Daily Reward ---
         const claimDailyBtn = document.getElementById('claim-daily-btn');
@@ -1179,6 +1219,9 @@ class Game {
     }
 
     showToast(message) {
+        if (this.toastTimeout) clearTimeout(this.toastTimeout);
+        if (this.toastRemoveTimeout) clearTimeout(this.toastRemoveTimeout);
+
         const existingToast = document.querySelector('.toast-notification');
         if (existingToast) {
             existingToast.remove();
@@ -1194,9 +1237,9 @@ class Game {
             toast.offsetHeight;
             toast.classList.add('show');
 
-            setTimeout(() => {
+            this.toastTimeout = setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => {
+                this.toastRemoveTimeout = setTimeout(() => {
                     toast.remove();
                 }, 400);
             }, 2500);
@@ -1261,8 +1304,60 @@ class Game {
         };
         updateWepPts('p1');
         updateWepPts('p2');
+        this.updateP2WeaponBadges();
 
         this.forceRepaint();
+    }
+
+    updateModeVisibility() {
+        const difficultySection = document.querySelector('.difficulty-select');
+        if (difficultySection) {
+            if (this.mode === 'pvp') {
+                difficultySection.style.display = 'none';
+            } else {
+                difficultySection.style.display = '';
+            }
+        }
+        document.body.classList.remove('mode-pvp', 'mode-pve');
+        document.body.classList.add(`mode-${this.mode}`);
+        this.updateP2WeaponBadges();
+    }
+
+    updateP2WeaponBadges() {
+        const p2Col = document.getElementById('p2-weapon-select-col');
+        if (!p2Col) return;
+
+        p2Col.querySelectorAll('.weapon-btn').forEach(btn => {
+            const wep = btn.getAttribute('data-weapon');
+            const ptsSpan = btn.querySelector('.wep-pts');
+            if (ptsSpan) {
+                if (this.mode === 'pve') {
+                    const isActive = this.p2Weapon === wep;
+                    if (wep === 'random') {
+                        ptsSpan.textContent = isActive ? '0 🪙 (Aktiv)' : '0 🪙';
+                    } else {
+                        ptsSpan.textContent = isActive ? '15 🪙 (Aktiv)' : '15 🪙';
+                    }
+                } else {
+                    const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
+                    if (wep === 'random') {
+                        ptsSpan.textContent = '? Pkt';
+                    } else if (wep === 'rapid') {
+                        const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
+                        ptsSpan.textContent = `${rapidDmg}${ptsUnit}`;
+                    } else if (wep === 'heavy') {
+                        const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
+                        ptsSpan.textContent = `${heavyDmg}${ptsUnit}`;
+                    } else if (wep === 'bomb') {
+                        const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
+                        ptsSpan.textContent = `${bombDmg}${ptsUnit}`;
+                    } else if (wep === 'laser') {
+                        const laserDmg = this.lasergunLvl >= 5 ? 5 : (this.lasergunLvl >= 3 ? 4 : 3);
+                        ptsSpan.textContent = `${laserDmg}${ptsUnit}`;
+                    }
+                }
+            }
+        });
     }
 
     updatePrestigeUI() {
@@ -1330,7 +1425,7 @@ class Game {
                     this.closeQRCode();
                     audio.playRicochet();
                     e.preventDefault();
-                } else if (this.state === 'playing') {
+                } else if (this.state === 'playing' || this.state === 'paused') {
                     this.togglePause();
                 }
             }
@@ -1599,6 +1694,10 @@ class Game {
             if (dustContainer) {
                 dustContainer.width = window.innerWidth;
                 dustContainer.height = window.innerHeight;
+                this.menuDust.forEach(p => {
+                    if (p.x > dustContainer.width) p.x = Math.random() * dustContainer.width;
+                    if (p.y > dustContainer.height) p.y = Math.random() * dustContainer.height;
+                });
             }
         };
         resizeCanvas();
@@ -1652,6 +1751,11 @@ class Game {
     }
 
     startGame() {
+        if (this.coinSoundTimeout) {
+            clearTimeout(this.coinSoundTimeout);
+            this.coinSoundTimeout = null;
+        }
+        this.lastCoinsEarned = 0;
         audio.init();
         audio.playWesternWhistle();
         audio.startBGM(); // Start Spaghetti Western loop!
@@ -1740,25 +1844,35 @@ class Game {
 
         this.setupLevel();
 
+        const availableWeapons = ['rapid', 'heavy', 'bomb'];
+        if (this.lasergunUnlocked) {
+            availableWeapons.push('laser');
+        }
+
+        const p1ActualWeapon = this.p1Weapon === 'random'
+            ? availableWeapons[Math.floor(Math.random() * availableWeapons.length)]
+            : this.p1Weapon;
+
         // Spawn Cowboys: P1 is Black, P2/AI is White
-        this.player1 = new Cowboy(120, this.canvas.height / 2 + 30, 'player1', this.p1Weapon, this);
+        this.player1 = new Cowboy(120, this.canvas.height / 2 + 30, 'player1', p1ActualWeapon, this);
         this.player1.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
         this.player1.health = this.player1.maxHealth;
         
         if (this.mode === 'pvp') {
-            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', this.p2Weapon, this);
+            const p2ActualWeapon = this.p2Weapon === 'random'
+                ? availableWeapons[Math.floor(Math.random() * availableWeapons.length)]
+                : this.p2Weapon;
+            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'player2', p2ActualWeapon, this);
             this.player2.maxHealth = 50 + (this.hpActive ? this.hpUpgrades : 0);
             this.player2.health = this.player2.maxHealth;
         } else {
-            // Randomly pick AI weapon for PvE mode
-            const availableWeapons = ['rapid', 'heavy', 'bomb'];
-            if (this.lasergunUnlocked) {
-                availableWeapons.push('laser');
-            }
-            this.p2Weapon = availableWeapons[Math.floor(Math.random() * availableWeapons.length)];
+            // Pick AI weapon for PvE mode: if 'random' or unspecified, randomly choose from available weapons
+            const p2ActualWeapon = (this.p2Weapon === 'random' || !this.p2Weapon)
+                ? availableWeapons[Math.floor(Math.random() * availableWeapons.length)]
+                : this.p2Weapon;
 
             // Level 10 KI boss utilizes the Lasergun for maximum lethality!
-            const aiWeapon = this.aiDifficulty === 10 ? 'laser' : this.p2Weapon;
+            const aiWeapon = this.aiDifficulty === 10 ? 'laser' : p2ActualWeapon;
             this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon, this);
         }
 
@@ -1963,6 +2077,10 @@ class Game {
 
 
     exitToMenu() {
+        if (this.coinSoundTimeout) {
+            clearTimeout(this.coinSoundTimeout);
+            this.coinSoundTimeout = null;
+        }
         this.resetJoystickState();
         document.body.classList.remove('game-playing');
         document.documentElement.classList.remove('game-playing');
@@ -2350,10 +2468,12 @@ class Game {
         const rewardBanner = document.getElementById('coins-reward-banner');
 
         if (this.player1.health <= 0 && this.player2.health <= 0) {
+            this.lastCoinsEarned = 0;
             title.textContent = this.t('go-draw-title');
             subtitle.textContent = this.t('go-draw-subtitle');
             if (rewardBanner) rewardBanner.classList.add('hidden');
         } else if (this.player1.health <= 0) {
+            this.lastCoinsEarned = 0;
             const oppName = this.mode === 'pvp' ? this.p2Name : this.p2NamePvE;
             title.textContent = this.t('go-victory-title', { name: oppName });
             subtitle.textContent = this.mode === 'pvp' ? this.t('go-p2-win-pvp-subtitle', { oppName, p1Name: this.p1Name }) : this.t('go-p2-win-ki-subtitle');
@@ -2378,10 +2498,13 @@ class Game {
                 }
                 
                 // Play a brief delayed coin sound effect for maximum dopamine
-                setTimeout(() => {
+                if (this.coinSoundTimeout) clearTimeout(this.coinSoundTimeout);
+                this.coinSoundTimeout = setTimeout(() => {
                     audio.playCoinSound();
+                    this.coinSoundTimeout = null;
                 }, 800);
             } else {
+                this.lastCoinsEarned = 0;
                 if (rewardBanner) rewardBanner.classList.add('hidden');
             }
         }

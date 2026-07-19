@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=42">
+    <link rel="stylesheet" href="style.css?v=49">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -48,7 +48,8 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; cursor: default;">v42</div>
+            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v49</div>
+            <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">🪙 Saldo: <span id="header-coins-val">0</span> Münzen</div>
 
             <!-- Prestige Reset Panel -->
             <div id="prestige-panel" class="prestige-panel hidden">
@@ -97,7 +98,7 @@
                             <h3 data-i18n="weapon-p1-label">P1 (Schwarz)</h3>
                             <div class="weapon-grid">
                                 <button class="btn btn-primary weapon-btn p1-wep-active" data-player="p1" data-weapon="rapid">
-                                    <span class="wep-name" data-i18n="wep-rapid">Schnell</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
+                                    <span class="wep-name" data-i18n="wep-rapid">Pistole</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
                                 </button>
                                 <button class="btn btn-primary weapon-btn" data-player="p1" data-weapon="heavy">
                                     <span class="wep-name" data-i18n="wep-heavy">Langsam</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
@@ -108,13 +109,19 @@
                                 <button id="p1-wep-laser" class="btn btn-primary weapon-btn" data-player="p1" data-weapon="laser" disabled>
                                     <span class="wep-name" data-i18n="wep-laser-locked">Lasergun 🔒</span><span class="wep-pts" data-i18n="wep-pts-3">3 Pkt</span>
                                 </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p1" data-weapon="random">
+                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts">? Pkt</span>
+                                </button>
                             </div>
                         </div>
                         <div class="weapon-select-col" id="p2-weapon-select-col">
                             <h3 id="p2-weapon-title" data-i18n="weapon-p2-label-ki">KI (Weiß)</h3>
                             <div class="weapon-grid">
-                                <button class="btn btn-primary weapon-btn p2-wep-active" data-player="p2" data-weapon="rapid">
-                                    <span class="wep-name" data-i18n="wep-rapid">Schnell</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
+                                <button class="btn btn-primary weapon-btn p2-wep-active" data-player="p2" data-weapon="random">
+                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts">? Pkt</span>
+                                </button>
+                                <button class="btn btn-primary weapon-btn" data-player="p2" data-weapon="rapid">
+                                    <span class="wep-name" data-i18n="wep-rapid">Pistole</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
                                 </button>
                                 <button class="btn btn-primary weapon-btn" data-player="p2" data-weapon="heavy">
                                     <span class="wep-name" data-i18n="wep-heavy">Langsam</span><span class="wep-pts" data-i18n="wep-pts-2">2 Pkt</span>
@@ -421,7 +428,7 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=42"></script>
+    <script type="module" src="game.js?v=49"></script>
 <!-- redeploy2 -->
 </body>
 </html>

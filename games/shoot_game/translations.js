@@ -26,7 +26,8 @@ export const TRANSLATIONS = {
         "weapon-p1-label": "P1 (Schwarz)",
         "weapon-p2-label-ki": "KI (Weiß)",
         "weapon-p2-label-pvp": "P2 (Weiß)",
-        "wep-rapid": "Schnell",
+        "wep-random": "🎲 Zufall",
+        "wep-rapid": "Pistole",
         "wep-heavy": "Langsam",
         "wep-bomb": "Bombe",
         "wep-laser-locked": "Lasergun 🔒",
@@ -132,7 +133,11 @@ export const TRANSLATIONS = {
         "pause-title": "Pause",
         "pause-subtitle": "Das Duell ruht...",
         "pause-resume-btn": "Weiter",
-        "pause-menu-btn": "Hauptmenü"
+        "pause-menu-btn": "Hauptmenü",
+
+        // Toasts
+        "toast-ki-wep-bought": "KI-Waffe selbst gewählt! (-15 🪙)",
+        "toast-ki-wep-not-enough": "Nicht genug Münzen! (15 🪙 benötigt)",
     },
     chinese: {
         // Main Menu
@@ -161,6 +166,7 @@ export const TRANSLATIONS = {
         "weapon-p1-label": "玩家1 (黑色)",
         "weapon-p2-label-ki": "AI (白色)",
         "weapon-p2-label-pvp": "玩家2 (白色)",
+        "wep-random": "🎲 随机",
         "wep-rapid": "快速",
         "wep-heavy": "重型",
         "wep-bomb": "炸弹",
@@ -267,6 +273,10 @@ export const TRANSLATIONS = {
         "pause-title": "暂停",
         "pause-subtitle": "决斗暂停中……",
         "pause-resume-btn": "继续",
-        "pause-menu-btn": "主菜单"
+        "pause-menu-btn": "主菜单",
+
+        // Toasts
+        "toast-ki-wep-bought": "已手动选择AI武器！(-15 🪙)",
+        "toast-ki-wep-not-enough": "金币不足！（需要 15 🪙）"
     }
 };

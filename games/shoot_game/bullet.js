@@ -1,5 +1,5 @@
 // Bullet physics, trajectory, wind influence, and collision handling
-import { audio } from './audio.js?v=42';
+import { audio } from './audio.js?v=49';
 
 export class Bullet {
     constructor(x, y, angle, owner, type = 'normal') {
@@ -217,6 +217,7 @@ export class Bullet {
         const targets = [game.player1, game.player2, ...game.helperAIs];
         targets.forEach(player => {
             if (!player || player.health <= 0 || player === directTarget) return;
+            if (game && game.isInTunnel && game.isInTunnel(player.x, player.y)) return; // Tunnelblockade
             
             // Allow splash damage to hit anyone (including the shooter/allies), friendly fire is fully enabled!
             const dist = Math.hypot(player.x - x, player.y - y);

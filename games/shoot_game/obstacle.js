@@ -1,5 +1,5 @@
 // Environmental Obstacles for Wild West Duel
-import { audio } from './audio.js?v=42';
+import { audio } from './audio.js?v=49';
 
 export class Obstacle {
     constructor(x, y, type, isFullHP = false) {
@@ -486,6 +486,7 @@ export class Obstacle {
         const targets = [game.player1, game.player2, ...game.helperAIs];
         targets.forEach(player => {
             if (!player || player.health <= 0) return;
+            if (game && game.isInTunnel && game.isInTunnel(player.x, player.y)) return; // Tunnelblockade
             const dist = Math.hypot(player.x - this.x, player.y - this.y);
             if (dist < explosionRadius) {
                 player.takeDamage(1, game);
