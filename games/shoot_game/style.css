@@ -80,6 +80,7 @@ body {
     font-size: 3.2rem;
     color: #e5a93b;
     text-shadow: 0 3px 0 #6e4313, 0 6px 10px rgba(0, 0, 0, 0.8), 0 0 30px rgba(229, 169, 59, 0.2);
+    margin-top: 1.5rem;
     margin-bottom: 0.2rem;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -963,13 +964,20 @@ body {
     box-shadow: 0 0 8px rgba(229, 169, 59, 0.4);
 }
 
-/* Language Selector Styles */
+/* Language & QR Selector Styles */
 #language-selector {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
+    top: 1.2rem;
+    right: 1.2rem;
     display: flex;
     gap: 0.5rem;
+    z-index: 1000;
+}
+
+#qr-container {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
     z-index: 1000;
 }
 
