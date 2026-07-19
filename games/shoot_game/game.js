@@ -3,7 +3,7 @@ import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js';
 import { audio } from './audio.js';
 import { TRANSLATIONS } from './translations.js';
 
-const GAME_VERSION = '107';
+const GAME_VERSION = '108';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 const safeStorage = {
@@ -555,36 +555,46 @@ class Game {
         });
 
         // Start button
-        document.getElementById('start-game-btn').addEventListener('click', () => {
-            this.startGame();
-        });
+        const startGameBtn = document.getElementById('start-game-btn');
+        if (startGameBtn) startGameBtn.addEventListener('click', () => this.startGame());
 
         // Pause / Unpause / Resume
-        document.getElementById('pause-btn').addEventListener('click', () => this.togglePause());
-        document.getElementById('resume-btn').addEventListener('click', () => this.togglePause());
+        const pauseBtn = document.getElementById('pause-btn');
+        if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
+
+        const resumeBtn = document.getElementById('resume-btn');
+        if (resumeBtn) resumeBtn.addEventListener('click', () => this.togglePause());
         
         // Exit to main menu
-        document.getElementById('exit-game-btn').addEventListener('click', () => this.exitToMenu());
-        document.getElementById('pause-menu-btn').addEventListener('click', () => this.exitToMenu());
-        document.getElementById('menu-btn').addEventListener('click', () => this.exitToMenu());
+        const exitGameBtn = document.getElementById('exit-game-btn');
+        if (exitGameBtn) exitGameBtn.addEventListener('click', () => this.exitToMenu());
+
+        const pauseMenuBtn = document.getElementById('pause-menu-btn');
+        if (pauseMenuBtn) pauseMenuBtn.addEventListener('click', () => this.exitToMenu());
+
+        const menuBtn = document.getElementById('menu-btn');
+        if (menuBtn) menuBtn.addEventListener('click', () => this.exitToMenu());
 
         // Rematch
-        document.getElementById('rematch-btn').addEventListener('click', () => this.startGame());
+        const rematchBtn = document.getElementById('rematch-btn');
+        if (rematchBtn) rematchBtn.addEventListener('click', () => this.startGame());
 
         // Mute toggle
         const muteBtn = document.getElementById('mute-btn');
-        muteBtn.addEventListener('click', () => {
-            this.isMuted = audio.toggleMute();
-            muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
-            if (this.isMuted) {
-                audio.stopBGM();
-            } else {
-                audio.playRicochet();
-                if (this.state === 'playing') {
-                    audio.startBGM();
+        if (muteBtn) {
+            muteBtn.addEventListener('click', () => {
+                this.isMuted = audio.toggleMute();
+                muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
+                if (this.isMuted) {
+                    audio.stopBGM();
+                } else {
+                    audio.playRicochet();
+                    if (this.state === 'playing') {
+                        audio.startBGM();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         // Initialize Shop UI
         this.updateShopUI();
@@ -2921,13 +2931,20 @@ class Game {
 }
 
 function initGame() {
-    if (!window.game) {
-        window.game = new Game();
+    try {
+        if (!window.game) {
+            console.log(`Wild West Duel v${GAME_VERSION} initializing...`);
+            window.game = new Game();
+        }
+    } catch(err) {
+        console.error("Critical game initialization error:", err);
     }
 }
 
 if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', initGame);
+    document.addEventListener('DOMContentLoaded', initGame);
+    window.addEventListener('load', initGame);
+    setTimeout(initGame, 100);
 } else {
     initGame();
 }
