@@ -1889,9 +1889,7 @@ class Game {
                 ? availableWeapons[Math.floor(Math.random() * availableWeapons.length)]
                 : this.p2Weapon;
 
-            // Level 10 KI boss utilizes the Lasergun for maximum lethality!
-            const aiWeapon = this.aiDifficulty === 10 ? 'laser' : p2ActualWeapon;
-            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', aiWeapon, this);
+            this.player2 = new Cowboy(this.canvas.width - 120, this.canvas.height / 2 + 30, 'ai', p2ActualWeapon, this);
         }
 
         // Spawn helper AI doppelgangers if unlocked, active & in single-player PvE mode
