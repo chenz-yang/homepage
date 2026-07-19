@@ -96,9 +96,9 @@ class Game {
         this.hasPhysicalKeyboard = !this.isMobileDevice;
 
         // Player names persistent stats with language defaults
-        const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
-        const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
-        const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
+        const defaultP1 = this.t('default-p1-name');
+        const defaultP2 = this.t('default-p2-name');
+        const defaultP2PvE = this.t('default-p2-name-ki');
 
         this.p1Name = localStorage.getItem('wild_west_p1_name') || defaultP1;
         this.p2Name = localStorage.getItem('wild_west_p2_name') || defaultP2;
@@ -191,13 +191,13 @@ class Game {
         }
 
         // Adjust defaults for player names if user hasn't customized them yet
-        const oldDefaultP1 = oldLang === 'chinese' ? '玩家 1' : 'Spieler 1';
-        const oldDefaultP2 = oldLang === 'chinese' ? '玩家 2' : 'Spieler 2';
-        const oldDefaultP2PvE = oldLang === 'chinese' ? '强盗' : 'Bandit';
+        const oldDefaultP1 = TRANSLATIONS[oldLang]?['default-p1-name'] || 'Spieler 1';
+        const oldDefaultP2 = TRANSLATIONS[oldLang]?['default-p2-name'] || 'Spieler 2';
+        const oldDefaultP2PvE = TRANSLATIONS[oldLang]?['default-p2-name-ki'] || 'Bandit';
 
-        const newDefaultP1 = lang === 'chinese' ? '玩家 1' : 'Spieler 1';
-        const newDefaultP2 = lang === 'chinese' ? '玩家 2' : 'Spieler 2';
-        const newDefaultP2PvE = lang === 'chinese' ? '强盗' : 'Bandit';
+        const newDefaultP1 = this.t('default-p1-name');
+        const newDefaultP2 = this.t('default-p2-name');
+        const newDefaultP2PvE = this.t('default-p2-name-ki');
 
         if (this.p1Name === oldDefaultP1) {
             this.p1Name = newDefaultP1;
@@ -412,18 +412,18 @@ class Game {
             p2Input.value = this.mode === 'pvp' ? this.p2Name : this.p2NamePvE;
 
             p1Input.addEventListener('input', () => {
-                const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
+                const defaultP1 = this.t('default-p1-name');
                 this.p1Name = p1Input.value.trim() || defaultP1;
                 localStorage.setItem('wild_west_p1_name', this.p1Name);
             });
 
             p2Input.addEventListener('input', () => {
                 if (this.mode === 'pvp') {
-                    const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
+                    const defaultP2 = this.t('default-p2-name');
                     this.p2Name = p2Input.value.trim() || defaultP2;
                     localStorage.setItem('wild_west_p2_name', this.p2Name);
                 } else {
-                    const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
+                    const defaultP2PvE = this.t('default-p2-name-ki');
                     this.p2NamePvE = p2Input.value.trim() || defaultP2PvE;
                     localStorage.setItem('wild_west_p2_name_pve', this.p2NamePvE);
                 }
@@ -1276,6 +1276,11 @@ class Game {
         const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
         
         const updateWepPts = (player) => {
+            const randomPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="random"] .wep-pts`);
+            if (randomPts) {
+                randomPts.textContent = `?${ptsUnit}`;
+            }
+
             const rapidPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="rapid"] .wep-pts`);
             if (rapidPts) {
                 const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
@@ -1331,15 +1336,16 @@ class Game {
             if (ptsSpan) {
                 if (this.mode === 'pve') {
                     const isActive = this.p2Weapon === wep;
+                    const activeBadge = ` ${this.t('status-active')}`;
                     if (wep === 'random') {
-                        ptsSpan.textContent = isActive ? '0 🪙 (Aktiv)' : '0 🪙';
+                        ptsSpan.textContent = isActive ? `0 🪙${activeBadge}` : '0 🪙';
                     } else {
-                        ptsSpan.textContent = isActive ? '15 🪙 (Aktiv)' : '15 🪙';
+                        ptsSpan.textContent = isActive ? `15 🪙${activeBadge}` : '15 🪙';
                     }
                 } else {
                     const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
                     if (wep === 'random') {
-                        ptsSpan.textContent = '? Pkt';
+                        ptsSpan.textContent = `?${ptsUnit}`;
                     } else if (wep === 'rapid') {
                         const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
                         ptsSpan.textContent = `${rapidDmg}${ptsUnit}`;
@@ -1838,9 +1844,9 @@ class Game {
         const p1Input = document.getElementById('p1-name-input');
         const p2Input = document.getElementById('p2-name-input');
         
-        const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
-        const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
-        const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
+        const defaultP1 = this.t('default-p1-name');
+        const defaultP2 = this.t('default-p2-name');
+        const defaultP2PvE = this.t('default-p2-name-ki');
 
         if (p1Input) {
             this.p1Name = p1Input.value.trim() || defaultP1;

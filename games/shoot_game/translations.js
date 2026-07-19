@@ -63,6 +63,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. Shop & Upgrades",
         "shop-balance": "Saldo:",
+        "coins-unit": "Münzen",
         "shop-infinite": "Unendlich",
         "shop-max": "Max",
         "shop-hp-title": "+1 Start-Leben",
@@ -203,6 +204,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. 商店与升级",
         "shop-balance": "余额:",
+        "coins-unit": "金币",
         "shop-infinite": "无限",
         "shop-max": "满级",
         "shop-hp-title": "+1 初始生命",
