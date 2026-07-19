@@ -1,145 +1,131 @@
-import { Cowboy } from './cowboy.js';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js';
-import { audio } from './audio.js';
-import { TRANSLATIONS } from './translations.js';
+import { Cowboy } from './cowboy.js?v=100';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=100';
+import { audio } from './audio.js?v=100';
+import { TRANSLATIONS } from './translations.js?v=100';
 
-const GAME_VERSION = '108';
+const GAME_VERSION = '100';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
-
-const safeStorage = {
-    getItem(key) {
-        try {
-            return localStorage.getItem(key);
-        } catch (e) {
-            console.warn("safeStorage getItem error:", key, e);
-            return null;
-        }
-    },
-    setItem(key, val) {
-        try {
-            localStorage.setItem(key, val);
-        } catch (e) {
-            console.warn("safeStorage setItem error:", key, e);
-        }
-    }
-};
 
 class Game {
     constructor() {
-        try {
-            this.canvas = document.getElementById('game-canvas');
-            this.ctx = this.canvas.getContext('2d');
-            
-            // Game States
-            this.mode = 'pve'; // 'pve' or 'pvp'
-            this.level = 1;
-            this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
-            this.keys = {};
-            
-            // Weapons (default: P1 rapid, P2/KI random)
-            this.p1Weapon = 'rapid';
-            this.p2Weapon = 'random';
+        this.canvas = document.getElementById('game-canvas');
+        this.ctx = this.canvas.getContext('2d');
+        
+        // Game States
+        this.mode = 'pve'; // 'pve' or 'pvp'
+        this.level = 1;
+        this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
+        this.keys = {};
+        
+        // Weapons (default: P1 rapid, P2/KI random)
+        this.p1Weapon = 'rapid';
+        this.p2Weapon = 'random';
 
-            // Entities
-            this.player1 = null;
-            this.player2 = null;
-            this.bullets = [];
-            this.obstacles = [];
-            this.tumbleweeds = [];
-            this.groundSpikes = [];
-            this.particles = [];
-            this.spikeSpawnTimer = 0;
-            
-            // Sheriff Summon State
-            this.sheriffActive = false;
-            this.sheriffTimer = 0;
-            this.sheriffX = 0;
-            this.sheriffY = 0;
+        // Entities
+        this.player1 = null;
+        this.player2 = null;
+        this.bullets = [];
+        this.obstacles = [];
+        this.tumbleweeds = [];
+        this.groundSpikes = [];
+        this.particles = [];
+        this.spikeSpawnTimer = 0;
+        
+        // Sheriff Summon State
+        this.sheriffActive = false;
+        this.sheriffTimer = 0;
+        this.sheriffX = 0;
+        this.sheriffY = 0;
 
-            // Wind variables
-            this.wind = 0;
-            this.currentWind = 0;
-            this.windTime = 0;
-            this.windLines = [];
-            
-            // Screen Shake
-            this.shakeTimer = 0;
-            this.shakeIntensity = 0;
-            
-            // Floating Dust in menu
-            this.menuDust = [];
-            
-            // Audio state
-            this.isMuted = false;
-            this.menuLoopRunning = false;
-            this.tumbleweedSpawnTimer = 0;
+        // Wind variables
+        this.wind = 0; // target wind velocity (-10 to 10)
+        this.currentWind = 0; // interpolated wind velocity
+        this.windTime = 0;
+        this.windLines = [];
+        
+        // Screen Shake
+        this.shakeTimer = 0;
+        this.shakeIntensity = 0;
+        
+        // Floating Dust in menu
+        this.menuDust = [];
+        
+        // Audio state
+        this.isMuted = false;
 
-            let savedCoins = safeStorage.getItem('wild_west_coins');
-            if (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) {
-                safeStorage.setItem('wild_west_coins', '0');
-                savedCoins = '0';
-            }
-            this.coins = Math.max(0, parseInt(savedCoins) || 0);
-            this.hpUpgrades = Math.max(0, Math.min(10, parseInt(safeStorage.getItem('wild_west_hp_upgrade')) || 0));
-            this.hpActive = safeStorage.getItem('wild_west_hp_active') !== 'false';
-            this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(safeStorage.getItem('wild_west_doppelganger_count')) || 0));
-            this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(safeStorage.getItem('wild_west_doppelganger_level')) || 0));
-            if (this.doppelgangerCount > 0 && this.doppelgangerLvl === 0) {
-                this.doppelgangerLvl = 1;
-                safeStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
-            }
-            this.doppelgangerActive = safeStorage.getItem('wild_west_doppelganger_active') !== 'false';
-            this.lasergunLvl = Math.max(0, Math.min(5, parseInt(safeStorage.getItem('wild_west_lasergun_level')) || 0));
-            this.rapidLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_rapid_level')) || 1));
-            this.heavyLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_heavy_level')) || 1));
-            this.bombLvl = Math.max(1, Math.min(5, parseInt(safeStorage.getItem('wild_west_bomb_level')) || 1));
-            this.aiDifficulty = Math.max(1, Math.min(10, parseInt(safeStorage.getItem('wild_west_ai_difficulty')) || 1));
-            this.prestigeCount = Math.max(0, parseInt(safeStorage.getItem('wild_west_prestige_count')) || 0);
-            this.lastPrestigeChoiceTime = Math.max(0, parseInt(safeStorage.getItem('wild_west_prestige_time')) || 0);
-            this.lastDailyClaim = safeStorage.getItem('wild_west_last_daily_claim') || '';
+        this.menuLoopRunning = false;
 
-            // Language setup
-            this.currentLanguage = safeStorage.getItem('wild_west_lang') || 'original';
+        // Tumbleweed spawn controller
+        this.tumbleweedSpawnTimer = 0;
 
-            // Detect mobile device
-            this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                                  (navigator.maxTouchPoints > 0 && (/iPad/i.test(navigator.userAgent) || /Macintosh/i.test(navigator.userAgent)));
-            
-            this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
-            this.hasPhysicalKeyboard = !this.isMobileDevice;
-
-            const defaultP1 = this.t('default-p1-name');
-            const defaultP2 = this.t('default-p2-name');
-            const defaultP2PvE = this.t('default-p2-name-ki');
-
-            this.p1Name = safeStorage.getItem('wild_west_p1_name') || defaultP1;
-            this.p2Name = safeStorage.getItem('wild_west_p2_name') || defaultP2;
-            this.p2NamePvE = safeStorage.getItem('wild_west_p2_name_pve') || defaultP2PvE;
-
-            this.helperAIs = [];
-
-            this.joystickMove = { x: 0, y: 0, active: false };
-            this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
-            this.moveTouchId = null;
-            this.aimTouchId = null;
-
-            this.lastCoinsEarned = 0;
-            this.toastTimeout = null;
-            this.toastRemoveTimeout = null;
-            this.coinSoundTimeout = null;
-
-            this.timeOffset = 0;
-            this.syncTime();
-
-            this.initDOM();
-            this.initInput();
-            this.createMenuDust();
-            this.startMenuLoop();
-            this.setLanguage(this.currentLanguage);
-            this.forceRepaint();
-        } catch(e) {
-            console.error("Critical Game constructor error:", e);
+        let savedCoins = localStorage.getItem('wild_west_coins');
+        if (savedCoins === 'Infinity' || parseInt(savedCoins) >= 99999999) {
+            localStorage.setItem('wild_west_coins', '0');
+            savedCoins = '0';
         }
+        this.coins = Math.max(0, parseInt(savedCoins) || 0);
+        this.hpUpgrades = Math.max(0, Math.min(10, parseInt(localStorage.getItem('wild_west_hp_upgrade')) || 0));
+        this.hpActive = localStorage.getItem('wild_west_hp_active') !== 'false';
+        this.doppelgangerCount = Math.max(0, Math.min(3, parseInt(localStorage.getItem('wild_west_doppelganger_count')) || 0));
+        this.doppelgangerLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_doppelganger_level')) || 0));
+        if (this.doppelgangerCount > 0 && this.doppelgangerLvl === 0) {
+            this.doppelgangerLvl = 1;
+            localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+        }
+        this.doppelgangerActive = localStorage.getItem('wild_west_doppelganger_active') !== 'false';
+        this.lasergunLvl = Math.max(0, Math.min(5, parseInt(localStorage.getItem('wild_west_lasergun_level')) || 0));
+        this.rapidLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_rapid_level')) || 1));
+        this.heavyLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_heavy_level')) || 1));
+        this.bombLvl = Math.max(1, Math.min(5, parseInt(localStorage.getItem('wild_west_bomb_level')) || 1));
+        this.aiDifficulty = Math.max(1, Math.min(10, parseInt(localStorage.getItem('wild_west_ai_difficulty')) || 1));
+        this.prestigeCount = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_count')) || 0);
+        this.lastPrestigeChoiceTime = Math.max(0, parseInt(localStorage.getItem('wild_west_prestige_time')) || 0);
+        this.lastDailyClaim = localStorage.getItem('wild_west_last_daily_claim') || '';
+
+        // Language setup
+        this.currentLanguage = localStorage.getItem('wild_west_lang') || 'original';
+
+        // Detect mobile device (smartphone or tablet like iPad)
+        this.isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                              (navigator.maxTouchPoints > 0 && (/iPad/i.test(navigator.userAgent) || /Macintosh/i.test(navigator.userAgent)));
+        
+        // Detect smartphone specifically (mobile device with small screen dimension)
+        this.isSmartphone = this.isMobileDevice && (Math.min(window.innerWidth, window.innerHeight) < 550);
+
+        // A device has a physical keyboard if it's NOT a mobile device
+        this.hasPhysicalKeyboard = !this.isMobileDevice;
+
+        // Player names persistent stats with language defaults
+        const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
+        const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
+        const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
+
+        this.p1Name = localStorage.getItem('wild_west_p1_name') || defaultP1;
+        this.p2Name = localStorage.getItem('wild_west_p2_name') || defaultP2;
+        this.p2NamePvE = localStorage.getItem('wild_west_p2_name_pve') || defaultP2PvE;
+
+        this.helperAIs = [];
+
+        // Joystick inputs for mobile/touch play
+        this.joystickMove = { x: 0, y: 0, active: false };
+        this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+        this.moveTouchId = null;
+        this.aimTouchId = null;
+
+        this.lastCoinsEarned = 0;
+        this.toastTimeout = null;
+        this.toastRemoveTimeout = null;
+        this.coinSoundTimeout = null;
+
+        this.timeOffset = 0;
+        this.syncTime();
+
+        this.initDOM();
+        this.initInput();
+        this.createMenuDust();
+        this.startMenuLoop();
+        this.setLanguage(this.currentLanguage);
+        this.forceRepaint();
     }
 
     forceRepaint() {
@@ -205,13 +191,13 @@ class Game {
         }
 
         // Adjust defaults for player names if user hasn't customized them yet
-        const oldDefaultP1 = TRANSLATIONS[oldLang]?['default-p1-name'] || 'Spieler 1';
-        const oldDefaultP2 = TRANSLATIONS[oldLang]?['default-p2-name'] || 'Spieler 2';
-        const oldDefaultP2PvE = TRANSLATIONS[oldLang]?['default-p2-name-ki'] || 'Bandit';
+        const oldDefaultP1 = oldLang === 'chinese' ? '玩家 1' : 'Spieler 1';
+        const oldDefaultP2 = oldLang === 'chinese' ? '玩家 2' : 'Spieler 2';
+        const oldDefaultP2PvE = oldLang === 'chinese' ? '强盗' : 'Bandit';
 
-        const newDefaultP1 = this.t('default-p1-name');
-        const newDefaultP2 = this.t('default-p2-name');
-        const newDefaultP2PvE = this.t('default-p2-name-ki');
+        const newDefaultP1 = lang === 'chinese' ? '玩家 1' : 'Spieler 1';
+        const newDefaultP2 = lang === 'chinese' ? '玩家 2' : 'Spieler 2';
+        const newDefaultP2PvE = lang === 'chinese' ? '强盗' : 'Bandit';
 
         if (this.p1Name === oldDefaultP1) {
             this.p1Name = newDefaultP1;
@@ -426,18 +412,18 @@ class Game {
             p2Input.value = this.mode === 'pvp' ? this.p2Name : this.p2NamePvE;
 
             p1Input.addEventListener('input', () => {
-                const defaultP1 = this.t('default-p1-name');
+                const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
                 this.p1Name = p1Input.value.trim() || defaultP1;
                 localStorage.setItem('wild_west_p1_name', this.p1Name);
             });
 
             p2Input.addEventListener('input', () => {
                 if (this.mode === 'pvp') {
-                    const defaultP2 = this.t('default-p2-name');
+                    const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
                     this.p2Name = p2Input.value.trim() || defaultP2;
                     localStorage.setItem('wild_west_p2_name', this.p2Name);
                 } else {
-                    const defaultP2PvE = this.t('default-p2-name-ki');
+                    const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
                     this.p2NamePvE = p2Input.value.trim() || defaultP2PvE;
                     localStorage.setItem('wild_west_p2_name_pve', this.p2NamePvE);
                 }
@@ -555,46 +541,36 @@ class Game {
         });
 
         // Start button
-        const startGameBtn = document.getElementById('start-game-btn');
-        if (startGameBtn) startGameBtn.addEventListener('click', () => this.startGame());
+        document.getElementById('start-game-btn').addEventListener('click', () => {
+            this.startGame();
+        });
 
         // Pause / Unpause / Resume
-        const pauseBtn = document.getElementById('pause-btn');
-        if (pauseBtn) pauseBtn.addEventListener('click', () => this.togglePause());
-
-        const resumeBtn = document.getElementById('resume-btn');
-        if (resumeBtn) resumeBtn.addEventListener('click', () => this.togglePause());
+        document.getElementById('pause-btn').addEventListener('click', () => this.togglePause());
+        document.getElementById('resume-btn').addEventListener('click', () => this.togglePause());
         
         // Exit to main menu
-        const exitGameBtn = document.getElementById('exit-game-btn');
-        if (exitGameBtn) exitGameBtn.addEventListener('click', () => this.exitToMenu());
-
-        const pauseMenuBtn = document.getElementById('pause-menu-btn');
-        if (pauseMenuBtn) pauseMenuBtn.addEventListener('click', () => this.exitToMenu());
-
-        const menuBtn = document.getElementById('menu-btn');
-        if (menuBtn) menuBtn.addEventListener('click', () => this.exitToMenu());
+        document.getElementById('exit-game-btn').addEventListener('click', () => this.exitToMenu());
+        document.getElementById('pause-menu-btn').addEventListener('click', () => this.exitToMenu());
+        document.getElementById('menu-btn').addEventListener('click', () => this.exitToMenu());
 
         // Rematch
-        const rematchBtn = document.getElementById('rematch-btn');
-        if (rematchBtn) rematchBtn.addEventListener('click', () => this.startGame());
+        document.getElementById('rematch-btn').addEventListener('click', () => this.startGame());
 
         // Mute toggle
         const muteBtn = document.getElementById('mute-btn');
-        if (muteBtn) {
-            muteBtn.addEventListener('click', () => {
-                this.isMuted = audio.toggleMute();
-                muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
-                if (this.isMuted) {
-                    audio.stopBGM();
-                } else {
-                    audio.playRicochet();
-                    if (this.state === 'playing') {
-                        audio.startBGM();
-                    }
+        muteBtn.addEventListener('click', () => {
+            this.isMuted = audio.toggleMute();
+            muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
+            if (this.isMuted) {
+                audio.stopBGM();
+            } else {
+                audio.playRicochet();
+                if (this.state === 'playing') {
+                    audio.startBGM();
                 }
-            });
-        }
+            }
+        });
 
         // Initialize Shop UI
         this.updateShopUI();
@@ -987,27 +963,27 @@ class Game {
 
         // Render descriptions from templates so that the span IDs are present
         const hpDescContainer = document.getElementById('shop-hp-desc-container');
-        if (hpDescContainer) hpDescContainer.innerHTML = this.t('shop-hp-desc', { val: `<span id="shop-hp-lvl">${this.hpUpgrades}</span>` }) + ` <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span>`;
+        hpDescContainer.innerHTML = this.t('shop-hp-desc', { val: `<span id="shop-hp-lvl">${this.hpUpgrades}</span>` }) + ` <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span>`;
 
         const doppelCountValContainer = document.getElementById('shop-doppel-count-container');
-        if (doppelCountValContainer) doppelCountValContainer.innerHTML = this.t('shop-doppel-desc', { count: `<span id="shop-doppel-count-val">${this.doppelgangerCount}</span>` }) + ` <span id="shop-doppel-status"></span>`;
+        doppelCountValContainer.innerHTML = this.t('shop-doppel-desc', { count: `<span id="shop-doppel-count-val">${this.doppelgangerCount}</span>` }) + ` <span id="shop-doppel-status"></span>`;
 
         const doppelLvlValContainer = document.getElementById('shop-doppel-lvl-container');
         const doppelHp = 10 + this.doppelgangerLvl * 5;
         const doppelCdr = this.doppelgangerLvl > 0 ? (this.doppelgangerLvl - 1) * 10 : 0;
-        if (doppelLvlValContainer) doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
+        doppelLvlValContainer.innerHTML = this.t('shop-doppel-hp-cdr', {
             hp: `<span id="shop-doppel-hp-val">${doppelHp}</span>`,
             cdr: `<span id="shop-doppel-cdr-val">${doppelCdr}</span>`,
             lvl: `<span id="shop-doppel-lvl-val">${this.doppelgangerLvl}</span>`
         });
 
         const laserDescContainer = document.getElementById('shop-laser-desc-container');
-        if (laserDescContainer) laserDescContainer.innerHTML = this.t('shop-laser-desc', { lvl: `<span id="shop-laser-lvl">${this.lasergunLvl}</span>` }) + ` <span id="shop-laser-status"></span>`;
+        laserDescContainer.innerHTML = this.t('shop-laser-desc', { lvl: `<span id="shop-laser-lvl">${this.lasergunLvl}</span>` }) + ` <span id="shop-laser-status"></span>`;
 
         const rapidDescContainer = document.getElementById('shop-rapid-desc-container');
         const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
         const rapidCd = 250 - (this.rapidLvl - 1) * 20;
-        if (rapidDescContainer) rapidDescContainer.innerHTML = this.t('shop-rapid-desc', {
+        rapidDescContainer.innerHTML = this.t('shop-rapid-desc', {
             dmg: `<span id="shop-rapid-dmg">${rapidDmg}</span>`,
             cd: `<span id="shop-rapid-cd">${rapidCd}</span>`,
             lvl: `<span id="shop-rapid-lvl">${this.rapidLvl}</span>`
@@ -1016,7 +992,7 @@ class Game {
         const heavyDescContainer = document.getElementById('shop-heavy-desc-container');
         const heavyDmg = this.heavyLvl >= 5 ? 4 : (this.heavyLvl >= 3 ? 3 : 2);
         const heavyCd = 1500 - (this.heavyLvl - 1) * 200;
-        if (heavyDescContainer) heavyDescContainer.innerHTML = this.t('shop-heavy-desc', {
+        heavyDescContainer.innerHTML = this.t('shop-heavy-desc', {
             dmg: `<span id="shop-heavy-dmg">${heavyDmg}</span>`,
             cd: `<span id="shop-heavy-cd">${heavyCd}</span>`,
             lvl: `<span id="shop-heavy-lvl">${this.heavyLvl}</span>`
@@ -1025,7 +1001,7 @@ class Game {
         const bombDescContainer = document.getElementById('shop-bomb-desc-container');
         const bombDmg = this.bombLvl >= 5 ? 4 : (this.bombLvl >= 3 ? 3 : 2);
         const bombCd = 2000 - (this.bombLvl - 1) * 250;
-        if (bombDescContainer) bombDescContainer.innerHTML = this.t('shop-bomb-desc', {
+        bombDescContainer.innerHTML = this.t('shop-bomb-desc', {
             dmg: `<span id="shop-bomb-dmg">${bombDmg}</span>`,
             cd: `<span id="shop-bomb-cd">${bombCd}</span>`,
             lvl: `<span id="shop-bomb-lvl">${this.bombLvl}</span>`
@@ -1300,11 +1276,6 @@ class Game {
         const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
         
         const updateWepPts = (player) => {
-            const randomPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="random"] .wep-pts`);
-            if (randomPts) {
-                randomPts.textContent = `?${ptsUnit}`;
-            }
-
             const rapidPts = document.querySelector(`.weapon-btn[data-player="${player}"][data-weapon="rapid"] .wep-pts`);
             if (rapidPts) {
                 const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
@@ -1360,16 +1331,15 @@ class Game {
             if (ptsSpan) {
                 if (this.mode === 'pve') {
                     const isActive = this.p2Weapon === wep;
-                    const activeBadge = ` ${this.t('status-active')}`;
                     if (wep === 'random') {
-                        ptsSpan.textContent = isActive ? `0 🪙${activeBadge}` : '0 🪙';
+                        ptsSpan.textContent = isActive ? '0 🪙 (Aktiv)' : '0 🪙';
                     } else {
-                        ptsSpan.textContent = isActive ? `15 🪙${activeBadge}` : '15 🪙';
+                        ptsSpan.textContent = isActive ? '15 🪙 (Aktiv)' : '15 🪙';
                     }
                 } else {
                     const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
                     if (wep === 'random') {
-                        ptsSpan.textContent = `?${ptsUnit}`;
+                        ptsSpan.textContent = '? Pkt';
                     } else if (wep === 'rapid') {
                         const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
                         ptsSpan.textContent = `${rapidDmg}${ptsUnit}`;
@@ -1868,9 +1838,9 @@ class Game {
         const p1Input = document.getElementById('p1-name-input');
         const p2Input = document.getElementById('p2-name-input');
         
-        const defaultP1 = this.t('default-p1-name');
-        const defaultP2 = this.t('default-p2-name');
-        const defaultP2PvE = this.t('default-p2-name-ki');
+        const defaultP1 = this.currentLanguage === 'chinese' ? '玩家 1' : 'Spieler 1';
+        const defaultP2 = this.currentLanguage === 'chinese' ? '玩家 2' : 'Spieler 2';
+        const defaultP2PvE = this.currentLanguage === 'chinese' ? '强盗' : 'Bandit';
 
         if (p1Input) {
             this.p1Name = p1Input.value.trim() || defaultP1;
@@ -2930,21 +2900,6 @@ class Game {
     }
 }
 
-function initGame() {
-    try {
-        if (!window.game) {
-            console.log(`Wild West Duel v${GAME_VERSION} initializing...`);
-            window.game = new Game();
-        }
-    } catch(err) {
-        console.error("Critical game initialization error:", err);
-    }
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initGame);
-    window.addEventListener('load', initGame);
-    setTimeout(initGame, 100);
-} else {
-    initGame();
-}
+window.addEventListener('DOMContentLoaded', () => {
+    window.game = new Game();
+});

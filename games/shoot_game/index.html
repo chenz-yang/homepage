@@ -11,11 +11,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rye&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=101">
+    <link rel="stylesheet" href="style.css?v=100">
     <style>
-        /* Normal button transitions */
-        .btn, .level-card, .shop-item {
-            cursor: pointer;
+        /* Bulletproof hardware acceleration layer forcing for iOS Safari */
+        .screen, .btn, .level-card, .shop-item, .menu-section {
+            -webkit-transform: translate3d(0, 0, 0) !important;
+            transform: translate3d(0, 0, 0) !important;
+            -webkit-backface-visibility: hidden !important;
+            backface-visibility: hidden !important;
+            will-change: transform !important;
         }
         /* Lock only the gold buttons (play/shop) to transparent backgrounds to bypass WebKit bug */
         .btn-gold {
@@ -44,8 +48,8 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v108</div>
-            <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="coins-unit">Münzen</span></div>
+            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v100</div>
+            <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">🪙 Saldo: <span id="header-coins-val">0</span> Münzen</div>
 
             <!-- Prestige Reset Panel -->
             <div id="prestige-panel" class="prestige-panel hidden">
@@ -424,7 +428,7 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=108"></script>
-<!-- redeploy5 -->
+    <script type="module" src="game.js?v=100"></script>
+<!-- redeploy2 -->
 </body>
 </html>
