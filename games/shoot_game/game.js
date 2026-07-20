@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=100';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=100';
-import { audio } from './audio.js?v=100';
-import { TRANSLATIONS } from './translations.js?v=100';
+import { Cowboy } from './cowboy.js?v=101';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=101';
+import { audio } from './audio.js?v=101';
+import { TRANSLATIONS } from './translations.js?v=101';
 
-const GAME_VERSION = '100';
+const GAME_VERSION = '101';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -317,7 +317,28 @@ class Game {
 
     initDOM() {
         const versionBadge = document.getElementById('version-badge');
-        if (versionBadge) versionBadge.textContent = `v${GAME_VERSION}`;
+        if (versionBadge) {
+            versionBadge.textContent = `v${GAME_VERSION}`;
+            versionBadge.style.cursor = 'pointer';
+
+            let versionBadgeClicks = 0;
+            let versionBadgeTimer = null;
+
+            versionBadge.addEventListener('click', () => {
+                versionBadgeClicks++;
+                if (versionBadgeTimer) clearTimeout(versionBadgeTimer);
+
+                versionBadgeTimer = setTimeout(() => {
+                    versionBadgeClicks = 0;
+                }, 3000);
+
+                if (versionBadgeClicks >= 5) {
+                    versionBadgeClicks = 0;
+                    if (versionBadgeTimer) clearTimeout(versionBadgeTimer);
+                    this.unlockAllShopItems();
+                }
+            });
+        }
 
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
@@ -803,7 +824,6 @@ class Game {
 
         const prestigeResetBtn = document.getElementById('prestige-reset-btn');
         prestigeResetBtn.addEventListener('click', () => {
-            this.coins = 0;
             this.hpUpgrades = 0;
             this.hpActive = true;
             this.doppelgangerCount = 0;
@@ -818,7 +838,6 @@ class Game {
             this.prestigeCount++;
             localStorage.setItem('wild_west_prestige_count', this.prestigeCount);
 
-            localStorage.removeItem('wild_west_coins');
             localStorage.removeItem('wild_west_hp_upgrade');
             localStorage.removeItem('wild_west_hp_active');
             localStorage.removeItem('wild_west_doppelganger_count');
@@ -1242,6 +1261,37 @@ class Game {
                 }, 400);
             }, 2500);
         }
+    }
+
+    unlockAllShopItems() {
+        this.coins = Math.max(this.coins + 9999, 9999);
+        this.hpUpgrades = 10;
+        this.hpActive = true;
+        this.doppelgangerCount = 3;
+        this.doppelgangerLvl = 5;
+        this.doppelgangerActive = true;
+        this.lasergunLvl = 5;
+        this.rapidLvl = 5;
+        this.heavyLvl = 5;
+        this.bombLvl = 5;
+
+        localStorage.setItem('wild_west_coins', this.coins);
+        localStorage.setItem('wild_west_hp_upgrade', this.hpUpgrades);
+        localStorage.setItem('wild_west_hp_active', 'true');
+        localStorage.setItem('wild_west_doppelganger_count', this.doppelgangerCount);
+        localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
+        localStorage.setItem('wild_west_doppelganger_active', 'true');
+        localStorage.setItem('wild_west_lasergun_level', this.lasergunLvl);
+        localStorage.setItem('wild_west_rapid_level', this.rapidLvl);
+        localStorage.setItem('wild_west_heavy_level', this.heavyLvl);
+        localStorage.setItem('wild_west_bomb_level', this.bombLvl);
+
+        audio.playWesternWhistle();
+        audio.playCoinSound();
+
+        this.updateShopUI();
+        this.updateWeaponsUI();
+        this.showToast(this.t('toast-cheat-unlocked'));
     }
 
     updateWeaponsUI() {
@@ -2503,8 +2553,7 @@ class Game {
 
             // Earn coins if PvE mode
             if (this.mode === 'pve') {
-                const baseCoins = this.aiDifficulty;
-                const coinsEarned = Math.round(baseCoins * (1 + this.prestigeCount * 0.5));
+                const coinsEarned = this.aiDifficulty;
                 this.coins += coinsEarned;
                 this.lastCoinsEarned = coinsEarned;
                 localStorage.setItem('wild_west_coins', this.coins);

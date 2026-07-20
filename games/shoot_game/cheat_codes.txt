@@ -3,3 +3,4 @@ game.lastPrestigeChoiceTime = Date.now() - 21 * 60 * 1000;
 game.player1.health = 99; game.updateHUD();
 game.player2.health = 1;
 game.helperAIs.forEach(h => { h.health = 99; });
+# Shop Unlock Cheat: 5x auf den Versions-Badge (z.B. v101) im Hauptmenü klicken!
