@@ -138,8 +138,8 @@ export const TRANSLATIONS = {
         "pause-menu-btn": "Hauptmenü",
 
         // Toasts
-        "toast-ki-wep-bought": "KI-Waffe selbst gewählt! (-15 🪙)",
-        "toast-ki-wep-not-enough": "Nicht genug Münzen! (15 🪙 benötigt)",
+        "toast-ki-wep-bought": "KI-Waffe selbst gewählt! (-3 🪙)",
+        "toast-ki-wep-not-enough": "Nicht genug Münzen! (3 🪙 benötigt)",
     },
     chinese: {
         // Main Menu
@@ -280,7 +280,7 @@ export const TRANSLATIONS = {
         "pause-menu-btn": "主菜单",
 
         // Toasts
-        "toast-ki-wep-bought": "已手动选择AI武器！(-15 🪙)",
-        "toast-ki-wep-not-enough": "金币不足！（需要 15 🪙）"
+        "toast-ki-wep-bought": "已手动选择AI武器！(-3 🪙)",
+        "toast-ki-wep-not-enough": "金币不足！（需要 3 🪙）"
     }
 };

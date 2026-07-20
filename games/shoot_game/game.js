@@ -484,7 +484,7 @@ class Game {
                             if (this.p2Weapon === weapon) {
                                 return;
                             }
-                            if (this.coins >= 15) {
+                            if (this.coins >= 3) {
                                 document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
                                 btn.classList.add('p2-wep-active');
                                 this.p2Weapon = weapon;
@@ -1335,7 +1335,7 @@ class Game {
                     if (wep === 'random') {
                         ptsSpan.textContent = `0 🪙${activeStr}`;
                     } else {
-                        ptsSpan.textContent = `15 🪙${activeStr}`;
+                        ptsSpan.textContent = `3 🪙${activeStr}`;
                     }
                 } else {
                     const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
@@ -1752,7 +1752,7 @@ class Game {
     startGame() {
         if (this.mode === 'pve' && this.p2Weapon && this.p2Weapon !== 'random') {
             this.coins = parseInt(localStorage.getItem('wild_west_coins')) || 0;
-            if (this.coins < 15) {
+            if (this.coins < 3) {
                 this.p2Weapon = 'random';
                 document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
                 const randomBtn = document.querySelector('.weapon-btn[data-player="p2"][data-weapon="random"]');
@@ -1761,7 +1761,7 @@ class Game {
                 audio.playRicochet();
                 this.showToast(this.t('toast-ki-wep-not-enough'));
             } else {
-                this.coins -= 15;
+                this.coins -= 3;
                 localStorage.setItem('wild_west_coins', this.coins);
                 audio.playCoinSound();
                 this.updateHUD();
