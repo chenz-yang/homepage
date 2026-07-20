@@ -1375,7 +1375,7 @@ class Game {
             const titleEl = prestigePanel.querySelector('.prestige-title');
             if (titleEl) {
                 const baseTitle = this.t('prestige-title');
-                titleEl.innerHTML = this.prestigeCount > 0 ? `${baseTitle} (Lvl ${this.prestigeCount})` : baseTitle;
+                titleEl.textContent = baseTitle;
             }
             if (!this.lastPrestigeChoiceTime) {
                 this.lastPrestigeChoiceTime = this.getSecureTime().getTime();
