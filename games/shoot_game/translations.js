@@ -140,8 +140,6 @@ export const TRANSLATIONS = {
         // Toasts
         "toast-ki-wep-bought": "KI-Waffe selbst gewählt! (-3 🪙)",
         "toast-ki-wep-not-enough": "Nicht genug Münzen! (3 🪙 benötigt)",
-        "toast-cheat-unlocked": "🤠 CHEAT AKTIVIERT: Alles im Shop freigeschaltet! (+9999 🪙)",
-        "toast-timer-skipped": "⏱️ CHEAT AKTIVIERT: Prestige-Timer übersprungen!",
     },
     chinese: {
         // Main Menu
@@ -283,8 +281,6 @@ export const TRANSLATIONS = {
 
         // Toasts
         "toast-ki-wep-bought": "已手动选择AI武器！(-3 🪙)",
-        "toast-ki-wep-not-enough": "金币不足！（需要 3 🪙）",
-        "toast-cheat-unlocked": "🤠 秘籍已激活：已解锁商店所有内容！(+9999 🪙)",
-        "toast-timer-skipped": "⏱️ 秘籍已激活：已跳过重置倒计时！"
+        "toast-ki-wep-not-enough": "金币不足！（需要 3 🪙）"
     }
 };

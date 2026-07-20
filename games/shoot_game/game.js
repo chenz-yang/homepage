@@ -317,50 +317,7 @@ class Game {
 
     initDOM() {
         const versionBadge = document.getElementById('version-badge');
-        if (versionBadge) {
-            versionBadge.textContent = `v${GAME_VERSION}`;
-            versionBadge.style.cursor = 'pointer';
-
-            let versionBadgeClicks = 0;
-            let versionBadgeTimer = null;
-
-            versionBadge.addEventListener('click', () => {
-                versionBadgeClicks++;
-                if (versionBadgeTimer) clearTimeout(versionBadgeTimer);
-
-                versionBadgeTimer = setTimeout(() => {
-                    versionBadgeClicks = 0;
-                }, 3000);
-
-                if (versionBadgeClicks >= 5) {
-                    versionBadgeClicks = 0;
-                    if (versionBadgeTimer) clearTimeout(versionBadgeTimer);
-                    this.unlockAllShopItems();
-                }
-            });
-        }
-
-        const prestigeTimerEl = document.getElementById('prestige-timer');
-        if (prestigeTimerEl) {
-            prestigeTimerEl.style.cursor = 'pointer';
-            let timerClicks = 0;
-            let timerClickTimeout = null;
-
-            prestigeTimerEl.addEventListener('click', () => {
-                timerClicks++;
-                if (timerClickTimeout) clearTimeout(timerClickTimeout);
-
-                timerClickTimeout = setTimeout(() => {
-                    timerClicks = 0;
-                }, 3000);
-
-                if (timerClicks >= 5) {
-                    timerClicks = 0;
-                    if (timerClickTimeout) clearTimeout(timerClickTimeout);
-                    this.skipPrestigeTimer();
-                }
-            });
-        }
+        if (versionBadge) versionBadge.textContent = `v${GAME_VERSION}`;
 
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
@@ -1283,45 +1240,6 @@ class Game {
                 }, 400);
             }, 2500);
         }
-    }
-
-    unlockAllShopItems() {
-        this.coins = Math.max(this.coins + 9999, 9999);
-        this.hpUpgrades = 10;
-        this.hpActive = true;
-        this.doppelgangerCount = 3;
-        this.doppelgangerLvl = 5;
-        this.doppelgangerActive = true;
-        this.lasergunLvl = 5;
-        this.rapidLvl = 5;
-        this.heavyLvl = 5;
-        this.bombLvl = 5;
-
-        localStorage.setItem('wild_west_coins', this.coins);
-        localStorage.setItem('wild_west_hp_upgrade', this.hpUpgrades);
-        localStorage.setItem('wild_west_hp_active', 'true');
-        localStorage.setItem('wild_west_doppelganger_count', this.doppelgangerCount);
-        localStorage.setItem('wild_west_doppelganger_level', this.doppelgangerLvl);
-        localStorage.setItem('wild_west_doppelganger_active', 'true');
-        localStorage.setItem('wild_west_lasergun_level', this.lasergunLvl);
-        localStorage.setItem('wild_west_rapid_level', this.rapidLvl);
-        localStorage.setItem('wild_west_heavy_level', this.heavyLvl);
-        localStorage.setItem('wild_west_bomb_level', this.bombLvl);
-
-        audio.playWesternWhistle();
-        audio.playCoinSound();
-
-        this.updateShopUI();
-        this.updateWeaponsUI();
-        this.showToast(this.t('toast-cheat-unlocked'));
-    }
-
-    skipPrestigeTimer() {
-        this.lastPrestigeChoiceTime = 1;
-        localStorage.setItem('wild_west_prestige_time', 1);
-        audio.playWesternWhistle();
-        this.updatePrestigeTimer();
-        this.showToast(this.t('toast-timer-skipped'));
     }
 
     updateWeaponsUI() {
