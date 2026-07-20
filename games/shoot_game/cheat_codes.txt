@@ -4,3 +4,4 @@ game.player1.health = 99; game.updateHUD();
 game.player2.health = 1;
 game.helperAIs.forEach(h => { h.health = 99; });
 # Shop Unlock Cheat: 5x auf den Versions-Badge (z.B. v101) im Hauptmenü klicken!
+# Prestige Timer Cheat: 5x auf den Timer-Countdown (z.B. 20:00) im Saloon-Legende-Panel klicken!

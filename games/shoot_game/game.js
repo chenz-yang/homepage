@@ -340,6 +340,28 @@ class Game {
             });
         }
 
+        const prestigeTimerEl = document.getElementById('prestige-timer');
+        if (prestigeTimerEl) {
+            prestigeTimerEl.style.cursor = 'pointer';
+            let timerClicks = 0;
+            let timerClickTimeout = null;
+
+            prestigeTimerEl.addEventListener('click', () => {
+                timerClicks++;
+                if (timerClickTimeout) clearTimeout(timerClickTimeout);
+
+                timerClickTimeout = setTimeout(() => {
+                    timerClicks = 0;
+                }, 3000);
+
+                if (timerClicks >= 5) {
+                    timerClicks = 0;
+                    if (timerClickTimeout) clearTimeout(timerClickTimeout);
+                    this.skipPrestigeTimer();
+                }
+            });
+        }
+
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
         if (this.isMobileDevice) {
@@ -1292,6 +1314,14 @@ class Game {
         this.updateShopUI();
         this.updateWeaponsUI();
         this.showToast(this.t('toast-cheat-unlocked'));
+    }
+
+    skipPrestigeTimer() {
+        this.lastPrestigeChoiceTime = 1;
+        localStorage.setItem('wild_west_prestige_time', 1);
+        audio.playWesternWhistle();
+        this.updatePrestigeTimer();
+        this.showToast(this.t('toast-timer-skipped'));
     }
 
     updateWeaponsUI() {
