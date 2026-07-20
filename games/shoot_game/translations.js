@@ -35,6 +35,7 @@ export const TRANSLATIONS = {
         "wep-pts-1": "1 Pkt",
         "wep-pts-2": "2 Pkt",
         "wep-pts-3": "3 Pkt",
+        "wep-pts-random": "? Pkt",
         
         "level-title": "3. Welten einstellen",
         "level-label": "Welt",
@@ -63,6 +64,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. Shop & Upgrades",
         "shop-balance": "Saldo:",
+        "header-coins-unit": "Münzen",
         "shop-infinite": "Unendlich",
         "shop-max": "Max",
         "shop-hp-title": "+1 Start-Leben",
@@ -175,6 +177,7 @@ export const TRANSLATIONS = {
         "wep-pts-1": "1 分",
         "wep-pts-2": "2 分",
         "wep-pts-3": "3 分",
+        "wep-pts-random": "? 分",
         
         "level-title": "3. 世界设置",
         "level-label": "关卡",
@@ -203,6 +206,7 @@ export const TRANSLATIONS = {
         
         "shop-title": "5. 商店与升级",
         "shop-balance": "余额:",
+        "header-coins-unit": "金币",
         "shop-infinite": "无限",
         "shop-max": "满级",
         "shop-hp-title": "+1 初始生命",

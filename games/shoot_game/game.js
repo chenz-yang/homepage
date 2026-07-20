@@ -1331,15 +1331,16 @@ class Game {
             if (ptsSpan) {
                 if (this.mode === 'pve') {
                     const isActive = this.p2Weapon === wep;
+                    const activeStr = isActive ? ` ${this.t('status-active')}` : '';
                     if (wep === 'random') {
-                        ptsSpan.textContent = isActive ? '0 🪙 (Aktiv)' : '0 🪙';
+                        ptsSpan.textContent = `0 🪙${activeStr}`;
                     } else {
-                        ptsSpan.textContent = isActive ? '15 🪙 (Aktiv)' : '15 🪙';
+                        ptsSpan.textContent = `15 🪙${activeStr}`;
                     }
                 } else {
                     const ptsUnit = this.currentLanguage === 'chinese' ? ' 分' : ' Pkt';
                     if (wep === 'random') {
-                        ptsSpan.textContent = '? Pkt';
+                        ptsSpan.textContent = `?${ptsUnit}`;
                     } else if (wep === 'rapid') {
                         const rapidDmg = this.rapidLvl >= 4 ? 2 : 1;
                         ptsSpan.textContent = `${rapidDmg}${ptsUnit}`;
