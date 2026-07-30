@@ -916,34 +916,47 @@ body {
 }
 
 .btn-prestige-keep {
-    background: linear-gradient(135deg, #f39c12 0%, #d4af37 100%) !important;
-    color: #ffffff !important;
-    border: 1px solid #ffe066 !important;
-    box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4) !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(135deg, #ffee00 0%, #ffc107 100%) !important;
+    color: #1a0f0a !important;
+    font-weight: 800 !important;
+    border: 2px solid #fff350 !important;
+    box-shadow: 0 4px 14px rgba(255, 215, 0, 0.6) !important;
+    text-shadow: none !important;
 }
 .btn-prestige-keep:hover {
-    background: linear-gradient(135deg, #e67e22 0%, #c59b27 100%) !important;
+    background: linear-gradient(135deg, #fff200 0%, #ffa000 100%) !important;
     transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(255, 215, 0, 0.8) !important;
 }
 
 .btn-prestige-reset {
-    background: linear-gradient(135deg, #d90429 0%, #b3001e 100%) !important;
+    background: linear-gradient(135deg, #ff1744 0%, #d50000 100%) !important;
     color: #ffffff !important;
-    border: 1px solid #ef233c !important;
-    box-shadow: 0 4px 10px rgba(217, 4, 41, 0.4) !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: 800 !important;
+    border: 2px solid #ff616f !important;
+    box-shadow: 0 4px 14px rgba(255, 23, 68, 0.6) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6) !important;
 }
 .btn-prestige-reset:hover {
-    background: linear-gradient(135deg, #b3001e 0%, #8d0013 100%) !important;
+    background: linear-gradient(135deg, #ff4569 0%, #b71c1c 100%) !important;
     transform: translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(255, 23, 68, 0.8) !important;
 }
 
-#prestige-keep-btn,
-#prestige-reset-btn,
-#prestige-keep-btn:disabled,
+#prestige-keep-btn:disabled {
+    background: linear-gradient(135deg, #d4b800 0%, #b88a00 100%) !important;
+    color: #2a1f0a !important;
+    border-color: #aa9000 !important;
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+}
+
 #prestige-reset-btn:disabled {
-    opacity: 1 !important;
+    background: linear-gradient(135deg, #b81030 0%, #800000 100%) !important;
+    color: #ffcccc !important;
+    border-color: #991020 !important;
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
 }
 
 /* Spieler-Namen Styling */

@@ -917,7 +917,7 @@ class Game {
         if (qrModal) {
             qrModal.classList.add('active');
             
-            const currentURL = window.location.protocol.startsWith('http') ? window.location.href : 'https://yang.zchen.org/games/shoot_game/index.html';
+            const currentURL = 'https://yang.zchen.org/games/shoot_game/index.html';
             if (qrLinkInput) {
                 qrLinkInput.value = currentURL;
             }
