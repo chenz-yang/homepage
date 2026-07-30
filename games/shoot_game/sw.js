@@ -11,6 +11,7 @@ const ASSETS = [
   './cowboy.js',
   './cowboy.js?v=106',
   './bullet.js',
+  './bullet.js?v=106',
   './obstacle.js',
   './obstacle.js?v=106',
   './audio.js',

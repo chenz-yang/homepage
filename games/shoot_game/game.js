@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=105';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=105';
-import { audio } from './audio.js?v=105';
-import { TRANSLATIONS } from './translations.js?v=105';
+import { Cowboy } from './cowboy.js?v=106';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=106';
+import { audio } from './audio.js?v=106';
+import { TRANSLATIONS } from './translations.js?v=106';
 
-const GAME_VERSION = '105';
+const GAME_VERSION = '106';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
