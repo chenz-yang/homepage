@@ -14,8 +14,14 @@
     <link rel="preload" href="./fonts/outfit-800.ttf" as="font" type="font/ttf" crossorigin>
 
     <title>Wild West Duel</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css?v=105">
+    <!-- Icons & iOS PWA Touch Icons -->
+    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png?v=106">
+    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png?v=106">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=106">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=106">
+    <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=106">
+    <link rel="manifest" href="manifest.json?v=106">
+    <link rel="stylesheet" href="style.css?v=106">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -52,7 +58,7 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v105</div>
+            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v106</div>
             <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span>🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="header-coins-unit">Münzen</span></span>
                 <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
@@ -424,7 +430,7 @@
                     <h2 data-i18n="qr-modal-title">Mobil spielen</h2>
                     <p class="qr-desc" data-i18n="qr-modal-desc">Scanne diesen QR-Code mit deinem Handy oder Tablet, um das Spiel auf einem mobilen Gerät zu spielen!</p>
                     <div class="qr-link-container">
-                        <input type="text" id="qr-link-input" readonly value="">
+                        <input type="text" id="qr-link-input" readonly value="https://yang.zchen.org/games/shoot_game/index.html">
                         <button id="qr-copy-btn" class="btn btn-gold btn-small" data-i18n="qr-btn-copy">Kopieren</button>
                     </div>
                     <div class="qr-modal-buttons">
@@ -436,7 +442,7 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=105"></script>
+    <script type="module" src="game.js?v=106"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
