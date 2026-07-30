@@ -1,0 +1,17 @@
+{
+  "name": "Wild West Duel",
+  "short_name": "Wild West",
+  "description": "Zwei Colts. Ein Überlebender.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a0f0a",
+  "theme_color": "#1a0f0a",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "qr-code.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
