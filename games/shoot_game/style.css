@@ -1,3 +1,40 @@
+/* Local Font Definitions (100% Offline Support) */
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+    src: url('./fonts/outfit-300.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url('./fonts/outfit-400.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 600;
+    font-display: block;
+    src: url('./fonts/outfit-600.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 800;
+    font-display: block;
+    src: url('./fonts/outfit-800.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Rye';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url('./fonts/rye-400.ttf') format('truetype');
+}
+
 /* General Styles & Reset */
 * {
     box-sizing: border-box;
