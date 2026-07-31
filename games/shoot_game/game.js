@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=108';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=108';
-import { audio } from './audio.js?v=108';
-import { TRANSLATIONS } from './translations.js?v=108';
+import { Cowboy } from './cowboy.js?v=109';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=109';
+import { audio } from './audio.js?v=109';
+import { TRANSLATIONS } from './translations.js?v=109';
 
-const GAME_VERSION = '108';
+const GAME_VERSION = '109';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -16,6 +16,10 @@ class Game {
         this.level = 1;
         this.state = 'menu'; // 'menu', 'playing', 'paused', 'gameover'
         this.keys = {};
+        
+        // Frame timing accumulator for 100% constant speed on all devices (30Hz, 60Hz, 120Hz, battery saver)
+        this.lastTime = 0;
+        this.accumulator = 0;
         
         // Weapons (default: P1 rapid, P2/KI random)
         this.p1Weapon = 'rapid';
@@ -1917,6 +1921,8 @@ class Game {
         }
 
         this.updateHUD();
+        this.lastTime = 0;
+        this.accumulator = 0;
         this.loop();
     }
 
@@ -2095,6 +2101,8 @@ class Game {
             this.state = 'playing';
             audio.startBGM(); // Resume music
             document.getElementById('pause-screen').classList.remove('active');
+            this.lastTime = 0;
+            this.accumulator = 0;
             this.loop();
         }
     }
@@ -2897,13 +2905,32 @@ class Game {
         ctx.restore();
     }
 
-    loop() {
+    loop(timestamp) {
         if (this.state !== 'playing') return;
 
-        this.update();
+        if (!this.lastTime) this.lastTime = timestamp || performance.now();
+        const now = timestamp || performance.now();
+        let elapsed = now - this.lastTime;
+        this.lastTime = now;
+
+        // Prevent frame spike spirals (max 100ms cap per frame)
+        if (elapsed > 100) elapsed = 100;
+        if (elapsed < 0) elapsed = 0;
+
+        this.accumulator += elapsed;
+        const TARGET_STEP = 1000 / 60; // Exact 60 FPS physics rate (16.66667ms per step)
+
+        // Run fixed simulation steps to maintain 100% constant physical speed on all refresh rates (30Hz/60Hz/120Hz/battery saver)
+        let steps = 0;
+        while (this.accumulator >= TARGET_STEP && steps < 5) {
+            this.update();
+            this.accumulator -= TARGET_STEP;
+            steps++;
+        }
+
         this.draw();
 
-        requestAnimationFrame(() => this.loop());
+        requestAnimationFrame((t) => this.loop(t));
     }
 }
 
