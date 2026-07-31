@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=111';
-import { audio } from './audio.js?v=111';
+import { Bullet } from './bullet.js?v=112';
+import { audio } from './audio.js?v=112';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -76,8 +76,8 @@ export class Cowboy {
         this.hitFlash = 15; // flash for 15 frames
         audio.playHit();
 
-        // Screen Shake (Dampened to prevent eye strain)
-        game.triggerScreenShake(3.5, 10);
+        // Screen Shake (Minimal crisp impact on taking damage)
+        game.triggerScreenShake(2.5, 6);
 
         // Blood particles
         if (game.particles) {
@@ -823,17 +823,17 @@ export class Cowboy {
         let legL = 0;
         let legR = 0;
         if (this.isMoving) {
-            legL = Math.sin(this.walkCycle) * 8;
-            legR = -Math.sin(this.walkCycle) * 8;
+            legL = Math.sin(this.walkCycle) * 4;
+            legR = -Math.sin(this.walkCycle) * 4;
         }
 
-        // Left Boot
-        ctx.fillRect(-9 + legL/2, 10 + Math.abs(legL)/4, 6, 10);
-        ctx.strokeRect(-9 + legL/2, 10 + Math.abs(legL)/4, 6, 10);
+        // Left Boot (Smooth sliding walk without vertical jitter)
+        ctx.fillRect(-9 + legL/2, 10, 6, 10);
+        ctx.strokeRect(-9 + legL/2, 10, 6, 10);
         
         // Right Boot
-        ctx.fillRect(3 + legR/2, 10 + Math.abs(legR)/4, 6, 10);
-        ctx.strokeRect(3 + legR/2, 10 + Math.abs(legR)/4, 6, 10);
+        ctx.fillRect(3 + legR/2, 10, 6, 10);
+        ctx.strokeRect(3 + legR/2, 10, 6, 10);
 
         // 2. Poncho / Body Coat
         ctx.fillStyle = this.color;

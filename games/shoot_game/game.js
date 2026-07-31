@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=111';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=111';
-import { audio } from './audio.js?v=111';
-import { TRANSLATIONS } from './translations.js?v=111';
+import { Cowboy } from './cowboy.js?v=112';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=112';
+import { audio } from './audio.js?v=112';
+import { TRANSLATIONS } from './translations.js?v=112';
 
-const GAME_VERSION = '111';
+const GAME_VERSION = '112';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2087,10 +2087,10 @@ class Game {
         this.obstacles.push(new Obstacle(x, y, type, isFullHP));
     }
 
-    triggerScreenShake(intensity = 0, frames = 0) {
-        // Completely disabled screen shake to eliminate all camera vibration
-        this.shakeTimer = 0;
-        this.shakeIntensity = 0;
+    triggerScreenShake(intensity = 2.5, frames = 6) {
+        // Minimal screen shake on impact (hitting or taking damage)
+        this.shakeTimer = frames;
+        this.shakeIntensity = intensity;
     }
 
     togglePause() {
@@ -2552,8 +2552,15 @@ class Game {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Screen Shake Translate (Disabled for 100% steady camera)
+        // Screen Shake Translate (Minimal crisp impact feedback on hit/explosion)
         this.ctx.save();
+        if (this.shakeTimer > 0) {
+            const factor = Math.min(1, this.shakeTimer / 6);
+            const dx = (Math.random() - 0.5) * this.shakeIntensity * factor;
+            const dy = (Math.random() - 0.5) * this.shakeIntensity * factor;
+            this.ctx.translate(dx, dy);
+            this.shakeTimer -= (this.lastDt || 1);
+        }
 
         // 1. Draw Sandy Arena floor
         this.ctx.fillStyle = '#dfb582';

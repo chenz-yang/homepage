@@ -1,5 +1,5 @@
 // Bullet physics, trajectory, wind influence, and collision handling
-import { audio } from './audio.js?v=111';
+import { audio } from './audio.js?v=112';
 
 export class Bullet {
     constructor(x, y, angle, owner, type = 'normal') {
@@ -192,7 +192,7 @@ export class Bullet {
     explodeBombOnOpponent(game, x, y, directTarget = null) {
         this.destroyed = true;
         audio.playExplosion();
-        game.triggerScreenShake(5, 12);
+        game.triggerScreenShake(3.0, 7);
         
         // Spawn rich fire explosion particles
         for (let i = 0; i < 20; i++) {

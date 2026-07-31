@@ -1,5 +1,5 @@
 // Environmental Obstacles for Wild West Duel
-import { audio } from './audio.js?v=111';
+import { audio } from './audio.js?v=112';
 
 export class Obstacle {
     constructor(x, y, type, isFullHP = false) {
@@ -463,7 +463,7 @@ export class Obstacle {
         this.destroyed = true;
         audio.playExplosion();
 
-        game.triggerScreenShake(4, 10);
+        game.triggerScreenShake(3.0, 7);
 
         for (let i = 0; i < 25; i++) {
             const angle = Math.random() * Math.PI * 2;
