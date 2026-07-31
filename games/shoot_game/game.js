@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=110';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=110';
-import { audio } from './audio.js?v=110';
-import { TRANSLATIONS } from './translations.js?v=110';
+import { Cowboy } from './cowboy.js?v=111';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=111';
+import { audio } from './audio.js?v=111';
+import { TRANSLATIONS } from './translations.js?v=111';
 
-const GAME_VERSION = '110';
+const GAME_VERSION = '111';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2087,9 +2087,10 @@ class Game {
         this.obstacles.push(new Obstacle(x, y, type, isFullHP));
     }
 
-    triggerScreenShake(intensity = 4, frames = 10) {
-        this.shakeTimer = frames;
-        this.shakeIntensity = Math.min(6, intensity);
+    triggerScreenShake(intensity = 0, frames = 0) {
+        // Completely disabled screen shake to eliminate all camera vibration
+        this.shakeTimer = 0;
+        this.shakeIntensity = 0;
     }
 
     togglePause() {
@@ -2551,15 +2552,8 @@ class Game {
     draw() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Screen Shake Translate
+        // Screen Shake Translate (Disabled for 100% steady camera)
         this.ctx.save();
-        if (this.shakeTimer > 0) {
-            const factor = Math.min(1, this.shakeTimer / 10);
-            const dx = (Math.random() - 0.5) * this.shakeIntensity * factor;
-            const dy = (Math.random() - 0.5) * this.shakeIntensity * factor;
-            this.ctx.translate(dx, dy);
-            this.shakeTimer -= (this.lastDt || 1);
-        }
 
         // 1. Draw Sandy Arena floor
         this.ctx.fillStyle = '#dfb582';
@@ -2920,9 +2914,14 @@ class Game {
         if (elapsed > 100) elapsed = 16.667;
         if (elapsed <= 0) elapsed = 16.667;
 
-        // Calculate smooth delta-time factor (1.0 = standard 60 FPS frame tick)
-        let dt = elapsed / (1000 / 60);
-        dt = Math.max(0.1, Math.min(2.5, dt));
+        // Calculate smooth delta-time factor with exponential moving average filter
+        const rawDt = elapsed / (1000 / 60);
+        if (!this.smoothedDt) this.smoothedDt = 1.0;
+        this.smoothedDt = this.smoothedDt * 0.75 + rawDt * 0.25;
+        if (Math.abs(this.smoothedDt - 1.0) < 0.04) {
+            this.smoothedDt = 1.0;
+        }
+        let dt = Math.max(0.2, Math.min(2.0, this.smoothedDt));
         this.lastDt = dt;
 
         this.update(dt);

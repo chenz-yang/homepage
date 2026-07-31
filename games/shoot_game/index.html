@@ -16,13 +16,13 @@
 
     <title>Wild West Duel</title>
     <!-- Icons & iOS PWA Touch Icons -->
-    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png?v=110">
-    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png?v=110">
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=110">
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=110">
-    <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=110">
-    <link rel="manifest" href="manifest.json?v=110">
-    <link rel="stylesheet" href="style.css?v=110">
+    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png?v=111">
+    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png?v=111">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=111">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=111">
+    <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=111">
+    <link rel="manifest" href="manifest.json?v=111">
+    <link rel="stylesheet" href="style.css?v=111">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -88,7 +88,7 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v110</div>
+            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v111</div>
             <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span>🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="header-coins-unit">Münzen</span></span>
                 <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
@@ -472,10 +472,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=110"></script>
+    <script type="module" src="game.js?v=111"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '110';
+            const TARGET_VERSION = '111';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -526,7 +526,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=110', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=111', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());
