@@ -9,19 +9,20 @@
     <meta name="apple-mobile-web-app-title" content="Wild West">
     <!-- Preload Local Fonts for Immediate Rendering (Prevents Fallback Font Flash) -->
     <link rel="preload" href="./fonts/rye-400.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="./fonts/outfit-300.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="./fonts/outfit-400.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="./fonts/outfit-600.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="./fonts/outfit-800.ttf" as="font" type="font/ttf" crossorigin>
 
     <title>Wild West Duel</title>
     <!-- Icons & iOS PWA Touch Icons -->
-    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png?v=106">
-    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png?v=106">
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=106">
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=106">
-    <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=106">
-    <link rel="manifest" href="manifest.json?v=106">
-    <link rel="stylesheet" href="style.css?v=106">
+    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon.png?v=108">
+    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon.png?v=108">
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png?v=108">
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=108">
+    <link rel="apple-touch-icon-precomposed" href="./apple-touch-icon-precomposed.png?v=108">
+    <link rel="manifest" href="manifest.json?v=108">
+    <link rel="stylesheet" href="style.css?v=108">
     <style>
         /* Bulletproof hardware acceleration layer forcing for iOS Safari */
         .screen, .btn, .level-card, .shop-item, .menu-section {
@@ -35,6 +36,35 @@
         .btn-gold {
             background-color: transparent !important;
             background-image: none !important;
+        }
+        /* Strict element size bounds to prevent layout distortion or oversized joysticks offline */
+        .joystick-container {
+            width: 120px !important;
+            height: 120px !important;
+            max-width: 120px !important;
+            max-height: 120px !important;
+            box-sizing: border-box !important;
+            position: absolute !important;
+        }
+        .joystick-base {
+            width: 120px !important;
+            height: 120px !important;
+            max-width: 120px !important;
+            max-height: 120px !important;
+            border-radius: 50% !important;
+            box-sizing: border-box !important;
+        }
+        .joystick-knob {
+            width: 52px !important;
+            height: 52px !important;
+            border-radius: 50% !important;
+            box-sizing: border-box !important;
+        }
+        .western-title {
+            font-family: 'Rye', 'Impact', 'Trebuchet MS', serif;
+        }
+        .lang-btn {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
     </style>
 </head>
@@ -58,7 +88,7 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: default;">v106</div>
+            <div id="version-badge" title="Klicken für Sofort-Update auf v108" style="font-size: 0.75rem; color: #ffd700; text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.35rem; background: rgba(229, 169, 59, 0.2); padding: 0.25rem 0.75rem; border-radius: 12px; border: 1px solid rgba(229, 169, 59, 0.5); user-select: none; -webkit-tap-highlight-color: transparent;">v108 🔄 Neu laden</div>
             <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span>🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="header-coins-unit">Münzen</span></span>
                 <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
@@ -123,7 +153,7 @@
                                     <span class="wep-name" data-i18n="wep-laser-locked">Lasergun 🔒</span><span class="wep-pts" data-i18n="wep-pts-3">3 Pkt</span>
                                 </button>
                                 <button class="btn btn-primary weapon-btn" data-player="p1" data-weapon="random">
-                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts">? Pkt</span>
+                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts" data-i18n="wep-pts-random">? Pkt</span>
                                 </button>
                             </div>
                         </div>
@@ -131,7 +161,7 @@
                             <h3 id="p2-weapon-title" data-i18n="weapon-p2-label-ki">KI (Weiß)</h3>
                             <div class="weapon-grid">
                                 <button class="btn btn-primary weapon-btn p2-wep-active" data-player="p2" data-weapon="random">
-                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts">? Pkt</span>
+                                    <span class="wep-name" data-i18n="wep-random">🎲 Zufall</span><span class="wep-pts" data-i18n="wep-pts-random">? Pkt</span>
                                 </button>
                                 <button class="btn btn-primary weapon-btn" data-player="p2" data-weapon="rapid">
                                     <span class="wep-name" data-i18n="wep-rapid">Pistole</span><span class="wep-pts" data-i18n="wep-pts-1">1 Pkt</span>
@@ -262,15 +292,15 @@
                         <div class="shop-item">
                             <div class="shop-item-info">
                                 <div class="shop-item-title" data-i18n="shop-daily-title">TÄGLICHER GEWINN!</div>
-                                <div class="shop-item-desc" id="shop-daily-desc-container">Normal: 10-30 🪙 | Jackpot am Monatsende: 100-200 🪙</div>
+                                <div class="shop-item-desc" id="shop-daily-desc-container" data-i18n="shop-daily-desc">Normal: 10-30 🪙 | Jackpot am Monatsende: 100-200 🪙</div>
                             </div>
-                            <button id="claim-daily-btn" class="btn btn-gold btn-shop">GRATIS!</button>
+                            <button id="claim-daily-btn" class="btn btn-gold btn-shop" data-i18n="shop-daily-btn-claim">GRATIS!</button>
                         </div>
                         <div class="shop-item">
                             <div class="shop-item-info">
                                 <div class="shop-item-title" data-i18n="shop-hp-title">+1 Start-Leben</div>
                                 <div class="shop-item-desc" id="shop-hp-desc-container">Käufe: +<span id="shop-hp-lvl">0</span> LP (Max 10) <span id="shop-hp-status" style="font-weight:bold; color:#ff9500;"></span></div>
-                                <button id="toggle-hp-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;">Deaktivieren</button>
+                                <button id="toggle-hp-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
                             </div>
                             <button id="buy-hp-btn" class="btn btn-gold btn-shop">10 🪙</button>
                         </div>
@@ -278,7 +308,7 @@
                             <div class="shop-item-info">
                                 <div class="shop-item-title" data-i18n="shop-doppel-title">Doppelgänger (Anzahl)</div>
                                 <div class="shop-item-desc" id="shop-doppel-count-container">Helfer: <span id="shop-doppel-count-val">0</span> / 3 <span id="shop-doppel-status" class="status-inactive"></span></div>
-                                <button id="toggle-doppel-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;">Deaktivieren</button>
+                                <button id="toggle-doppel-btn" class="btn btn-toggle-inactive btn-shop hidden" style="margin-top: 0.3rem; font-size: 0.65rem !important; padding: 0.2rem 0.5rem !important; width: auto !important; height: auto !important;" data-i18n="btn-deactivate">Deaktivieren</button>
                             </div>
                             <button id="buy-doppel-count-btn" class="btn btn-gold btn-shop">30 🪙</button>
                         </div>
@@ -442,34 +472,98 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=106"></script>
+    <script type="module" src="game.js?v=108"></script>
     <script>
-        if ('serviceWorker' in navigator) {
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-                if (!refreshing) {
-                    refreshing = true;
-                    window.location.reload();
-                }
-            });
+        (function() {
+            const TARGET_VERSION = '108';
+            const storedVersion = localStorage.getItem('wild_west_installed_version');
 
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').then(reg => {
-                    reg.onupdatefound = () => {
-                        const installingWorker = reg.installing;
-                        if (installingWorker) {
-                            installingWorker.onstatechange = () => {
-                                if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    window.location.reload();
-                                }
-                            };
-                        }
-                    };
-                }).catch(err => {
-                    console.log('SW registration failed:', err);
+            // Force cache purge if version stored in browser is older than 108
+            if (storedVersion !== TARGET_VERSION) {
+                localStorage.setItem('wild_west_installed_version', TARGET_VERSION);
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(regs => {
+                        return Promise.all(regs.map(r => r.unregister()));
+                    }).then(() => {
+                        return caches.keys();
+                    }).then(keys => {
+                        return Promise.all(keys.map(k => caches.delete(k)));
+                    }).then(() => {
+                        window.location.reload(true);
+                    }).catch(() => {
+                        window.location.reload(true);
+                    });
+                }
+            }
+
+            if ('serviceWorker' in navigator) {
+                let refreshing = false;
+                const handleReload = () => {
+                    if (!refreshing) {
+                        refreshing = true;
+                        window.location.reload();
+                    }
+                };
+
+                const forceUpdateAndReload = async () => {
+                    localStorage.setItem('wild_west_installed_version', TARGET_VERSION);
+                    try {
+                        const regs = await navigator.serviceWorker.getRegistrations();
+                        for (let r of regs) await r.unregister();
+                        const keys = await caches.keys();
+                        await Promise.all(keys.map(k => caches.delete(k)));
+                    } catch (e) {
+                        console.warn('Cache clear failed:', e);
+                    }
+                    window.location.href = window.location.pathname + '?v=108&t=' + Date.now();
+                };
+
+                navigator.serviceWorker.addEventListener('controllerchange', handleReload);
+                navigator.serviceWorker.addEventListener('message', (event) => {
+                    if (event.data && (event.data.type === 'VERSION_UPDATED' || event.data.type === 'RELOAD')) {
+                        handleReload();
+                    }
                 });
-            });
-        }
+
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('./sw.js?v=108', { scope: './' }).then(reg => {
+                        reg.update();
+
+                        window.addEventListener('focus', () => reg.update());
+                        window.addEventListener('online', () => reg.update());
+                        window.addEventListener('pageshow', () => reg.update());
+
+                        reg.onupdatefound = () => {
+                            const installingWorker = reg.installing;
+                            if (installingWorker) {
+                                installingWorker.onstatechange = () => {
+                                    if (installingWorker.state === 'installed') {
+                                        if (navigator.serviceWorker.controller) {
+                                            installingWorker.postMessage({ type: 'SKIP_WAITING' });
+                                            handleReload();
+                                        }
+                                    }
+                                };
+                            }
+                        };
+                    }).catch(err => {
+                        console.log('SW registration failed:', err);
+                    });
+                });
+
+                document.addEventListener('DOMContentLoaded', () => {
+                    const badge = document.getElementById('version-badge');
+                    if (badge) {
+                        badge.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            badge.style.opacity = '0.5';
+                            badge.innerText = 'Wird aktualisiert...';
+                            forceUpdateAndReload();
+                        });
+                    }
+                });
+            }
+        })();
     </script>
 </body>
 </html>

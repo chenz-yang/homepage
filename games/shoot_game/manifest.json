@@ -9,19 +9,19 @@
   "orientation": "landscape",
   "icons": [
     {
-      "src": "app-icon.png?v=106",
+      "src": "app-icon.png?v=107",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "app-icon.png?v=106",
+      "src": "app-icon.png?v=107",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "apple-touch-icon.png?v=106",
+      "src": "apple-touch-icon.png?v=107",
       "sizes": "180x180",
       "type": "image/png"
     }

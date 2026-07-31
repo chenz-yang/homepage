@@ -1,30 +1,30 @@
-const CACHE_NAME = 'wild-west-duel-v106';
+const CACHE_NAME = 'wild-west-duel-v108';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './manifest.json?v=106',
+  './manifest.json?v=108',
   './style.css',
-  './style.css?v=106',
+  './style.css?v=108',
   './game.js',
-  './game.js?v=106',
+  './game.js?v=108',
   './cowboy.js',
-  './cowboy.js?v=106',
+  './cowboy.js?v=108',
   './bullet.js',
-  './bullet.js?v=106',
+  './bullet.js?v=108',
   './obstacle.js',
-  './obstacle.js?v=106',
+  './obstacle.js?v=108',
   './audio.js',
-  './audio.js?v=106',
+  './audio.js?v=108',
   './translations.js',
-  './translations.js?v=106',
+  './translations.js?v=108',
   './qr-code.png',
   './app-icon.png',
-  './app-icon.png?v=106',
+  './app-icon.png?v=108',
   './apple-touch-icon.png',
-  './apple-touch-icon.png?v=106',
+  './apple-touch-icon.png?v=108',
   './apple-touch-icon-precomposed.png',
-  './apple-touch-icon-precomposed.png?v=106',
+  './apple-touch-icon-precomposed.png?v=108',
   './jobs.json',
   './cheats.html',
   './fonts/outfit-300.ttf',
@@ -34,13 +34,47 @@ const ASSETS = [
   './fonts/rye-400.ttf'
 ];
 
+// Helper to get resolved absolute URL for reliable Cache matching in iOS WebKit
+function getAbsoluteUrl(path) {
+  return new URL(path, self.location).href;
+}
+
+// Robust helper to match requests in Cache, handling CORS Vary headers, query strings, and path variations
+async function matchInCache(cache, request) {
+  // 1. Try matching exact request with ignoreSearch and ignoreVary
+  let cachedResponse = await cache.match(request, { ignoreSearch: true, ignoreVary: true });
+  if (cachedResponse) return cachedResponse;
+
+  // 2. Try matching clean URL string without query string/hash
+  const reqUrl = typeof request === 'string' ? request : request.url;
+  const cleanUrl = reqUrl.split('?')[0].split('#')[0];
+  cachedResponse = await cache.match(cleanUrl, { ignoreSearch: true, ignoreVary: true });
+  if (cachedResponse) return cachedResponse;
+
+  // 3. Fallback: match by pathname against all keys in cache
+  try {
+    const keys = await cache.keys();
+    const reqPathname = new URL(reqUrl, self.location).pathname;
+    for (const key of keys) {
+      const keyPathname = new URL(key.url, self.location).pathname;
+      if (keyPathname === reqPathname || (reqPathname.endsWith('/') && keyPathname.endsWith('/index.html'))) {
+        return await cache.match(key, { ignoreSearch: true, ignoreVary: true });
+      }
+    }
+  } catch (e) {
+    console.warn('Cache pathname search fallback failed:', e);
+  }
+
+  return null;
+}
+
 // Install Event: Pre-cache essential game assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return Promise.allSettled(
-        ASSETS.map((asset) => 
-          cache.add(asset).catch((err) => 
+        ASSETS.map((asset) =>
+          cache.add(asset).catch((err) =>
             console.warn('Asset cache failed:', asset, err)
           )
         )
@@ -50,7 +84,21 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Activate Event: Clean up outdated caches and claim clients
+// Message Event: Handle instant skipWaiting and force cache updates
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+  if (event.data && event.data.type === 'FORCE_UPDATE') {
+    caches.keys().then((keys) => {
+      return Promise.all(keys.map((k) => caches.delete(k)));
+    }).then(() => {
+      self.skipWaiting();
+    });
+  }
+});
+
+// Activate Event: Clean up outdated caches and claim clients immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
@@ -61,60 +109,93 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
+    }).then(() => {
+      return self.clients.matchAll({ type: 'window' }).then((clients) => {
+        clients.forEach((client) => {
+          client.postMessage({ type: 'VERSION_UPDATED', version: '108' });
+        });
+      });
     })
   );
   self.clients.claim();
 });
 
-// Fetch Event: Network-First for navigation, Stale-While-Revalidate with cloned response & waitUntil for static assets
+// Fetch Event: Cache-First with background revalidation & guaranteed fallbacks
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith('http://') && !event.request.url.startsWith('https://')) return;
 
-  // HTML Navigation: Network-First with offline fallback
+  // HTML Navigation: Cache-First with background update (Optimized for iPad / iOS / Android / Desktop PWA offline startup)
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-          }
-          return networkResponse;
-        })
-        .catch(() => {
-          return caches.match(event.request, { ignoreSearch: true })
-            .then((cachedReq) => cachedReq || caches.match('./index.html', { ignoreSearch: true }))
-            .then((cachedIndex) => cachedIndex || caches.match('./', { ignoreSearch: true }));
-        })
+      (async () => {
+        const cache = await caches.open(CACHE_NAME);
+
+        let cachedResponse = await matchInCache(cache, event.request);
+        if (!cachedResponse) {
+          cachedResponse = await matchInCache(cache, getAbsoluteUrl('./index.html'));
+        }
+        if (!cachedResponse) {
+          cachedResponse = await matchInCache(cache, getAbsoluteUrl('./'));
+        }
+
+        // Background network update when connected
+        const fetchPromise = fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const responseClone = networkResponse.clone();
+              cache.put(event.request, responseClone);
+            }
+            return networkResponse;
+          })
+          .catch(() => null);
+
+        if (cachedResponse) {
+          event.waitUntil(fetchPromise);
+          return cachedResponse;
+        }
+
+        // If not in cache (e.g. first online visit), wait for network response
+        const netResp = await fetchPromise;
+        if (netResp) return netResp;
+
+        // Guaranteed fallback response (prevents Safari/Chrome native offline error page)
+        return (await matchInCache(cache, getAbsoluteUrl('./index.html'))) ||
+          (await matchInCache(cache, getAbsoluteUrl('./'))) ||
+          new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+      })()
     );
     return;
   }
 
-  // Static Assets: Stale-While-Revalidate / Cache-First with update
+  // Static Assets: Cache-First with background revalidation
   event.respondWith(
-    caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      let cachedResponse = await matchInCache(cache, event.request);
+
       const fetchPromise = fetch(event.request)
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+            cache.put(event.request, responseClone);
           }
           return networkResponse;
         })
-        .catch(() => {
-          // Silent catch for background revalidation failures when offline
-        });
+        .catch(() => null);
 
       if (cachedResponse) {
-        // Keep SW active while revalidating in background
         event.waitUntil(fetchPromise);
         return cachedResponse;
       }
 
-      // If not in cache, wait for network fetch
-      return fetchPromise;
-    })
+      const netResp = await fetchPromise;
+      if (netResp) return netResp;
+
+      return new Response('Asset unavailable offline', { status: 404, headers: { 'Content-Type': 'text/plain' } });
+    })()
   );
 });
+
 
