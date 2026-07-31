@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=109';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=109';
-import { audio } from './audio.js?v=109';
-import { TRANSLATIONS } from './translations.js?v=109';
+import { Cowboy } from './cowboy.js?v=110';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=110';
+import { audio } from './audio.js?v=110';
+import { TRANSLATIONS } from './translations.js?v=110';
 
-const GAME_VERSION = '109';
+const GAME_VERSION = '110';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2087,9 +2087,9 @@ class Game {
         this.obstacles.push(new Obstacle(x, y, type, isFullHP));
     }
 
-    triggerScreenShake(intensity = 8, frames = 15) {
+    triggerScreenShake(intensity = 4, frames = 10) {
         this.shakeTimer = frames;
-        this.shakeIntensity = intensity;
+        this.shakeIntensity = Math.min(6, intensity);
     }
 
     togglePause() {
@@ -2337,6 +2337,7 @@ class Game {
 
         this.sheriffActive = true;
         this.sheriffTimer = 110; // ~1.8 seconds duration
+        this.sheriffFired = false;
         this.sheriffX = this.canvas.width / 2;
         this.sheriffY = 120;
 
@@ -2369,11 +2370,11 @@ class Game {
         }
     }
 
-    update() {
-        this.currentWind += (this.wind - this.currentWind) * 0.05;
+    update(dt = 1) {
+        this.currentWind += (this.wind - this.currentWind) * 0.05 * dt;
 
         if ([3, 5, 7, 10].includes(this.level)) {
-            this.windTime++;
+            this.windTime += dt;
             if (this.windTime > 300) {
                 this.windTime = 0;
                 const maxWind = this.level === 10 ? 18 : this.level === 7 ? 14 : this.level === 5 ? 12 : 8;
@@ -2382,11 +2383,11 @@ class Game {
         }
 
         // Update players & helper AIs
-        this.player1.update(this.keys, this);
-        this.player2.update(this.keys, this);
+        this.player1.update(this.keys, this, dt);
+        this.player2.update(this.keys, this, dt);
         this.helperAIs.forEach(helper => {
             if (helper.health > 0) {
-                helper.update(this.keys, this);
+                helper.update(this.keys, this, dt);
             }
         });
 
@@ -2394,8 +2395,9 @@ class Game {
 
         // Update Sheriff action sequence (draw against helper AI too)
         if (this.sheriffActive) {
-            this.sheriffTimer--;
-            if (this.sheriffTimer === 55) {
+            this.sheriffTimer -= dt;
+            if (this.sheriffTimer <= 55 && !this.sheriffFired) {
+                this.sheriffFired = true;
                 // Shoot all players!
                 audio.playShoot();
                 audio.playShoot(); // double gun boom!
@@ -2404,7 +2406,7 @@ class Game {
                         audio.playShoot();
                     }
                 });
-                this.triggerScreenShake(12, 15);
+                this.triggerScreenShake(5, 12);
                 
                 // Spawn tracers
                 this.spawnSheriffSparks(this.player1);
@@ -2434,29 +2436,29 @@ class Game {
         }
 
         // Update bullets
-        this.bullets.forEach(bullet => bullet.update(this));
+        this.bullets.forEach(bullet => bullet.update(this, dt));
         this.bullets = this.bullets.filter(bullet => !bullet.destroyed);
 
         // Update obstacles
-        this.obstacles.forEach(obstacle => obstacle.update(this));
+        this.obstacles.forEach(obstacle => obstacle.update(this, dt));
         this.obstacles = this.obstacles.filter(obstacle => !obstacle.destroyed);
 
         // Spawn and update Ground Spikes
         this.spawnGroundSpikes();
-        this.groundSpikes.forEach(spike => spike.update(this));
+        this.groundSpikes.forEach(spike => spike.update(this, dt));
         this.groundSpikes = this.groundSpikes.filter(spike => !spike.destroyed);
 
         // Spawn and update Tumbleweeds
         this.spawnTumbleweeds();
-        this.tumbleweeds.forEach(t => t.update(this));
+        this.tumbleweeds.forEach(t => t.update(this, dt));
         this.tumbleweeds = this.tumbleweeds.filter(t => !t.destroyed);
 
         // Update particles
         this.particles.forEach(p => {
-            p.x += p.vx;
-            p.y += p.vy;
-            if (p.gravity) p.vy += p.gravity;
-            p.alpha -= p.decay;
+            p.x += p.vx * dt;
+            p.y += p.vy * dt;
+            if (p.gravity) p.vy += p.gravity * dt;
+            p.alpha -= p.decay * dt;
         });
         this.particles = this.particles.filter(p => p.alpha > 0);
 
@@ -2466,7 +2468,7 @@ class Game {
             const wSpeed = Math.abs(this.currentWind) * 0.6;
             
             this.windLines.forEach(l => {
-                l.y += dir * (l.speed + wSpeed);
+                l.y += dir * (l.speed + wSpeed) * dt;
                 
                 if (dir > 0 && l.y > this.canvas.height) {
                     l.y = -l.len;
@@ -2552,10 +2554,11 @@ class Game {
         // Screen Shake Translate
         this.ctx.save();
         if (this.shakeTimer > 0) {
-            const dx = (Math.random() - 0.5) * this.shakeIntensity;
-            const dy = (Math.random() - 0.5) * this.shakeIntensity;
+            const factor = Math.min(1, this.shakeTimer / 10);
+            const dx = (Math.random() - 0.5) * this.shakeIntensity * factor;
+            const dy = (Math.random() - 0.5) * this.shakeIntensity * factor;
             this.ctx.translate(dx, dy);
-            this.shakeTimer--;
+            this.shakeTimer -= (this.lastDt || 1);
         }
 
         // 1. Draw Sandy Arena floor
@@ -2914,20 +2917,15 @@ class Game {
         this.lastTime = now;
 
         // Prevent frame spike spirals (max 100ms cap per frame)
-        if (elapsed > 100) elapsed = 100;
-        if (elapsed < 0) elapsed = 0;
+        if (elapsed > 100) elapsed = 16.667;
+        if (elapsed <= 0) elapsed = 16.667;
 
-        this.accumulator += elapsed;
-        const TARGET_STEP = 1000 / 60; // Exact 60 FPS physics rate (16.66667ms per step)
+        // Calculate smooth delta-time factor (1.0 = standard 60 FPS frame tick)
+        let dt = elapsed / (1000 / 60);
+        dt = Math.max(0.1, Math.min(2.5, dt));
+        this.lastDt = dt;
 
-        // Run fixed simulation steps to maintain 100% constant physical speed on all refresh rates (30Hz/60Hz/120Hz/battery saver)
-        let steps = 0;
-        while (this.accumulator >= TARGET_STEP && steps < 5) {
-            this.update();
-            this.accumulator -= TARGET_STEP;
-            steps++;
-        }
-
+        this.update(dt);
         this.draw();
 
         requestAnimationFrame((t) => this.loop(t));

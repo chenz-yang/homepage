@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=109';
-import { audio } from './audio.js?v=109';
+import { Bullet } from './bullet.js?v=110';
+import { audio } from './audio.js?v=110';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -76,8 +76,8 @@ export class Cowboy {
         this.hitFlash = 15; // flash for 15 frames
         audio.playHit();
 
-        // Screen Shake
-        game.triggerScreenShake();
+        // Screen Shake (Dampened to prevent eye strain)
+        game.triggerScreenShake(3.5, 10);
 
         // Blood particles
         if (game.particles) {
@@ -172,26 +172,26 @@ export class Cowboy {
         if (this.y > maxY) this.y = maxY;
     }
 
-    update(keys, game) {
+    update(keys, game, dt = 1) {
         if (this.health <= 0) return;
 
-        if (this.hitFlash > 0) this.hitFlash--;
+        if (this.hitFlash > 0) this.hitFlash = Math.max(0, this.hitFlash - dt);
 
         this.isMoving = false;
 
         if (this.role === 'player1') {
-            this.handlePlayer1Controls(keys, game);
+            this.handlePlayer1Controls(keys, game, dt);
         } else if (this.role === 'player2') {
-            this.handlePlayer2Controls(keys, game);
+            this.handlePlayer2Controls(keys, game, dt);
         } else if (this.role === 'ai') {
-            this.handleAI(game);
+            this.handleAI(game, dt);
         } else if (this.role === 'helper_ai') {
-            this.handleHelperAI(game);
+            this.handleHelperAI(game, dt);
         }
 
         // Apply leg swing when moving
         if (this.isMoving) {
-            this.walkCycle += 0.15;
+            this.walkCycle += 0.15 * dt;
         } else {
             this.walkCycle = 0;
         }
@@ -200,20 +200,20 @@ export class Cowboy {
         this.clampToField(game.canvas.width, game.canvas.height);
     }
 
-    handlePlayer1Controls(keys, game) {
+    handlePlayer1Controls(keys, game, dt = 1) {
         let dx = 0;
         let dy = 0;
 
         // Joystick movement (touch play)
         if (game.joystickMove && game.joystickMove.active) {
-            dx = game.joystickMove.x * this.speed;
-            dy = game.joystickMove.y * this.speed;
+            dx = game.joystickMove.x * this.speed * dt;
+            dy = game.joystickMove.y * this.speed * dt;
         } else {
             // Keyboard movement
-            if (keys['w'] || keys['W']) dy -= this.speed;
-            if (keys['s'] || keys['S']) dy += this.speed;
-            if (keys['a'] || keys['A']) dx -= this.speed;
-            if (keys['d'] || keys['D']) dx += this.speed;
+            if (keys['w'] || keys['W']) dy -= this.speed * dt;
+            if (keys['s'] || keys['S']) dy += this.speed * dt;
+            if (keys['a'] || keys['A']) dx -= this.speed * dt;
+            if (keys['d'] || keys['D']) dx += this.speed * dt;
 
             if (dx !== 0 && dy !== 0) {
                 // Diagonal speed normalization
@@ -238,7 +238,7 @@ export class Cowboy {
         if (game.joystickAim && game.joystickAim.active) {
             this.angle = game.joystickAim.angle;
         } else {
-            const rotSpeed = 0.05;
+            const rotSpeed = 0.05 * dt;
             if (keys['q'] || keys['Q']) this.angle -= rotSpeed;
             if (keys['e'] || keys['E']) this.angle += rotSpeed;
         }
@@ -249,14 +249,14 @@ export class Cowboy {
         }
     }
 
-    handlePlayer2Controls(keys, game) {
+    handlePlayer2Controls(keys, game, dt = 1) {
         let dx = 0;
         let dy = 0;
 
-        if (keys['ArrowUp']) dy -= this.speed;
-        if (keys['ArrowDown']) dy += this.speed;
-        if (keys['ArrowLeft']) dx -= this.speed;
-        if (keys['ArrowRight']) dx += this.speed;
+        if (keys['ArrowUp']) dy -= this.speed * dt;
+        if (keys['ArrowDown']) dy += this.speed * dt;
+        if (keys['ArrowLeft']) dx -= this.speed * dt;
+        if (keys['ArrowRight']) dx += this.speed * dt;
 
         if (dx !== 0 || dy !== 0) {
             if (dx !== 0 && dy !== 0) {
@@ -275,7 +275,7 @@ export class Cowboy {
         }
 
         // Aiming Gun rotation
-        const rotSpeed = 0.05;
+        const rotSpeed = 0.05 * dt;
         if (keys['u'] || keys['U']) this.angle -= rotSpeed;
         if (keys['o'] || keys['O']) this.angle += rotSpeed;
 
@@ -334,12 +334,12 @@ export class Cowboy {
         return { x: pvx, y: pvy };
     }
 
-    handleHelperAI(game) {
+    handleHelperAI(game, dt = 1) {
         const opponent = game.player2;
         if (!opponent || opponent.health <= 0) return;
 
-        this.aiDecisionTimer--;
-        this.dodgeCooldown = Math.max(0, this.dodgeCooldown - 1);
+        this.aiDecisionTimer -= dt;
+        this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
 
         // Base properties scaled by upgrade level
         this.setWeaponProperties();
@@ -358,7 +358,7 @@ export class Cowboy {
         }
 
         this.handleEvasion(game);
-        this.moveTowardsTarget(game);
+        this.moveTowardsTarget(game, dt);
 
         // Aim at enemy (with slight wind compensation if wind levels)
         const dist = Math.hypot(opponent.x - this.x, opponent.y - this.y);
@@ -366,18 +366,18 @@ export class Cowboy {
         this.angle = Math.atan2(opponent.y + windOffset - this.y, opponent.x - this.x);
 
         // Shoot at enemy
-        if (Math.random() < 0.035) {
+        if (Math.random() < 0.035 * dt) {
             this.shoot(game);
         }
     }
 
     // AI DECISION TREE & CONTROLS (SCALED FOR 10 LEVELS)
-    handleAI(game) {
+    handleAI(game, dt = 1) {
         const player = game.player1;
         if (!player || player.health <= 0) return;
 
-        this.aiDecisionTimer--;
-        this.dodgeCooldown = Math.max(0, this.dodgeCooldown - 1);
+        this.aiDecisionTimer -= dt;
+        this.dodgeCooldown = Math.max(0, this.dodgeCooldown - dt);
 
         const lvl = game.aiDifficulty || 1;
 
@@ -604,14 +604,14 @@ export class Cowboy {
         }
     }
 
-    moveTowardsTarget(game) {
+    moveTowardsTarget(game, dt = 1) {
         const dx = this.targetX - this.x;
         const dy = this.targetY - this.y;
         const dist = Math.hypot(dx, dy);
 
         if (dist > 10) {
-            let stepX = (dx / dist) * this.speed;
-            let stepY = (dy / dist) * this.speed;
+            let stepX = (dx / dist) * this.speed * dt;
+            let stepY = (dy / dist) * this.speed * dt;
 
             if (!this.checkObstacleCollision(this.x + stepX, this.y, game)) {
                 this.x += stepX;

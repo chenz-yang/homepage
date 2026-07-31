@@ -1,5 +1,5 @@
 // Bullet physics, trajectory, wind influence, and collision handling
-import { audio } from './audio.js?v=109';
+import { audio } from './audio.js?v=110';
 
 export class Bullet {
     constructor(x, y, angle, owner, type = 'normal') {
@@ -40,7 +40,7 @@ export class Bullet {
         this.vy = Math.sin(angle) * this.speed;
     }
 
-    update(game) {
+    update(game, dt = 1) {
         if (this.destroyed) return;
 
         // Save trail position
@@ -51,12 +51,12 @@ export class Bullet {
 
         // Apply wind (vertical deflection) on level 3, 5, 7, and 10
         if ([3, 5, 7, 10].includes(game.level)) {
-            this.vy += game.currentWind * 0.007;
+            this.vy += game.currentWind * 0.007 * dt;
         }
 
         // Move bullet
-        this.x += this.vx;
-        this.y += this.vy;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
 
         // Check offscreen boundaries
         if (this.x < 0 || this.x > game.canvas.width || this.y < 0 || this.y > game.canvas.height) {
@@ -192,7 +192,7 @@ export class Bullet {
     explodeBombOnOpponent(game, x, y, directTarget = null) {
         this.destroyed = true;
         audio.playExplosion();
-        game.triggerScreenShake(12, 18);
+        game.triggerScreenShake(5, 12);
         
         // Spawn rich fire explosion particles
         for (let i = 0; i < 20; i++) {

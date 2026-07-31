@@ -1,5 +1,5 @@
 // Environmental Obstacles for Wild West Duel
-import { audio } from './audio.js?v=109';
+import { audio } from './audio.js?v=110';
 
 export class Obstacle {
     constructor(x, y, type, isFullHP = false) {
@@ -448,11 +448,11 @@ export class Obstacle {
         }
     }
 
-    update(game) {
+    update(game, dt = 1) {
         if (this.destroyed) return;
 
         if (this.type === 'tnt' && this.isTriggered) {
-            this.flashCount--;
+            this.flashCount -= dt;
             if (this.flashCount <= 0) {
                 this.explode(game);
             }
@@ -463,7 +463,7 @@ export class Obstacle {
         this.destroyed = true;
         audio.playExplosion();
 
-        game.triggerScreenShake();
+        game.triggerScreenShake(4, 10);
 
         for (let i = 0; i < 25; i++) {
             const angle = Math.random() * Math.PI * 2;
@@ -566,15 +566,22 @@ export class Tumbleweed {
         ctx.restore();
     }
 
-    update(game) {
+    update(game, dt = 1) {
         if (this.destroyed) return;
 
-        this.x += this.vx;
-        this.y += this.vy;
-        this.angle += this.rotSpeed;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+        this.angle += this.rotSpeed * dt;
 
+        // Apply wind influence if in wind levels
+        if ([3, 5, 7, 10].includes(game.level)) {
+            this.vy += game.currentWind * 0.005 * dt;
+        }
+
+        // Boundary bouncing & fence collision
         const fenceTop = 75;
-        const fenceBottom = game.canvas.height - 35;
+        const fenceBottom = game.canvas.height - 30;
+
         if (this.y - this.radius < fenceTop) {
             this.y = fenceTop + this.radius;
             this.vy = -this.vy;
@@ -596,8 +603,8 @@ export class Tumbleweed {
             const minDist = this.radius + player.radius;
             if (dist < minDist) {
                 const pushAngle = Math.atan2(player.y - this.y, player.x - this.x);
-                const nextX = player.x + Math.cos(pushAngle) * 1.5;
-                const nextY = player.y + Math.sin(pushAngle) * 1.5;
+                const nextX = player.x + Math.cos(pushAngle) * 1.5 * dt;
+                const nextY = player.y + Math.sin(pushAngle) * 1.5 * dt;
                 if (!player.checkObstacleCollision(nextX, nextY, game)) {
                     player.x = nextX;
                     player.y = nextY;
@@ -646,9 +653,9 @@ export class GroundSpike {
         this.heightPercent = 0; // 0 to 1
     }
     
-    update(game) {
+    update(game, dt = 1) {
         if (this.destroyed) return;
-        this.timer++;
+        this.timer += dt;
         
         if (this.state === 'warning') {
             this.heightPercent = 0;
@@ -657,7 +664,7 @@ export class GroundSpike {
                 this.timer = 0;
                 audio.playSpike(); // Play the spike sound effect!
                 // Trigger screen shake slightly
-                game.triggerScreenShake(3, 8);
+                game.triggerScreenShake(2, 6);
                 // Damage any entity close enough when emerging
                 this.checkDamage(game);
             }
@@ -677,7 +684,7 @@ export class GroundSpike {
                 this.timer = 0;
             }
         } else if (this.state === 'retracting') {
-            this.heightPercent = 1 - (this.timer / this.retractDuration);
+            this.heightPercent = Math.max(0, 1 - (this.timer / this.retractDuration));
             if (this.timer >= this.retractDuration) {
                 this.heightPercent = 0;
                 this.destroyed = true;

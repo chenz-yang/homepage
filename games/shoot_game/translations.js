@@ -14,7 +14,7 @@ export const TRANSLATIONS = {
         "mode-pve-text": "1 Spieler (vs. Bandit-KI)",
         "mode-pvp-text": "2 Spieler (Lokales Duell)",
         
-        "names-title": "Namen eingeben",
+        "names-title": "2. Namen eingeben",
         "label-p1-name": "P1 (Schwarz):",
         "label-p2-name-ki": "Gegner (KI):",
         "label-p2-name-pvp": "P2 (Weiß):",
@@ -22,7 +22,7 @@ export const TRANSLATIONS = {
         "default-p2-name": "Spieler 2",
         "default-p2-name-ki": "Bandit",
         
-        "weapon-title": "2. Waffe wählen",
+        "weapon-title": "3. Waffe wählen",
         "weapon-p1-label": "P1 (Schwarz)",
         "weapon-p2-label-ki": "KI (Weiß)",
         "weapon-p2-label-pvp": "P2 (Weiß)",
@@ -37,9 +37,9 @@ export const TRANSLATIONS = {
         "wep-pts-3": "3 Pkt",
         "wep-pts-random": "? Pkt",
         
-        "level-title": "3. Welten einstellen",
+        "level-title": "4. Welten einstellen",
         "level-label": "Welt",
-        "difficulty-title": "4. KI-Schwierigkeit einstellen",
+        "difficulty-title": "5. KI-Schwierigkeit einstellen",
         "difficulty-label": "Schwierigkeit",
         "level-1-name": "Sunny Prairie",
         "level-1-desc": "Einfaches Feld, keine Gefahren.",
@@ -62,7 +62,7 @@ export const TRANSLATIONS = {
         "level-10-name": "Armageddon Duel",
         "level-10-desc": "Ultimatives Chaos: Alles inklusive Bodenspikes!",
         
-        "shop-title": "5. Shop & Upgrades",
+        "shop-title": "6. Shop & Upgrades",
         "shop-balance": "Saldo:",
         "header-coins-unit": "Münzen",
         "clear-coins-btn": "Münzen leeren",
@@ -157,7 +157,7 @@ export const TRANSLATIONS = {
         "mode-pve-text": "单人模式 (对战强盗AI)",
         "mode-pvp-text": "双人模式 (本地对决)",
         
-        "names-title": "输入名字",
+        "names-title": "2. 输入名字",
         "label-p1-name": "玩家1 (黑色):",
         "label-p2-name-ki": "对手 (AI):",
         "label-p2-name-pvp": "玩家2 (白色):",
@@ -165,7 +165,7 @@ export const TRANSLATIONS = {
         "default-p2-name": "玩家 2",
         "default-p2-name-ki": "强盗",
         
-        "weapon-title": "2. 选择武器",
+        "weapon-title": "3. 选择武器",
         "weapon-p1-label": "玩家1 (黑色)",
         "weapon-p2-label-ki": "AI (白色)",
         "weapon-p2-label-pvp": "玩家2 (白色)",
@@ -180,9 +180,9 @@ export const TRANSLATIONS = {
         "wep-pts-3": "3 分",
         "wep-pts-random": "? 分",
         
-        "level-title": "3. 世界设置",
+        "level-title": "4. 世界设置",
         "level-label": "关卡",
-        "difficulty-title": "4. 设置AI难度",
+        "difficulty-title": "5. 设置AI难度",
         "difficulty-label": "难度",
         "level-1-name": "阳光原野",
         "level-1-desc": "普通场地，没有危险。",
@@ -205,7 +205,7 @@ export const TRANSLATIONS = {
         "level-10-name": "末日决斗",
         "level-10-desc": "终极混乱：包含一切及地面尖刺！",
         
-        "shop-title": "5. 商店与升级",
+        "shop-title": "6. 商店与升级",
         "shop-balance": "余额:",
         "header-coins-unit": "金币",
         "clear-coins-btn": "清空金币",
