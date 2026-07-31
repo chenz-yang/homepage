@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=113';
-import { audio } from './audio.js?v=113';
+import { Bullet } from './bullet.js?v=114';
+import { audio } from './audio.js?v=114';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -609,16 +609,20 @@ export class Cowboy {
         const dy = this.targetY - this.y;
         const dist = Math.hypot(dx, dy);
 
-        if (dist > 10) {
+        if (dist > 5) {
             let stepX = (dx / dist) * this.speed * dt;
             let stepY = (dy / dist) * this.speed * dt;
 
+            let moved = false;
             if (!this.checkObstacleCollision(this.x + stepX, this.y, game)) {
                 this.x += stepX;
-                this.isMoving = true;
+                moved = true;
             }
             if (!this.checkObstacleCollision(this.x, this.y + stepY, game)) {
                 this.y += stepY;
+                moved = true;
+            }
+            if (moved) {
                 this.isMoving = true;
             }
         }

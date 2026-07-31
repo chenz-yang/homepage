@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=113';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=113';
-import { audio } from './audio.js?v=113';
-import { TRANSLATIONS } from './translations.js?v=113';
+import { Cowboy } from './cowboy.js?v=114';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=114';
+import { audio } from './audio.js?v=114';
+import { TRANSLATIONS } from './translations.js?v=114';
 
-const GAME_VERSION = '113';
+const GAME_VERSION = '114';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2918,20 +2918,20 @@ class Game {
         this.lastTime = now;
 
         // Prevent frame spike spirals (max 100ms cap per frame)
-        if (elapsed > 100) elapsed = 16.667;
-        if (elapsed <= 0) elapsed = 16.667;
+        if (elapsed > 100) elapsed = 100;
+        if (elapsed <= 0) elapsed = 0;
 
-        // Calculate smooth delta-time factor with exponential moving average filter
-        const rawDt = elapsed / (1000 / 60);
-        if (!this.smoothedDt) this.smoothedDt = 1.0;
-        this.smoothedDt = this.smoothedDt * 0.75 + rawDt * 0.25;
-        if (Math.abs(this.smoothedDt - 1.0) < 0.04) {
-            this.smoothedDt = 1.0;
+        this.accumulator += elapsed;
+        const FIXED_STEP = 1000 / 60; // Exact 60 FPS physics rate (16.6667ms per step)
+
+        // Run fixed simulation steps to guarantee 100% constant movement speed on all PCs & monitors
+        let steps = 0;
+        while (this.accumulator >= FIXED_STEP && steps < 5) {
+            this.update(1.0); // Always update at constant speed
+            this.accumulator -= FIXED_STEP;
+            steps++;
         }
-        let dt = Math.max(0.2, Math.min(2.0, this.smoothedDt));
-        this.lastDt = dt;
 
-        this.update(dt);
         this.draw();
 
         requestAnimationFrame((t) => this.loop(t));
