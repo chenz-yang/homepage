@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=112';
-import { audio } from './audio.js?v=112';
+import { Bullet } from './bullet.js?v=113';
+import { audio } from './audio.js?v=113';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -823,11 +823,11 @@ export class Cowboy {
         let legL = 0;
         let legR = 0;
         if (this.isMoving) {
-            legL = Math.sin(this.walkCycle) * 4;
-            legR = -Math.sin(this.walkCycle) * 4;
+            legL = Math.sin(this.walkCycle) * 5;
+            legR = -Math.sin(this.walkCycle) * 5;
         }
 
-        // Left Boot (Smooth sliding walk without vertical jitter)
+        // Left Boot (Dynamic walking leg stride - Head, eyes and hat remain 100% steady and vibration-free)
         ctx.fillRect(-9 + legL/2, 10, 6, 10);
         ctx.strokeRect(-9 + legL/2, 10, 6, 10);
         

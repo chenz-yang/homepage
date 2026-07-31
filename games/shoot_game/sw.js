@@ -1,30 +1,30 @@
-const CACHE_NAME = 'wild-west-duel-v112';
+const CACHE_NAME = 'wild-west-duel-v113';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './manifest.json?v=112',
+  './manifest.json?v=113',
   './style.css',
-  './style.css?v=112',
+  './style.css?v=113',
   './game.js',
-  './game.js?v=112',
+  './game.js?v=113',
   './cowboy.js',
-  './cowboy.js?v=112',
+  './cowboy.js?v=113',
   './bullet.js',
-  './bullet.js?v=112',
+  './bullet.js?v=113',
   './obstacle.js',
-  './obstacle.js?v=112',
+  './obstacle.js?v=113',
   './audio.js',
-  './audio.js?v=112',
+  './audio.js?v=113',
   './translations.js',
-  './translations.js?v=112',
+  './translations.js?v=113',
   './qr-code.png',
   './app-icon.png',
-  './app-icon.png?v=112',
+  './app-icon.png?v=113',
   './apple-touch-icon.png',
-  './apple-touch-icon.png?v=112',
+  './apple-touch-icon.png?v=113',
   './apple-touch-icon-precomposed.png',
-  './apple-touch-icon-precomposed.png?v=112',
+  './apple-touch-icon-precomposed.png?v=113',
   './jobs.json',
   './cheats.html',
   './fonts/outfit-300.ttf',
@@ -112,7 +112,7 @@ self.addEventListener('activate', (event) => {
     }).then(() => {
       return self.clients.matchAll({ type: 'window' }).then((clients) => {
         clients.forEach((client) => {
-          client.postMessage({ type: 'VERSION_UPDATED', version: '112' });
+          client.postMessage({ type: 'VERSION_UPDATED', version: '113' });
         });
       });
     })
