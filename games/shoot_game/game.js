@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=128';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=128';
-import { audio } from './audio.js?v=128';
-import { TRANSLATIONS } from './translations.js?v=128';
+import { Cowboy } from './cowboy.js?v=129';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=129';
+import { audio } from './audio.js?v=129';
+import { TRANSLATIONS } from './translations.js?v=129';
 
-const GAME_VERSION = '128';
+const GAME_VERSION = '129';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2598,11 +2598,11 @@ class Game {
             if (this.sheriffTimer <= 65 && !this.sheriffFired) {
                 this.sheriffFired = true;
                 // Shoot all players!
-                audio.playShoot();
-                audio.playShoot(); // double gun boom!
+                audio.playHeavyShoot();
+                audio.playHeavyShoot(); // heavy double gun boom!
                 this.helperAIs.forEach(helper => {
                     if (helper.health > 0) {
-                        audio.playShoot();
+                        audio.playHeavyShoot();
                     }
                 });
                 this.triggerScreenShake(5, 12);

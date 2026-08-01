@@ -368,7 +368,10 @@ class AudioSynth {
         notes.forEach((freq, i) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            const startTime = now + i * 0.08;
+            const timeOffset = i * 0.08;
+            const startTime = now + timeOffset;
+            const noteEndTime = timeOffset + 0.3;
+
             osc.type = 'sine';
             osc.frequency.setValueAtTime(freq, startTime);
 
@@ -380,7 +383,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, 0.3, gain);
+            this.autoCleanup(osc, noteEndTime, gain);
 
             osc.start(startTime);
             osc.stop(startTime + 0.3);
@@ -406,6 +409,7 @@ class AudioSynth {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
             const startTime = now + timeOffset;
+            const noteEndTime = timeOffset + item.duration;
             
             // Triangle + sine gives a whistly quality
             osc.type = 'triangle';
@@ -428,7 +432,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, item.duration, gain, lfo, lfoGain);
+            this.autoCleanup(osc, noteEndTime, gain, lfo, lfoGain);
 
             lfo.start(startTime);
             osc.start(startTime);
@@ -489,7 +493,9 @@ class AudioSynth {
         notes.forEach((freq, index) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
-            const startTime = now + index * 0.08;
+            const timeOffset = index * 0.08;
+            const startTime = now + timeOffset;
+            const noteEndTime = timeOffset + 0.3;
             
             osc.type = 'triangle';
             osc.frequency.setValueAtTime(freq, startTime);
@@ -502,7 +508,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, 0.3, gain);
+            this.autoCleanup(osc, noteEndTime, gain);
 
             osc.start(startTime);
             osc.stop(startTime + 0.3);
@@ -701,6 +707,7 @@ class AudioSynth {
             osc.frequency.setValueAtTime(item.note, startTime);
             
             const dur = (index === notes.length - 1) ? 1.0 : 0.3;
+            const noteEndTime = item.time + dur;
 
             gain.gain.setValueAtTime(0.0001, startTime);
             gain.gain.linearRampToValueAtTime(0.12, startTime + 0.05);
@@ -715,7 +722,7 @@ class AudioSynth {
             filter.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, dur, filter, gain);
+            this.autoCleanup(osc, noteEndTime, filter, gain);
 
             osc.start(startTime);
             osc.stop(startTime + dur);

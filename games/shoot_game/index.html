@@ -70,11 +70,10 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- Language & Sound Selector -->
+        <!-- Language Selector -->
         <div id="language-selector">
             <button id="lang-btn-original" class="btn btn-small btn-primary lang-btn selected">DEUTSCH</button>
             <button id="lang-btn-chinese" class="btn btn-small btn-primary lang-btn">中文</button>
-            <button id="sound-toggle-btn" class="btn btn-small btn-primary sound-btn" data-i18n="sound-btn-on">🔊 Ton: EIN</button>
         </div>
 
         <!-- QR Code Selector -->
@@ -475,10 +474,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=128"></script>
+    <script type="module" src="game.js?v=129"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '128';
+            const TARGET_VERSION = '129';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -518,7 +517,7 @@
                     } catch (e) {
                         console.warn('Cache clear failed:', e);
                     }
-                    window.location.href = window.location.pathname + '?v=128&t=' + Date.now();
+                    window.location.href = window.location.pathname + '?v=129&t=' + Date.now();
                 };
                 window.forcePurgeAndReload = forceUpdateAndReload;
 
@@ -530,7 +529,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=128', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=129', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());
