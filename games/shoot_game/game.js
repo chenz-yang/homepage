@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=123';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=123';
-import { audio } from './audio.js?v=123';
-import { TRANSLATIONS } from './translations.js?v=123';
+import { Cowboy } from './cowboy.js?v=124';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=124';
+import { audio } from './audio.js?v=124';
+import { TRANSLATIONS } from './translations.js?v=124';
 
-const GAME_VERSION = '123';
+const GAME_VERSION = '124';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -256,7 +256,7 @@ class Game {
         // Update mute button text
         const muteBtn = document.getElementById('mute-btn');
         if (muteBtn) {
-            muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
+            muteBtn.textContent = audio.muted ? this.t('hud-mute-off') : this.t('hud-mute-on');
         }
 
         // Update Game Over text if active
@@ -561,9 +561,16 @@ class Game {
             this.startGame();
         });
 
-        // Pause / Unpause / Resume
+        // Pause / Unpause / Resume / Mute
         document.getElementById('pause-btn').addEventListener('click', () => this.togglePause());
         document.getElementById('resume-btn').addEventListener('click', () => this.togglePause());
+        const muteBtn = document.getElementById('mute-btn');
+        if (muteBtn) {
+            muteBtn.addEventListener('click', () => {
+                const isMuted = audio.toggleMute();
+                muteBtn.textContent = isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
+            });
+        }
         
         // Exit to main menu
         document.getElementById('exit-game-btn').addEventListener('click', () => this.exitToMenu());
