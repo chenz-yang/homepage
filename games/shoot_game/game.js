@@ -38,6 +38,8 @@ class Game {
         // Sheriff Summon State
         this.sheriffActive = false;
         this.sheriffTimer = 0;
+        this.sheriffMaxTimer = 130;
+        this.sheriffAlpha = 0;
         this.sheriffX = 0;
         this.sheriffY = 0;
 
@@ -2327,10 +2329,72 @@ class Game {
         if (this.sheriffActive) return;
 
         this.sheriffActive = true;
-        this.sheriffTimer = 110; // ~1.8 seconds duration
+        this.sheriffMaxTimer = 130;
+        this.sheriffTimer = this.sheriffMaxTimer;
         this.sheriffFired = false;
-        this.sheriffX = this.canvas.width / 2;
-        this.sheriffY = 120;
+        this.sheriffAlpha = 0;
+
+        // Choose a random position strictly on land (left or right of the river)
+        let bestX = 200;
+        let bestY = 200;
+        let foundValid = false;
+
+        for (let attempt = 0; attempt < 60; attempt++) {
+            // Pick left bank (100 to 480) or right bank (720 to 1080)
+            const side = Math.random() < 0.5 ? 'left' : 'right';
+            const testX = side === 'left' 
+                ? 100 + Math.random() * 380 
+                : 720 + Math.random() * 360;
+            const testY = 120 + Math.random() * 560;
+
+            if (!this.isPositionInWater(testX, testY) && 
+                !this.isInTunnel(testX, testY) && 
+                !this.isOnBridge(testX, testY)) {
+                
+                // Avoid spawning directly on top of active obstacles
+                let obstacleOverlap = false;
+                if (this.obstacles) {
+                    for (const obs of this.obstacles) {
+                        if (obs && obs.active !== false) {
+                            if (Math.hypot(obs.x - testX, obs.y - testY) < (obs.radius || 25) + 20) {
+                                obstacleOverlap = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (!obstacleOverlap) {
+                    bestX = testX;
+                    bestY = testY;
+                    foundValid = true;
+                    break;
+                } else if (!foundValid) {
+                    bestX = testX;
+                    bestY = testY;
+                }
+            }
+        }
+
+        this.sheriffX = bestX;
+        this.sheriffY = bestY;
+
+        // Mysterious entrance particle burst (swirling gold and smoke)
+        for (let i = 0; i < 25; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1 + Math.random() * 3;
+            this.particles.push({
+                x: this.sheriffX + (Math.random() - 0.5) * 20,
+                y: this.sheriffY + 10 + (Math.random() - 0.5) * 15,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed - 1.5,
+                radius: 2 + Math.random() * 3.5,
+                color: Math.random() < 0.6 ? '#ffd700' : (Math.random() < 0.5 ? '#4e3621' : '#ffaa00'),
+                alpha: 0.9,
+                decay: 0.025 + Math.random() * 0.02,
+                gravity: -0.02
+            });
+        }
 
         audio.playSheriffWhistle();
     }
@@ -2387,7 +2451,57 @@ class Game {
         // Update Sheriff action sequence (draw against helper AI too)
         if (this.sheriffActive) {
             this.sheriffTimer -= dt;
-            if (this.sheriffTimer <= 55 && !this.sheriffFired) {
+
+            const entranceDuration = 30;
+            const exitDuration = 30;
+
+            // Compute Sheriff alpha for mysterious fade in / fade out
+            if (this.sheriffTimer > this.sheriffMaxTimer - entranceDuration) {
+                // Fading in (Erscheinen)
+                const progress = (this.sheriffMaxTimer - this.sheriffTimer) / entranceDuration;
+                this.sheriffAlpha = Math.max(0, Math.min(1, progress));
+
+                // Spawn swirling mysterious entrance smoke / gold dust
+                if (Math.random() < 0.7) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 10 + Math.random() * 20;
+                    this.particles.push({
+                        x: this.sheriffX + Math.cos(angle) * dist,
+                        y: this.sheriffY + Math.sin(angle) * dist,
+                        vx: (Math.random() - 0.5) * 1.5,
+                        vy: -1.5 - Math.random() * 2,
+                        radius: 2 + Math.random() * 2.5,
+                        color: Math.random() < 0.5 ? '#ffd700' : '#8b7500',
+                        alpha: 0.8,
+                        decay: 0.04,
+                        gravity: -0.02
+                    });
+                }
+            } else if (this.sheriffTimer < exitDuration) {
+                // Fading out (Auflösen)
+                const progress = this.sheriffTimer / exitDuration;
+                this.sheriffAlpha = Math.max(0, Math.min(1, progress));
+
+                // Spawn dissolving smoke & ash particles floating upwards
+                if (Math.random() < 0.8) {
+                    this.particles.push({
+                        x: this.sheriffX + (Math.random() - 0.5) * 26,
+                        y: this.sheriffY + (Math.random() - 0.5) * 35,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: -1.2 - Math.random() * 2.5,
+                        radius: 1.5 + Math.random() * 3.0,
+                        color: Math.random() < 0.6 ? '#ffd700' : '#ffaa00',
+                        alpha: 0.9,
+                        decay: 0.04,
+                        gravity: -0.03
+                    });
+                }
+            } else {
+                this.sheriffAlpha = 1.0;
+            }
+
+            // Firing moment halfway through
+            if (this.sheriffTimer <= 65 && !this.sheriffFired) {
                 this.sheriffFired = true;
                 // Shoot all players!
                 audio.playShoot();
@@ -2421,8 +2535,25 @@ class Game {
                     }
                 });
             }
+
             if (this.sheriffTimer <= 0) {
                 this.sheriffActive = false;
+                // Final mysterious disappearance burst
+                for (let i = 0; i < 20; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 0.8 + Math.random() * 2.5;
+                    this.particles.push({
+                        x: this.sheriffX,
+                        y: this.sheriffY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 1,
+                        radius: 2 + Math.random() * 3,
+                        color: Math.random() < 0.5 ? '#ffd700' : '#4e3621',
+                        alpha: 0.8,
+                        decay: 0.05,
+                        gravity: -0.02
+                    });
+                }
             }
         }
 
@@ -2730,10 +2861,22 @@ class Game {
 
     drawSheriff(ctx) {
         ctx.save();
+        const alpha = Math.max(0, Math.min(1, this.sheriffAlpha !== undefined ? this.sheriffAlpha : 1));
+        ctx.globalAlpha = alpha;
         ctx.translate(this.sheriffX, this.sheriffY);
 
+        // Mysterious golden glowing aura under feet
+        ctx.save();
+        ctx.shadowBlur = 18 * alpha;
+        ctx.shadowColor = '#ffd700';
+        ctx.fillStyle = 'rgba(255, 215, 0, ' + (0.3 * alpha) + ')';
+        ctx.beginPath();
+        ctx.ellipse(0, 18, 22, 7, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
         // Shadow
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';
+        ctx.fillStyle = 'rgba(0, 0, 0, ' + (0.35 * alpha) + ')';
         ctx.beginPath();
         ctx.ellipse(0, 20, 16, 5, 0, 0, Math.PI * 2);
         ctx.fill();
