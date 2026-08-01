@@ -2,14 +2,10 @@
 class AudioSynth {
     constructor() {
         this.ctx = null;
+        this.masterGain = null;
+        this.compressor = null;
         this.muted = false;
         this.noiseBuffer = null;
-
-        const removeUnlock = () => {
-            window.removeEventListener('click', unlock);
-            window.removeEventListener('touchstart', unlock);
-            window.removeEventListener('touchend', unlock);
-        };
 
         const unlock = () => {
             if (!this.ctx) {
@@ -18,39 +14,66 @@ class AudioSynth {
             if (this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
                 this.ctx.resume().catch(e => console.warn("Failed to resume AudioContext on gesture:", e));
             }
-            if (this.ctx && this.ctx.state === 'running') {
-                removeUnlock();
-            }
         };
 
         const setupUnlock = () => {
+            if (typeof window === 'undefined') return;
             window.addEventListener('click', unlock);
             window.addEventListener('touchstart', unlock);
             window.addEventListener('touchend', unlock);
+            window.addEventListener('keydown', unlock);
+            window.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
+                    this.ctx.resume().catch(e => console.warn("Failed to resume AudioContext on visibility:", e));
+                }
+            });
         };
 
-        if (typeof window !== 'undefined') {
-            setupUnlock();
-        }
+        setupUnlock();
     }
 
     init() {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (!this.masterGain && this.ctx) {
+        if (this.ctx && !this.compressor) {
+            this.compressor = this.ctx.createDynamicsCompressor();
+            this.compressor.threshold.setValueAtTime(-6, this.ctx.currentTime);
+            this.compressor.knee.setValueAtTime(10, this.ctx.currentTime);
+            this.compressor.ratio.setValueAtTime(12, this.ctx.currentTime);
+            this.compressor.attack.setValueAtTime(0.003, this.ctx.currentTime);
+            this.compressor.release.setValueAtTime(0.1, this.ctx.currentTime);
+            this.compressor.connect(this.ctx.destination);
+        }
+        if (this.ctx && !this.masterGain) {
             this.masterGain = this.ctx.createGain();
             this.masterGain.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
-            this.masterGain.connect(this.ctx.destination);
+            this.masterGain.connect(this.compressor || this.ctx.destination);
         }
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+        if (this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
+            this.ctx.resume().catch(e => {});
         }
     }
 
     getDestination() {
         this.init();
         return this.masterGain || this.ctx.destination;
+    }
+
+    autoCleanup(sourceNode, ...connectedNodes) {
+        if (!sourceNode) return;
+        sourceNode.onended = () => {
+            try {
+                sourceNode.disconnect();
+            } catch (e) {}
+            connectedNodes.forEach(node => {
+                if (node && typeof node.disconnect === 'function') {
+                    try {
+                        node.disconnect();
+                    } catch (e) {}
+                }
+            });
+        };
     }
 
     setMuted(muted) {
@@ -95,9 +118,10 @@ class AudioSynth {
         osc.frequency.setValueAtTime(800, now);
         osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
 
-        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.setValueAtTime(0.0001, now);
         oscGain.gain.linearRampToValueAtTime(0.4, now + 0.003);
-        oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+        oscGain.gain.linearRampToValueAtTime(0, now + 0.15);
 
         osc.connect(oscGain);
         oscGain.connect(this.getDestination());
@@ -112,13 +136,17 @@ class AudioSynth {
         noiseFilter.frequency.exponentialRampToValueAtTime(100, now + 0.2);
 
         const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0, now);
+        noiseGain.gain.setValueAtTime(0.0001, now);
         noiseGain.gain.linearRampToValueAtTime(0.6, now + 0.005);
-        noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+        noiseGain.gain.linearRampToValueAtTime(0, now + 0.3);
 
         noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
         noiseGain.connect(this.getDestination());
+
+        this.autoCleanup(osc, oscGain);
+        this.autoCleanup(noise, noiseFilter, noiseGain);
 
         osc.start(now);
         osc.stop(now + 0.15);
@@ -139,9 +167,10 @@ class AudioSynth {
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.exponentialRampToValueAtTime(50, now + 0.18);
 
-        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.setValueAtTime(0.0001, now);
         oscGain.gain.linearRampToValueAtTime(0.8, now + 0.004);
-        oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+        oscGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+        oscGain.gain.linearRampToValueAtTime(0, now + 0.2);
 
         osc.connect(oscGain);
         oscGain.connect(this.getDestination());
@@ -156,20 +185,23 @@ class AudioSynth {
         noiseFilter.frequency.exponentialRampToValueAtTime(40, now + 0.45);
 
         const noiseGain = ctx.createGain();
-        noiseGain.gain.setValueAtTime(0, now);
+        noiseGain.gain.setValueAtTime(0.0001, now);
         noiseGain.gain.linearRampToValueAtTime(0.8, now + 0.005);
-        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+        noiseGain.gain.linearRampToValueAtTime(0, now + 0.5);
 
         noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
         noiseGain.connect(this.getDestination());
+
+        this.autoCleanup(osc, oscGain);
+        this.autoCleanup(noise, noiseFilter, noiseGain);
 
         osc.start(now);
         osc.stop(now + 0.2);
         noise.start(now);
         noise.stop(now + 0.5);
     }
-
 
     playHit() {
         if (this.muted) return;
@@ -184,9 +216,10 @@ class AudioSynth {
         osc.frequency.setValueAtTime(120, now);
         osc.frequency.linearRampToValueAtTime(60, now + 0.15);
 
-        gain.gain.setValueAtTime(0, now);
+        gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(0.3, now + 0.004);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.2);
+        gain.gain.linearRampToValueAtTime(0, now + 0.2);
 
         // Lowpass filter to make it sound muffled
         const filter = ctx.createBiquadFilter();
@@ -196,6 +229,8 @@ class AudioSynth {
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(this.getDestination());
+
+        this.autoCleanup(osc, filter, gain);
 
         osc.start(now);
         osc.stop(now + 0.2);
@@ -216,10 +251,11 @@ class AudioSynth {
         osc.frequency.exponentialRampToValueAtTime(2000, now + 0.05);
         osc.frequency.exponentialRampToValueAtTime(600, now + 0.35);
 
-        gain.gain.setValueAtTime(0, now);
+        gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(0.15, now + 0.004);
         gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+        gain.gain.linearRampToValueAtTime(0, now + 0.4);
 
         const delay = ctx.createDelay();
         delay.delayTime.setValueAtTime(0.03, now);
@@ -235,6 +271,8 @@ class AudioSynth {
         delay.connect(feedback);
         feedback.connect(delay);
         delay.connect(this.getDestination());
+
+        this.autoCleanup(osc, gain, delay, feedback);
 
         osc.start(now);
         osc.stop(now + 0.4);
@@ -256,10 +294,11 @@ class AudioSynth {
         filter.frequency.exponentialRampToValueAtTime(20, now + 1.2);
 
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0, now);
+        gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(1.0, now + 0.01);
         gain.gain.linearRampToValueAtTime(0.7, now + 0.1);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.6);
+        gain.gain.linearRampToValueAtTime(0, now + 1.6);
 
         noise.connect(filter);
         filter.connect(gain);
@@ -272,9 +311,10 @@ class AudioSynth {
         subOsc.frequency.setValueAtTime(80, now);
         subOsc.frequency.linearRampToValueAtTime(30, now + 0.5);
 
-        subGain.gain.setValueAtTime(0, now);
+        subGain.gain.setValueAtTime(0.0001, now);
         subGain.gain.linearRampToValueAtTime(0.6, now + 0.01);
-        subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+        subGain.gain.linearRampToValueAtTime(0, now + 0.65);
 
         const subFilter = ctx.createBiquadFilter();
         subFilter.type = 'lowpass';
@@ -283,6 +323,9 @@ class AudioSynth {
         subOsc.connect(subFilter);
         subFilter.connect(subGain);
         subGain.connect(this.getDestination());
+
+        this.autoCleanup(noise, filter, gain);
+        this.autoCleanup(subOsc, subFilter, subGain);
 
         noise.start(now);
         noise.stop(now + 1.6);
@@ -300,21 +343,24 @@ class AudioSynth {
         notes.forEach((freq, i) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            const startTime = now + i * 0.08;
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, now + i * 0.08);
+            osc.frequency.setValueAtTime(freq, startTime);
 
-            gain.gain.setValueAtTime(0, now + i * 0.08);
-            gain.gain.linearRampToValueAtTime(0.18, now + i * 0.08 + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.linearRampToValueAtTime(0.18, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.3);
+            gain.gain.linearRampToValueAtTime(0, startTime + 0.3);
 
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            osc.start(now + i * 0.08);
-            osc.stop(now + i * 0.08 + 0.3);
+            this.autoCleanup(osc, gain);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.3);
         });
     }
-
 
     // Melodic Western Motif: "The Good, the Bad and the Ugly" (simplified whistle)
     playWesternWhistle() {
@@ -334,32 +380,36 @@ class AudioSynth {
         notes.forEach(item => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            const startTime = now + timeOffset;
             
             // Triangle + sine gives a whistly quality
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(item.note, now + timeOffset);
+            osc.frequency.setValueAtTime(item.note, startTime);
             
             // Add vibrato
             const lfo = ctx.createOscillator();
             const lfoGain = ctx.createGain();
-            lfo.frequency.setValueAtTime(8, now + timeOffset);
-            lfoGain.gain.setValueAtTime(15, now + timeOffset); // 15 Hz modulation depth
+            lfo.frequency.setValueAtTime(8, startTime);
+            lfoGain.gain.setValueAtTime(15, startTime); // 15 Hz modulation depth
             lfo.connect(lfoGain);
             lfoGain.connect(osc.frequency);
 
-            gain.gain.setValueAtTime(0, now + timeOffset);
-            gain.gain.linearRampToValueAtTime(0.2, now + timeOffset + 0.03);
-            gain.gain.linearRampToValueAtTime(0.2, now + timeOffset + item.duration - 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + item.duration);
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.linearRampToValueAtTime(0.2, startTime + 0.03);
+            gain.gain.linearRampToValueAtTime(0.2, startTime + item.duration - 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + item.duration);
+            gain.gain.linearRampToValueAtTime(0, startTime + item.duration);
 
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            lfo.start(now + timeOffset);
-            osc.start(now + timeOffset);
+            this.autoCleanup(osc, gain, lfo, lfoGain);
+
+            lfo.start(startTime);
+            osc.start(startTime);
             
-            lfo.stop(now + timeOffset + item.duration);
-            osc.stop(now + timeOffset + item.duration);
+            lfo.stop(startTime + item.duration);
+            osc.stop(startTime + item.duration);
 
             timeOffset += item.duration + 0.05;
         });
@@ -386,13 +436,16 @@ class AudioSynth {
         lfo.connect(lfoGain);
         lfoGain.connect(osc.frequency);
 
-        gain.gain.setValueAtTime(0, now);
+        gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(0.25, now + 0.05);
         gain.gain.linearRampToValueAtTime(0.25, now + 0.45);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+        gain.gain.linearRampToValueAtTime(0, now + 0.6);
 
         osc.connect(gain);
         gain.connect(this.getDestination());
+
+        this.autoCleanup(osc, gain, lfo, lfoGain);
 
         lfo.start(now);
         osc.start(now);
@@ -400,7 +453,6 @@ class AudioSynth {
         lfo.stop(now + 0.6);
         osc.stop(now + 0.6);
     }
-
 
     playChestOpen() {
         if (this.muted) return;
@@ -412,19 +464,23 @@ class AudioSynth {
         notes.forEach((freq, index) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            const startTime = now + index * 0.08;
             
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, now + index * 0.08);
+            osc.frequency.setValueAtTime(freq, startTime);
 
-            gain.gain.setValueAtTime(0, now + index * 0.08);
-            gain.gain.linearRampToValueAtTime(0.15, now + index * 0.08 + 0.02);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.25);
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.linearRampToValueAtTime(0.15, startTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 0.3);
+            gain.gain.linearRampToValueAtTime(0, startTime + 0.3);
 
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            osc.start(now + index * 0.08);
-            osc.stop(now + index * 0.08 + 0.3);
+            this.autoCleanup(osc, gain);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.3);
         });
     }
 
@@ -440,9 +496,10 @@ class AudioSynth {
         osc.frequency.setValueAtTime(100, now);
         osc.frequency.exponentialRampToValueAtTime(320, now + 0.12);
 
-        gain.gain.setValueAtTime(0, now);
+        gain.gain.setValueAtTime(0.0001, now);
         gain.gain.linearRampToValueAtTime(0.2, now + 0.004);
-        gain.gain.exponentialRampToValueAtTime(0.005, now + 0.16);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+        gain.gain.linearRampToValueAtTime(0, now + 0.16);
 
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
@@ -451,6 +508,8 @@ class AudioSynth {
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(this.getDestination());
+
+        this.autoCleanup(osc, filter, gain);
 
         osc.start(now);
         osc.stop(now + 0.16);
@@ -472,7 +531,6 @@ class AudioSynth {
 
             if (!this.muted) {
                 // 1. Acoustic Gallop Bassline (Root-Fifth in D Minor: D -> A)
-                // Gallop rhythm: step % 4 === 0 or step % 4 === 2 or step % 4 === 3
                 if (step % 4 === 0 || step % 4 === 2 || step % 4 === 3) {
                     const bassOsc = ctx.createOscillator();
                     const bassGain = ctx.createGain();
@@ -481,9 +539,10 @@ class AudioSynth {
                     const freq = (step % 4 === 0) ? 73.42 : 110.00; // D2 or A2
                     bassOsc.frequency.setValueAtTime(freq, time);
 
-                    bassGain.gain.setValueAtTime(0, time);
+                    bassGain.gain.setValueAtTime(0.0001, time);
                     bassGain.gain.linearRampToValueAtTime(0.20, time + 0.02);
-                    bassGain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+                    bassGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.22);
+                    bassGain.gain.linearRampToValueAtTime(0, time + 0.22);
 
                     const filter = ctx.createBiquadFilter();
                     filter.type = 'lowpass';
@@ -492,6 +551,8 @@ class AudioSynth {
                     bassOsc.connect(filter);
                     filter.connect(bassGain);
                     bassGain.connect(this.getDestination());
+
+                    this.autoCleanup(bassOsc, filter, bassGain);
 
                     bassOsc.start(time);
                     bassOsc.stop(time + 0.22);
@@ -507,25 +568,27 @@ class AudioSynth {
                     drumFilter.frequency.setValueAtTime(400, time);
 
                     const drumGain = ctx.createGain();
-                    drumGain.gain.setValueAtTime(0, time);
+                    drumGain.gain.setValueAtTime(0.0001, time);
                     drumGain.gain.linearRampToValueAtTime(0.03, time + 0.004);
-                    drumGain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+                    drumGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.08);
+                    drumGain.gain.linearRampToValueAtTime(0, time + 0.08);
 
                     drum.connect(drumFilter);
                     drumFilter.connect(drumGain);
                     drumGain.connect(this.getDestination());
 
+                    this.autoCleanup(drum, drumFilter, drumGain);
+
                     drum.start(time);
                     drum.stop(time + 0.08);
                 }
 
-                // 3. Whistle Melody (Classic spaghetti western theme motif in D minor scale)
-                // 32-step loop
+                // 3. Whistle Melody
                 const melody = [
-                    293.66, 0, 349.23, 0, 293.66, 0, 0, 0, // D4, F4, D4
-                    392.00, 0, 293.66, 0, 349.23, 0, 0, 0, // G4, D4, F4
-                    440.00, 0, 523.25, 0, 440.00, 0, 0, 0, // A4, C5, A4
-                    392.00, 349.23, 293.66, 0, 0, 0, 0, 0  // G4, F4, D4
+                    293.66, 0, 349.23, 0, 293.66, 0, 0, 0,
+                    392.00, 0, 293.66, 0, 349.23, 0, 0, 0,
+                    440.00, 0, 523.25, 0, 440.00, 0, 0, 0,
+                    392.00, 349.23, 293.66, 0, 0, 0, 0, 0
                 ];
 
                 const noteFreq = melody[step % 32];
@@ -534,10 +597,8 @@ class AudioSynth {
                     const whistleGain = ctx.createGain();
 
                     whistle.type = 'sine';
-                    // Pitch up for whistling register
                     whistle.frequency.setValueAtTime(noteFreq * 1.5, time);
 
-                    // Whistle vibrato LFO
                     const lfo = ctx.createOscillator();
                     const lfoGain = ctx.createGain();
                     lfo.frequency.setValueAtTime(7.5, time);
@@ -546,12 +607,15 @@ class AudioSynth {
                     lfo.connect(lfoGain);
                     lfoGain.connect(whistle.frequency);
 
-                    whistleGain.gain.setValueAtTime(0, time);
+                    whistleGain.gain.setValueAtTime(0.0001, time);
                     whistleGain.gain.linearRampToValueAtTime(0.05, time + 0.05);
-                    whistleGain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
+                    whistleGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.45);
+                    whistleGain.gain.linearRampToValueAtTime(0, time + 0.45);
 
                     whistle.connect(whistleGain);
                     whistleGain.connect(this.getDestination());
+
+                    this.autoCleanup(whistle, whistleGain, lfo, lfoGain);
 
                     lfo.start(time);
                     whistle.start(time);
@@ -591,7 +655,6 @@ class AudioSynth {
         const ctx = this.ctx;
         const now = ctx.currentTime;
 
-        // Root notes of a triumphant chord progression
         const notes = [
             { note: 293.66, time: 0.0, type: 'sawtooth' }, // D4
             { note: 369.99, time: 0.15, type: 'sawtooth' }, // F#4
@@ -603,27 +666,30 @@ class AudioSynth {
         notes.forEach((item, index) => {
             const osc = ctx.createOscillator();
             const gain = ctx.createGain();
+            const startTime = now + item.time;
             
             osc.type = item.type;
-            osc.frequency.setValueAtTime(item.note, now + item.time);
+            osc.frequency.setValueAtTime(item.note, startTime);
             
             const dur = (index === notes.length - 1) ? 1.0 : 0.3;
 
-            gain.gain.setValueAtTime(0, now + item.time);
-            gain.gain.linearRampToValueAtTime(0.12, now + item.time + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + item.time + dur);
+            gain.gain.setValueAtTime(0.0001, startTime);
+            gain.gain.linearRampToValueAtTime(0.12, startTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+            gain.gain.linearRampToValueAtTime(0, startTime + dur);
 
-            // Filter for brassy trumpet sound
             const filter = ctx.createBiquadFilter();
             filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1500, now + item.time);
+            filter.frequency.setValueAtTime(1500, startTime);
 
             osc.connect(filter);
             filter.connect(gain);
             gain.connect(this.getDestination());
 
-            osc.start(now + item.time);
-            osc.stop(now + item.time + dur);
+            this.autoCleanup(osc, filter, gain);
+
+            osc.start(startTime);
+            osc.stop(startTime + dur);
         });
     }
 }

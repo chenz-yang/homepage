@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=125';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=125';
-import { audio } from './audio.js?v=125';
-import { TRANSLATIONS } from './translations.js?v=125';
+import { Cowboy } from './cowboy.js?v=126';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=126';
+import { audio } from './audio.js?v=126';
+import { TRANSLATIONS } from './translations.js?v=126';
 
-const GAME_VERSION = '125';
+const GAME_VERSION = '126';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -139,11 +139,10 @@ class Game {
         // Safe trigger to force a style reflow and repaint on all main screens and interactive buttons
         const elements = document.querySelectorAll('.btn, .level-card, .shop-item, .screen, .menu-section');
         elements.forEach(el => {
-            const voidOffset = el.offsetHeight;
-            const originalOpacity = window.getComputedStyle(el).opacity;
+            const inlineOpacity = el.style.opacity;
             el.style.opacity = '0.99';
             el.offsetHeight; // triggers layout repaint
-            el.style.opacity = originalOpacity;
+            el.style.opacity = inlineOpacity;
         });
     }
 
@@ -355,6 +354,7 @@ class Game {
                 document.body.classList.remove('smartphone');
                 document.documentElement.classList.remove('smartphone');
             }
+            this.resetJoystickState();
         });
 
         // Dynamic input detection: switch UI dynamically on touch vs keyboard interaction
@@ -1245,16 +1245,34 @@ class Game {
         const p1Laser = document.getElementById('p1-wep-laser');
         const p2Laser = document.getElementById('p2-wep-laser');
         if (p1Laser && p2Laser) {
+            p1Laser.style.opacity = '';
+            p2Laser.style.opacity = '';
             if (this.lasergunUnlocked) {
                 p1Laser.disabled = false;
-                p1Laser.querySelector('.wep-name').textContent = this.t('wep-laser-unlocked');
+                const p1Name = p1Laser.querySelector('.wep-name');
+                if (p1Name) {
+                    p1Name.setAttribute('data-i18n', 'wep-laser-unlocked');
+                    p1Name.textContent = this.t('wep-laser-unlocked');
+                }
                 p2Laser.disabled = false;
-                p2Laser.querySelector('.wep-name').textContent = this.t('wep-laser-unlocked');
+                const p2Name = p2Laser.querySelector('.wep-name');
+                if (p2Name) {
+                    p2Name.setAttribute('data-i18n', 'wep-laser-unlocked');
+                    p2Name.textContent = this.t('wep-laser-unlocked');
+                }
             } else {
                 p1Laser.disabled = true;
-                p1Laser.querySelector('.wep-name').textContent = this.t('wep-laser-locked');
+                const p1Name = p1Laser.querySelector('.wep-name');
+                if (p1Name) {
+                    p1Name.setAttribute('data-i18n', 'wep-laser-locked');
+                    p1Name.textContent = this.t('wep-laser-locked');
+                }
                 p2Laser.disabled = true;
-                p2Laser.querySelector('.wep-name').textContent = this.t('wep-laser-locked');
+                const p2Name = p2Laser.querySelector('.wep-name');
+                if (p2Name) {
+                    p2Name.setAttribute('data-i18n', 'wep-laser-locked');
+                    p2Name.textContent = this.t('wep-laser-locked');
+                }
                 
                 if (this.p1Weapon === 'laser') {
                     this.p1Weapon = 'rapid';
@@ -1586,8 +1604,8 @@ class Game {
                             // Fired in drag direction
                             this.player1.shoot(this);
                         } else {
-                            // Quick tap: Auto-aim at the nearest active opponent (player2)
-                            if (this.player2 && this.player2.health > 0) {
+                            // Quick tap: Auto-aim at the nearest active opponent (player2) if not inside tunnel
+                            if (this.player2 && this.player2.health > 0 && !this.isInTunnel(this.player2.x, this.player2.y)) {
                                 const angle = Math.atan2(this.player2.y - this.player1.y, this.player2.x - this.player1.x);
                                 this.player1.angle = angle;
                                 this.player1.shoot(this);
@@ -1777,6 +1795,7 @@ class Game {
         audio.playWesternWhistle();
         audio.startBGM(); // Start Spaghetti Western loop!
 
+        this.keys = {};
         this.resetJoystickState();
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'playing';
@@ -1903,6 +1922,15 @@ class Game {
                 const helper = new Cowboy(100, spawnY, 'helper_ai', this.p1Weapon, this);
                 helper.maxHealth = 10 + this.doppelgangerLvl * 5; // Level 1: 15 HP, Level 5: 35 HP!
                 helper.health = helper.maxHealth;
+                
+                // Resolve any spawn collision with level obstacles
+                let attempts = 0;
+                while (helper.checkObstacleCollision(helper.x, helper.y, this) && attempts < 20) {
+                    helper.x += 25;
+                    attempts++;
+                }
+                helper.clampToField(this.canvas.width, this.canvas.height);
+
                 this.helperAIs.push(helper);
             }
         }

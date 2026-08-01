@@ -471,10 +471,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=125"></script>
+    <script type="module" src="game.js?v=126"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '125';
+            const TARGET_VERSION = '126';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -488,9 +488,9 @@
                     }).then(keys => {
                         return Promise.all(keys.map(k => caches.delete(k)));
                     }).then(() => {
-                        window.location.reload(true);
+                        window.location.reload();
                     }).catch(() => {
-                        window.location.reload(true);
+                        window.location.reload();
                     });
                 }
             }
@@ -514,7 +514,7 @@
                     } catch (e) {
                         console.warn('Cache clear failed:', e);
                     }
-                    window.location.href = window.location.pathname + '?v=125&t=' + Date.now();
+                    window.location.href = window.location.pathname + '?v=126&t=' + Date.now();
                 };
                 window.forcePurgeAndReload = forceUpdateAndReload;
 
@@ -526,7 +526,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=125', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=126', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());
