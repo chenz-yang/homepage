@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=129';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=129';
-import { audio } from './audio.js?v=129';
-import { TRANSLATIONS } from './translations.js?v=129';
+import { Cowboy } from './cowboy.js?v=130';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=130';
+import { audio } from './audio.js?v=130';
+import { TRANSLATIONS } from './translations.js?v=130';
 
-const GAME_VERSION = '129';
+const GAME_VERSION = '130';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -56,9 +56,9 @@ class Game {
         // Floating Dust in menu
         this.menuDust = [];
         
-        // Audio state
-        this.isMuted = localStorage.getItem('wild_west_muted') === 'true';
-        audio.setMuted(this.isMuted);
+        // Audio state (Main Menu always sound ON)
+        this.isMuted = false;
+        audio.setMuted(false);
 
         this.menuLoopRunning = false;
 
@@ -2207,7 +2207,9 @@ class Game {
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(true); // Stop music explicitly
-        audio.setMuted(this.isMuted);
+        this.isMuted = false;
+        audio.setMuted(false);
+        this.updateSoundUI();
         document.getElementById('game-screen').classList.remove('active');
         document.getElementById('game-over-screen').classList.remove('active');
         document.getElementById('pause-screen').classList.remove('active');
