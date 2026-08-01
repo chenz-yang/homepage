@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=114';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=114';
-import { audio } from './audio.js?v=114';
-import { TRANSLATIONS } from './translations.js?v=114';
+import { Cowboy } from './cowboy.js?v=121';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=121';
+import { audio } from './audio.js?v=121';
+import { TRANSLATIONS } from './translations.js?v=121';
 
-const GAME_VERSION = '114';
+const GAME_VERSION = '121';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -54,8 +54,9 @@ class Game {
         // Floating Dust in menu
         this.menuDust = [];
         
-        // Audio state
+        // Audio state (always enabled)
         this.isMuted = false;
+        audio.setMuted(false);
 
         this.menuLoopRunning = false;
 
@@ -570,20 +571,7 @@ class Game {
         // Rematch
         document.getElementById('rematch-btn').addEventListener('click', () => this.startGame());
 
-        // Mute toggle
-        const muteBtn = document.getElementById('mute-btn');
-        muteBtn.addEventListener('click', () => {
-            this.isMuted = audio.toggleMute();
-            muteBtn.textContent = this.isMuted ? this.t('hud-mute-off') : this.t('hud-mute-on');
-            if (this.isMuted) {
-                audio.stopBGM();
-            } else {
-                audio.playRicochet();
-                if (this.state === 'playing') {
-                    audio.startBGM();
-                }
-            }
-        });
+
 
         // Initialize Shop UI
         this.updateShopUI();
@@ -1787,6 +1775,7 @@ class Game {
         }
         this.lastCoinsEarned = 0;
         audio.init();
+        audio.setMuted(false);
         audio.playWesternWhistle();
         audio.startBGM(); // Start Spaghetti Western loop!
 
@@ -2122,6 +2111,7 @@ class Game {
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music
+        audio.setMuted(false); // Unmute audio for main menu interaction
         document.getElementById('game-screen').classList.remove('active');
         document.getElementById('game-over-screen').classList.remove('active');
         document.getElementById('pause-screen').classList.remove('active');

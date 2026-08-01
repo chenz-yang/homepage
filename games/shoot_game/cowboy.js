@@ -791,7 +791,64 @@ export class Cowboy {
         ctx.restore();
     }
 
+    drawFootIndicator(ctx) {
+        const actualGame = this.game || window.game;
+        const isPvP = actualGame && actualGame.mode === 'pvp';
+
+        let color = null;
+        if (isPvP) {
+            if (this.role === 'player1' || this.role === 'player2') {
+                color = 'blue';
+            }
+        } else {
+            if (this.role === 'player1') {
+                color = 'green';
+            } else if (this.role === 'ai' || this.role === 'player2') {
+                color = 'red';
+            }
+        }
+
+        if (!color) return;
+
+        ctx.save();
+
+        let strokeColor = '';
+        let fillColor = '';
+        let glowColor = '';
+
+        if (color === 'green') {
+            strokeColor = '#00ff66';
+            fillColor = 'rgba(0, 255, 102, 0.28)';
+            glowColor = 'rgba(0, 255, 102, 0.65)';
+        } else if (color === 'red') {
+            strokeColor = '#ff2a4b';
+            fillColor = 'rgba(255, 42, 75, 0.28)';
+            glowColor = 'rgba(255, 42, 75, 0.65)';
+        } else if (color === 'blue') {
+            strokeColor = '#00b0ff';
+            fillColor = 'rgba(0, 176, 255, 0.28)';
+            glowColor = 'rgba(0, 176, 255, 0.65)';
+        }
+
+        ctx.shadowColor = glowColor;
+        ctx.shadowBlur = 8;
+
+        ctx.beginPath();
+        ctx.ellipse(0, 20, 24, 8.5, 0, 0, Math.PI * 2);
+        
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+
     drawCowboySilhouette(ctx) {
+        this.drawFootIndicator(ctx);
+
         ctx.beginPath();
         ctx.arc(0, -22, 9, 0, Math.PI * 2);
         
@@ -811,6 +868,9 @@ export class Cowboy {
 
     drawCowboyDetailed(ctx) {
         const flip = (this.angle > Math.PI/2 || this.angle < -Math.PI/2) ? -1 : 1;
+
+        // Foot indicator ring (Brawl Stars style)
+        this.drawFootIndicator(ctx);
 
         // Shadow
         ctx.fillStyle = 'rgba(0, 0, 0, 0.35)';

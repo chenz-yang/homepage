@@ -38,14 +38,34 @@ class AudioSynth {
         if (!this.ctx) {
             this.ctx = new (window.AudioContext || window.webkitAudioContext)();
         }
+        if (!this.masterGain && this.ctx) {
+            this.masterGain = this.ctx.createGain();
+            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
+            this.masterGain.connect(this.ctx.destination);
+        }
         if (this.ctx.state === 'suspended') {
             this.ctx.resume();
         }
     }
 
-    toggleMute() {
-        this.muted = !this.muted;
+    getDestination() {
+        this.init();
+        return this.masterGain || this.ctx.destination;
+    }
+
+    setMuted(muted) {
+        this.muted = !!muted;
+        if (this.ctx && this.masterGain) {
+            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
+        }
+        if (this.muted) {
+            this.stopBGM();
+        }
         return this.muted;
+    }
+
+    toggleMute() {
+        return this.setMuted(!this.muted);
     }
 
     // Custom noise generator helper for gunshots and explosions
@@ -80,7 +100,7 @@ class AudioSynth {
         oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
 
         osc.connect(oscGain);
-        oscGain.connect(ctx.destination);
+        oscGain.connect(this.getDestination());
 
         // 2. White Noise Blast (Gun powder)
         const noise = ctx.createBufferSource();
@@ -98,7 +118,7 @@ class AudioSynth {
 
         noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
+        noiseGain.connect(this.getDestination());
 
         osc.start(now);
         osc.stop(now + 0.15);
@@ -124,7 +144,7 @@ class AudioSynth {
         oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
 
         osc.connect(oscGain);
-        oscGain.connect(ctx.destination);
+        oscGain.connect(this.getDestination());
 
         // 2. Deep Lowpass Noise Blast
         const noise = ctx.createBufferSource();
@@ -142,7 +162,7 @@ class AudioSynth {
 
         noise.connect(noiseFilter);
         noiseFilter.connect(noiseGain);
-        noiseGain.connect(ctx.destination);
+        noiseGain.connect(this.getDestination());
 
         osc.start(now);
         osc.stop(now + 0.2);
@@ -175,7 +195,7 @@ class AudioSynth {
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(this.getDestination());
 
         osc.start(now);
         osc.stop(now + 0.2);
@@ -208,13 +228,13 @@ class AudioSynth {
         feedback.gain.setValueAtTime(0.3, now);
 
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(this.getDestination());
 
         // Feed gain into delay loop for a slight echo
         gain.connect(delay);
         delay.connect(feedback);
         feedback.connect(delay);
-        delay.connect(ctx.destination);
+        delay.connect(this.getDestination());
 
         osc.start(now);
         osc.stop(now + 0.4);
@@ -243,7 +263,7 @@ class AudioSynth {
 
         noise.connect(filter);
         filter.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(this.getDestination());
 
         // Low rumbling bass synth
         const subOsc = ctx.createOscillator();
@@ -262,7 +282,7 @@ class AudioSynth {
 
         subOsc.connect(subFilter);
         subFilter.connect(subGain);
-        subGain.connect(ctx.destination);
+        subGain.connect(this.getDestination());
 
         noise.start(now);
         noise.stop(now + 1.6);
@@ -288,7 +308,7 @@ class AudioSynth {
             gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
 
             osc.connect(gain);
-            gain.connect(ctx.destination);
+            gain.connect(this.getDestination());
 
             osc.start(now + i * 0.08);
             osc.stop(now + i * 0.08 + 0.3);
@@ -333,7 +353,7 @@ class AudioSynth {
             gain.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + item.duration);
 
             osc.connect(gain);
-            gain.connect(ctx.destination);
+            gain.connect(this.getDestination());
 
             lfo.start(now + timeOffset);
             osc.start(now + timeOffset);
@@ -372,7 +392,7 @@ class AudioSynth {
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
         osc.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(this.getDestination());
 
         lfo.start(now);
         osc.start(now);
@@ -401,7 +421,7 @@ class AudioSynth {
             gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.25);
 
             osc.connect(gain);
-            gain.connect(ctx.destination);
+            gain.connect(this.getDestination());
 
             osc.start(now + index * 0.08);
             osc.stop(now + index * 0.08 + 0.3);
@@ -430,7 +450,7 @@ class AudioSynth {
 
         osc.connect(filter);
         filter.connect(gain);
-        gain.connect(ctx.destination);
+        gain.connect(this.getDestination());
 
         osc.start(now);
         osc.stop(now + 0.16);
@@ -471,7 +491,7 @@ class AudioSynth {
 
                     bassOsc.connect(filter);
                     filter.connect(bassGain);
-                    bassGain.connect(ctx.destination);
+                    bassGain.connect(this.getDestination());
 
                     bassOsc.start(time);
                     bassOsc.stop(time + 0.22);
@@ -493,7 +513,7 @@ class AudioSynth {
 
                     drum.connect(drumFilter);
                     drumFilter.connect(drumGain);
-                    drumGain.connect(ctx.destination);
+                    drumGain.connect(this.getDestination());
 
                     drum.start(time);
                     drum.stop(time + 0.08);
@@ -531,7 +551,7 @@ class AudioSynth {
                     whistleGain.gain.exponentialRampToValueAtTime(0.001, time + 0.4);
 
                     whistle.connect(whistleGain);
-                    whistleGain.connect(ctx.destination);
+                    whistleGain.connect(this.getDestination());
 
                     lfo.start(time);
                     whistle.start(time);
@@ -600,7 +620,7 @@ class AudioSynth {
 
             osc.connect(filter);
             filter.connect(gain);
-            gain.connect(ctx.destination);
+            gain.connect(this.getDestination());
 
             osc.start(now + item.time);
             osc.stop(now + item.time + dur);
