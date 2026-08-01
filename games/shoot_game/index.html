@@ -88,7 +88,7 @@
         <div id="main-menu" class="screen active">
             <h1 class="western-title" data-i18n="game-title">Wild West Duel</h1>
             <p class="subtitle" data-i18n="game-subtitle">Zwei Colts. Ein Überlebender.</p>
-            <div id="version-badge" onclick="window.forcePurgeAndReload && window.forcePurgeAndReload()" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: pointer;" title="Klicken, um Cache zu leeren und neu zu laden">v124</div>
+            <div id="version-badge" onclick="window.forcePurgeAndReload && window.forcePurgeAndReload()" style="font-size: 0.7rem; color: rgba(255,255,255,0.45); text-align: center; margin-top: -0.5rem; margin-bottom: 0.4rem; font-family: 'Outfit', sans-serif; cursor: pointer;" title="Klicken, um Cache zu leeren und neu zu laden">v125</div>
             <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span>🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="header-coins-unit">Münzen</span></span>
                 <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
@@ -414,7 +414,6 @@
 
             <div id="game-controls-bar">
                 <button id="pause-btn" class="btn btn-small" data-i18n="hud-pause-btn">Pause</button>
-                <button id="mute-btn" class="btn btn-small" data-i18n="hud-mute-on">Ton: An</button>
                 <button id="exit-game-btn" class="btn btn-small btn-danger" data-i18n="hud-forfeit-btn">Aufgeben</button>
             </div>
 
@@ -472,10 +471,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=124"></script>
+    <script type="module" src="game.js?v=125"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '124';
+            const TARGET_VERSION = '125';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -515,7 +514,7 @@
                     } catch (e) {
                         console.warn('Cache clear failed:', e);
                     }
-                    window.location.href = window.location.pathname + '?v=124&t=' + Date.now();
+                    window.location.href = window.location.pathname + '?v=125&t=' + Date.now();
                 };
                 window.forcePurgeAndReload = forceUpdateAndReload;
 
@@ -527,7 +526,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=124', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=125', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());
