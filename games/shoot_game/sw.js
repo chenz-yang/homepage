@@ -1,30 +1,30 @@
-const CACHE_NAME = 'wild-west-duel-v122';
+const CACHE_NAME = 'wild-west-duel-v123';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './manifest.json?v=122',
+  './manifest.json?v=123',
   './style.css',
-  './style.css?v=122',
+  './style.css?v=123',
   './game.js',
-  './game.js?v=122',
+  './game.js?v=123',
   './cowboy.js',
-  './cowboy.js?v=122',
+  './cowboy.js?v=123',
   './bullet.js',
-  './bullet.js?v=122',
+  './bullet.js?v=123',
   './obstacle.js',
-  './obstacle.js?v=122',
+  './obstacle.js?v=123',
   './audio.js',
-  './audio.js?v=122',
+  './audio.js?v=123',
   './translations.js',
-  './translations.js?v=122',
+  './translations.js?v=123',
   './qr-code.png',
   './app-icon.png',
-  './app-icon.png?v=122',
+  './app-icon.png?v=123',
   './apple-touch-icon.png',
-  './apple-touch-icon.png?v=122',
+  './apple-touch-icon.png?v=123',
   './apple-touch-icon-precomposed.png',
-  './apple-touch-icon-precomposed.png?v=122',
+  './apple-touch-icon-precomposed.png?v=123',
   './jobs.json',
   './cheats.html',
   './fonts/outfit-300.ttf',
@@ -68,13 +68,17 @@ async function matchInCache(cache, request) {
   return null;
 }
 
-// Install Event: Pre-cache essential game assets
+// Install Event: Pre-cache essential game assets using no-cache to bypass stale browser cache
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return Promise.allSettled(
         ASSETS.map((asset) =>
-          cache.add(asset).catch((err) =>
+          fetch(new Request(asset, { cache: 'no-cache' })).then((res) => {
+            if (res && res.status === 200) {
+              return cache.put(asset, res);
+            }
+          }).catch((err) =>
             console.warn('Asset cache failed:', asset, err)
           )
         )
@@ -112,7 +116,7 @@ self.addEventListener('activate', (event) => {
     }).then(() => {
       return self.clients.matchAll({ type: 'window' }).then((clients) => {
         clients.forEach((client) => {
-          client.postMessage({ type: 'VERSION_UPDATED', version: '122' });
+          client.postMessage({ type: 'VERSION_UPDATED', version: '123' });
         });
       });
     })
@@ -125,11 +129,23 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith('http://') && !event.request.url.startsWith('https://')) return;
 
-  // HTML Navigation: Cache-First with background update (Optimized for iPad / iOS / Android / Desktop PWA offline startup)
+  // HTML Navigation: Network-First with Cache Fallback (Bypasses HTTP/SW cache on refresh, works offline)
   if (event.request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         const cache = await caches.open(CACHE_NAME);
+
+        try {
+          const bypassUrl = new URL(event.request.url);
+          bypassUrl.searchParams.set('_v_reload', Date.now().toString());
+          const networkResponse = await fetch(new Request(bypassUrl.toString(), { cache: 'no-cache' }));
+          if (networkResponse && networkResponse.status === 200) {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          }
+        } catch (err) {
+          // Offline or network error -> fall back to cache
+        }
 
         let cachedResponse = await matchInCache(cache, event.request);
         if (!cachedResponse) {
@@ -139,30 +155,10 @@ self.addEventListener('fetch', (event) => {
           cachedResponse = await matchInCache(cache, getAbsoluteUrl('./'));
         }
 
-        // Background network update when connected
-        const fetchPromise = fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              const responseClone = networkResponse.clone();
-              cache.put(event.request, responseClone);
-            }
-            return networkResponse;
-          })
-          .catch(() => null);
-
-        if (cachedResponse) {
-          event.waitUntil(fetchPromise);
-          return cachedResponse;
-        }
-
-        // If not in cache (e.g. first online visit), wait for network response
-        const netResp = await fetchPromise;
-        if (netResp) return netResp;
+        if (cachedResponse) return cachedResponse;
 
         // Guaranteed fallback response (prevents Safari/Chrome native offline error page)
-        return (await matchInCache(cache, getAbsoluteUrl('./index.html'))) ||
-          (await matchInCache(cache, getAbsoluteUrl('./'))) ||
-          new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } });
+        return new Response('Offline', { status: 503, headers: { 'Content-Type': 'text/plain' } });
       })()
     );
     return;
