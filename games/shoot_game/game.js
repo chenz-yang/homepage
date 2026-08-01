@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=126';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=126';
-import { audio } from './audio.js?v=126';
-import { TRANSLATIONS } from './translations.js?v=126';
+import { Cowboy } from './cowboy.js?v=127';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=127';
+import { audio } from './audio.js?v=127';
+import { TRANSLATIONS } from './translations.js?v=127';
 
-const GAME_VERSION = '126';
+const GAME_VERSION = '127';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -56,9 +56,9 @@ class Game {
         // Floating Dust in menu
         this.menuDust = [];
         
-        // Audio state (always enabled)
-        this.isMuted = false;
-        audio.setMuted(false);
+        // Audio state
+        this.isMuted = localStorage.getItem('wild_west_muted') === 'true';
+        audio.setMuted(this.isMuted);
 
         this.menuLoopRunning = false;
 
@@ -250,6 +250,7 @@ class Game {
         // Refresh dynamically rendered layouts
         this.updateShopUI();
         this.updateWeaponsUI();
+        this.updateSoundUI();
         this.updateHUD();
 
 
@@ -325,10 +326,66 @@ class Game {
             btn.addEventListener('click', () => {
                 this.coins = 0;
                 localStorage.setItem('wild_west_coins', '0');
-                audio.playRicochet();
+                if (!this.isMuted) audio.playRicochet();
                 this.updateShopUI();
             });
         });
+
+        document.querySelectorAll('.clear-purchases-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.lasergunLvl = 0;
+                this.rapidLvl = 1;
+                this.heavyLvl = 1;
+                this.bombLvl = 1;
+                this.hpUpgrades = 0;
+                this.hpActive = true;
+                this.doppelgangerCount = 0;
+                this.doppelgangerLvl = 0;
+                this.doppelgangerActive = false;
+
+                localStorage.removeItem('wild_west_lasergun_level');
+                localStorage.removeItem('wild_west_rapid_level');
+                localStorage.removeItem('wild_west_heavy_level');
+                localStorage.removeItem('wild_west_bomb_level');
+                localStorage.removeItem('wild_west_hp_upgrade');
+                localStorage.removeItem('wild_west_hp_active');
+                localStorage.removeItem('wild_west_doppelganger_count');
+                localStorage.removeItem('wild_west_doppelganger_level');
+                localStorage.setItem('wild_west_doppelganger_active', 'false');
+
+                if (this.p1Weapon === 'laser') {
+                    this.p1Weapon = 'rapid';
+                    document.querySelectorAll('.weapon-btn[data-player="p1"]').forEach(b => b.classList.remove('p1-wep-active'));
+                    const rBtn1 = document.querySelector('.weapon-btn[data-player="p1"][data-weapon="rapid"]');
+                    if (rBtn1) rBtn1.classList.add('p1-wep-active');
+                }
+                if (this.p2Weapon === 'laser') {
+                    this.p2Weapon = 'rapid';
+                    document.querySelectorAll('.weapon-btn[data-player="p2"]').forEach(b => b.classList.remove('p2-wep-active'));
+                    const rBtn2 = document.querySelector('.weapon-btn[data-player="p2"][data-weapon="rapid"]');
+                    if (rBtn2) rBtn2.classList.add('p2-wep-active');
+                }
+
+                if (!this.isMuted) audio.playWesternWhistle();
+                this.updateWeaponsUI();
+                this.updateShopUI();
+                this.showToast(this.t('toast-purchases-cleared'));
+            });
+        });
+
+        document.querySelectorAll('.sound-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.isMuted = !this.isMuted;
+                audio.setMuted(this.isMuted);
+                localStorage.setItem('wild_west_muted', this.isMuted);
+                this.updateSoundUI();
+                if (!this.isMuted) {
+                    audio.playCoinSound();
+                }
+            });
+        });
+
+        this.updateSoundUI();
 
         this.isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         
@@ -919,6 +976,19 @@ class Game {
         if (qrModal) {
             qrModal.classList.remove('active');
         }
+    }
+
+    updateSoundUI() {
+        document.querySelectorAll('.sound-btn').forEach(btn => {
+            const key = this.isMuted ? 'sound-btn-off' : 'sound-btn-on';
+            btn.setAttribute('data-i18n', key);
+            btn.textContent = this.t(key);
+            if (this.isMuted) {
+                btn.style.opacity = '0.7';
+            } else {
+                btn.style.opacity = '1';
+            }
+        });
     }
 
     updateShopUI() {
@@ -1791,8 +1861,8 @@ class Game {
         }
         this.lastCoinsEarned = 0;
         audio.init();
-        audio.setMuted(false);
-        audio.playWesternWhistle();
+        audio.setMuted(this.isMuted);
+        if (!this.isMuted) audio.playWesternWhistle();
         audio.startBGM(); // Start Spaghetti Western loop!
 
         this.keys = {};
@@ -2137,7 +2207,7 @@ class Game {
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
         audio.stopBGM(); // Stop music
-        audio.setMuted(false); // Unmute audio for main menu interaction
+        audio.setMuted(this.isMuted);
         document.getElementById('game-screen').classList.remove('active');
         document.getElementById('game-over-screen').classList.remove('active');
         document.getElementById('pause-screen').classList.remove('active');

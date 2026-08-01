@@ -66,6 +66,9 @@ export const TRANSLATIONS = {
         "shop-balance": "Saldo:",
         "header-coins-unit": "Münzen",
         "clear-coins-btn": "Münzen leeren",
+        "clear-purchases-btn": "Käufe leeren",
+        "sound-btn-on": "🔊 Ton: EIN",
+        "sound-btn-off": "🔇 Ton: AUS",
         "shop-infinite": "Unendlich",
         "shop-max": "Max",
         "shop-hp-title": "+1 Start-Leben",
@@ -141,6 +144,7 @@ export const TRANSLATIONS = {
         // Toasts
         "toast-ki-wep-bought": "KI-Waffe selbst gewählt! (-3 🪙)",
         "toast-ki-wep-not-enough": "Nicht genug Münzen! (3 🪙 benötigt)",
+        "toast-purchases-cleared": "Alle Käufe wurden geleert!",
     },
     chinese: {
         // Main Menu
@@ -209,6 +213,9 @@ export const TRANSLATIONS = {
         "shop-balance": "余额:",
         "header-coins-unit": "金币",
         "clear-coins-btn": "清空金币",
+        "clear-purchases-btn": "清空已购",
+        "sound-btn-on": "🔊 音效: 开启",
+        "sound-btn-off": "🔇 音效: 关闭",
         "shop-infinite": "无限",
         "shop-max": "满级",
         "shop-hp-title": "+1 初始生命",
@@ -283,6 +290,7 @@ export const TRANSLATIONS = {
 
         // Toasts
         "toast-ki-wep-bought": "已手动选择AI武器！(-3 🪙)",
-        "toast-ki-wep-not-enough": "金币不足！（需要 3 🪙）"
+        "toast-ki-wep-not-enough": "金币不足！（需要 3 🪙）",
+        "toast-purchases-cleared": "所有已购内容已清空！"
     }
 };

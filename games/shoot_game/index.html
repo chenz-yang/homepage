@@ -70,10 +70,11 @@
 </head>
 <body>
     <div id="game-container">
-        <!-- Language Selector -->
+        <!-- Language & Sound Selector -->
         <div id="language-selector">
             <button id="lang-btn-original" class="btn btn-small btn-primary lang-btn selected">DEUTSCH</button>
             <button id="lang-btn-chinese" class="btn btn-small btn-primary lang-btn">中文</button>
+            <button id="sound-toggle-btn" class="btn btn-small btn-primary sound-btn" data-i18n="sound-btn-on">🔊 Ton: EIN</button>
         </div>
 
         <!-- QR Code Selector -->
@@ -92,6 +93,7 @@
             <div id="header-coins-container" style="text-align: center; margin-top: 0; margin-bottom: 1.2rem; font-family: 'Outfit', sans-serif; color: #ffcc00; font-weight: bold; font-size: 0.95rem; text-shadow: 0 1px 3px rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                 <span>🪙 <span data-i18n="shop-balance">Saldo:</span> <span id="header-coins-val">0</span> <span data-i18n="header-coins-unit">Münzen</span></span>
                 <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
+                <button class="btn btn-small btn-danger clear-purchases-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-purchases-btn">Käufe leeren</button>
             </div>
 
             <!-- Prestige Reset Panel -->
@@ -287,6 +289,7 @@
                     <div class="shop-coins-header" style="display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
                         <span><span data-i18n="shop-balance">Saldo:</span> <span id="shop-coins-val">0</span> <span class="shop-coin-symbol">🪙</span></span>
                         <button class="btn btn-small btn-danger clear-coins-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-coins-btn">Münzen leeren</button>
+                        <button class="btn btn-small btn-danger clear-purchases-btn" style="padding: 0.15rem 0.5rem; font-size: 0.75rem; vertical-align: middle;" data-i18n="clear-purchases-btn">Käufe leeren</button>
                     </div>
                     <div class="shop-list">
                         <div class="shop-item">
@@ -413,6 +416,7 @@
             </div>
 
             <div id="game-controls-bar">
+                <button id="sound-toggle-btn-hud" class="btn btn-small sound-btn" data-i18n="sound-btn-on">🔊 Ton: EIN</button>
                 <button id="pause-btn" class="btn btn-small" data-i18n="hud-pause-btn">Pause</button>
                 <button id="exit-game-btn" class="btn btn-small btn-danger" data-i18n="hud-forfeit-btn">Aufgeben</button>
             </div>
@@ -471,10 +475,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=126"></script>
+    <script type="module" src="game.js?v=127"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '126';
+            const TARGET_VERSION = '127';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -514,7 +518,7 @@
                     } catch (e) {
                         console.warn('Cache clear failed:', e);
                     }
-                    window.location.href = window.location.pathname + '?v=126&t=' + Date.now();
+                    window.location.href = window.location.pathname + '?v=127&t=' + Date.now();
                 };
                 window.forcePurgeAndReload = forceUpdateAndReload;
 
@@ -526,7 +530,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=126', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=127', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());
