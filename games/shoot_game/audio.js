@@ -5,6 +5,7 @@ class AudioSynth {
         this.masterGain = null;
         this.compressor = null;
         this.muted = false;
+        this.bgmRequested = false;
         this.noiseBuffer = null;
 
         const unlock = () => {
@@ -34,7 +35,14 @@ class AudioSynth {
 
     init() {
         if (!this.ctx) {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+                try {
+                    this.ctx = new AudioCtx({ sampleRate: 48000 });
+                } catch (e) {
+                    this.ctx = new AudioCtx();
+                }
+            }
         }
         if (this.ctx && !this.compressor) {
             this.compressor = this.ctx.createDynamicsCompressor();
@@ -47,7 +55,7 @@ class AudioSynth {
         }
         if (this.ctx && !this.masterGain) {
             this.masterGain = this.ctx.createGain();
-            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
+            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.65, this.ctx.currentTime);
             this.masterGain.connect(this.compressor || this.ctx.destination);
         }
         if (this.ctx && (this.ctx.state === 'suspended' || this.ctx.state === 'interrupted')) {
@@ -60,9 +68,14 @@ class AudioSynth {
         return this.masterGain || this.ctx.destination;
     }
 
-    autoCleanup(sourceNode, ...connectedNodes) {
+    // Dual-layer autoCleanup: onended + fallback timer to guarantee 100% node disconnection on iOS Safari
+    autoCleanup(sourceNode, durationSec = 1.0, ...connectedNodes) {
         if (!sourceNode) return;
-        sourceNode.onended = () => {
+        let cleaned = false;
+
+        const doClean = () => {
+            if (cleaned) return;
+            cleaned = true;
             try {
                 sourceNode.disconnect();
             } catch (e) {}
@@ -74,15 +87,27 @@ class AudioSynth {
                 }
             });
         };
+
+        sourceNode.onended = doClean;
+        // Fallback timer in case WebKit drops onended during heavy touch events
+        const timeoutMs = Math.max(100, Math.ceil((durationSec + 0.15) * 1000));
+        setTimeout(doClean, timeoutMs);
     }
 
     setMuted(muted) {
         this.muted = !!muted;
         if (this.ctx && this.masterGain) {
-            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 1, this.ctx.currentTime);
+            this.masterGain.gain.setValueAtTime(this.muted ? 0 : 0.65, this.ctx.currentTime);
         }
         if (this.muted) {
-            this.stopBGM();
+            if (this.bgmInterval) {
+                clearInterval(this.bgmInterval);
+                this.bgmInterval = null;
+            }
+        } else {
+            if (this.bgmRequested && !this.bgmInterval) {
+                this.startBGM();
+            }
         }
         return this.muted;
     }
@@ -94,7 +119,7 @@ class AudioSynth {
     // Custom noise generator helper for gunshots and explosions
     createNoiseBuffer() {
         if (!this.ctx) return null;
-        if (this.noiseBuffer) return this.noiseBuffer;
+        if (this.noiseBuffer && this.noiseBuffer.sampleRate === this.ctx.sampleRate) return this.noiseBuffer;
         const bufferSize = this.ctx.sampleRate * 2; // 2 seconds of noise
         const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
         const data = buffer.getChannelData(0);
@@ -145,8 +170,8 @@ class AudioSynth {
         noiseFilter.connect(noiseGain);
         noiseGain.connect(this.getDestination());
 
-        this.autoCleanup(osc, oscGain);
-        this.autoCleanup(noise, noiseFilter, noiseGain);
+        this.autoCleanup(osc, 0.15, oscGain);
+        this.autoCleanup(noise, 0.3, noiseFilter, noiseGain);
 
         osc.start(now);
         osc.stop(now + 0.15);
@@ -194,8 +219,8 @@ class AudioSynth {
         noiseFilter.connect(noiseGain);
         noiseGain.connect(this.getDestination());
 
-        this.autoCleanup(osc, oscGain);
-        this.autoCleanup(noise, noiseFilter, noiseGain);
+        this.autoCleanup(osc, 0.2, oscGain);
+        this.autoCleanup(noise, 0.5, noiseFilter, noiseGain);
 
         osc.start(now);
         osc.stop(now + 0.2);
@@ -230,7 +255,7 @@ class AudioSynth {
         filter.connect(gain);
         gain.connect(this.getDestination());
 
-        this.autoCleanup(osc, filter, gain);
+        this.autoCleanup(osc, 0.2, filter, gain);
 
         osc.start(now);
         osc.stop(now + 0.2);
@@ -272,7 +297,7 @@ class AudioSynth {
         feedback.connect(delay);
         delay.connect(this.getDestination());
 
-        this.autoCleanup(osc, gain, delay, feedback);
+        this.autoCleanup(osc, 0.4, gain, delay, feedback);
 
         osc.start(now);
         osc.stop(now + 0.4);
@@ -324,8 +349,8 @@ class AudioSynth {
         subFilter.connect(subGain);
         subGain.connect(this.getDestination());
 
-        this.autoCleanup(noise, filter, gain);
-        this.autoCleanup(subOsc, subFilter, subGain);
+        this.autoCleanup(noise, 1.6, filter, gain);
+        this.autoCleanup(subOsc, 0.65, subFilter, subGain);
 
         noise.start(now);
         noise.stop(now + 1.6);
@@ -355,7 +380,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, gain);
+            this.autoCleanup(osc, 0.3, gain);
 
             osc.start(startTime);
             osc.stop(startTime + 0.3);
@@ -403,7 +428,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, gain, lfo, lfoGain);
+            this.autoCleanup(osc, item.duration, gain, lfo, lfoGain);
 
             lfo.start(startTime);
             osc.start(startTime);
@@ -445,7 +470,7 @@ class AudioSynth {
         osc.connect(gain);
         gain.connect(this.getDestination());
 
-        this.autoCleanup(osc, gain, lfo, lfoGain);
+        this.autoCleanup(osc, 0.6, gain, lfo, lfoGain);
 
         lfo.start(now);
         osc.start(now);
@@ -477,7 +502,7 @@ class AudioSynth {
             osc.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, gain);
+            this.autoCleanup(osc, 0.3, gain);
 
             osc.start(startTime);
             osc.stop(startTime + 0.3);
@@ -509,13 +534,14 @@ class AudioSynth {
         filter.connect(gain);
         gain.connect(this.getDestination());
 
-        this.autoCleanup(osc, filter, gain);
+        this.autoCleanup(osc, 0.16, filter, gain);
 
         osc.start(now);
         osc.stop(now + 0.16);
     }
 
     startBGM() {
+        this.bgmRequested = true;
         if (this.muted) return;
         this.init();
         if (this.bgmInterval) return; // Already playing
@@ -552,7 +578,7 @@ class AudioSynth {
                     filter.connect(bassGain);
                     bassGain.connect(this.getDestination());
 
-                    this.autoCleanup(bassOsc, filter, bassGain);
+                    this.autoCleanup(bassOsc, 0.22, filter, bassGain);
 
                     bassOsc.start(time);
                     bassOsc.stop(time + 0.22);
@@ -577,7 +603,7 @@ class AudioSynth {
                     drumFilter.connect(drumGain);
                     drumGain.connect(this.getDestination());
 
-                    this.autoCleanup(drum, drumFilter, drumGain);
+                    this.autoCleanup(drum, 0.08, drumFilter, drumGain);
 
                     drum.start(time);
                     drum.stop(time + 0.08);
@@ -615,7 +641,7 @@ class AudioSynth {
                     whistle.connect(whistleGain);
                     whistleGain.connect(this.getDestination());
 
-                    this.autoCleanup(whistle, whistleGain, lfo, lfoGain);
+                    this.autoCleanup(whistle, 0.45, whistleGain, lfo, lfoGain);
 
                     lfo.start(time);
                     whistle.start(time);
@@ -641,7 +667,10 @@ class AudioSynth {
         this.bgmInterval = setInterval(scheduler, 35);
     }
 
-    stopBGM() {
+    stopBGM(explicitStop = false) {
+        if (explicitStop) {
+            this.bgmRequested = false;
+        }
         if (this.bgmInterval) {
             clearInterval(this.bgmInterval);
             this.bgmInterval = null;
@@ -686,7 +715,7 @@ class AudioSynth {
             filter.connect(gain);
             gain.connect(this.getDestination());
 
-            this.autoCleanup(osc, filter, gain);
+            this.autoCleanup(osc, dur, filter, gain);
 
             osc.start(startTime);
             osc.stop(startTime + dur);

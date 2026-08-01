@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=127';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=127';
-import { audio } from './audio.js?v=127';
-import { TRANSLATIONS } from './translations.js?v=127';
+import { Cowboy } from './cowboy.js?v=128';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=128';
+import { audio } from './audio.js?v=128';
+import { TRANSLATIONS } from './translations.js?v=128';
 
-const GAME_VERSION = '127';
+const GAME_VERSION = '128';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -2206,7 +2206,7 @@ class Game {
         document.body.classList.remove('mode-pve');
         window.scrollTo(0, 0); // Reset scroll position to top
         this.state = 'menu';
-        audio.stopBGM(); // Stop music
+        audio.stopBGM(true); // Stop music explicitly
         audio.setMuted(this.isMuted);
         document.getElementById('game-screen').classList.remove('active');
         document.getElementById('game-over-screen').classList.remove('active');
