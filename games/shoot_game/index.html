@@ -525,7 +525,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=121', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=122', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());

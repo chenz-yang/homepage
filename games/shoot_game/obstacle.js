@@ -1,5 +1,5 @@
 // Environmental Obstacles for Wild West Duel
-import { audio } from './audio.js?v=114';
+import { audio } from './audio.js?v=122';
 
 export class Obstacle {
     constructor(x, y, type, isFullHP = false) {
