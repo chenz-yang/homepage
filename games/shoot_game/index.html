@@ -412,6 +412,16 @@
                         <div class="joystick-knob red"></div>
                     </div>
                 </div>
+                <div id="joystick-p2-move" class="joystick-container">
+                    <div class="joystick-base">
+                        <div class="joystick-knob green"></div>
+                    </div>
+                </div>
+                <div id="joystick-p2-aim" class="joystick-container">
+                    <div class="joystick-base">
+                        <div class="joystick-knob orange"></div>
+                    </div>
+                </div>
             </div>
 
             <div id="game-controls-bar">
@@ -474,10 +484,10 @@
     </div>
 
     <!-- JS Files as Modules -->
-    <script type="module" src="game.js?v=131"></script>
+    <script type="module" src="game.js?v=132"></script>
     <script>
         (function() {
-            const TARGET_VERSION = '131';
+            const TARGET_VERSION = '132';
             const storedVersion = localStorage.getItem('wild_west_installed_version');
 
             // Force cache purge if version stored in browser is older than 108
@@ -517,7 +527,7 @@
                     } catch (e) {
                         console.warn('Cache clear failed:', e);
                     }
-                    window.location.href = window.location.pathname + '?v=131&t=' + Date.now();
+                    window.location.href = window.location.pathname + '?v=132&t=' + Date.now();
                 };
                 window.forcePurgeAndReload = forceUpdateAndReload;
 
@@ -529,7 +539,7 @@
                 });
 
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('./sw.js?v=131', { scope: './' }).then(reg => {
+                    navigator.serviceWorker.register('./sw.js?v=132', { scope: './' }).then(reg => {
                         reg.update();
 
                         window.addEventListener('focus', () => reg.update());

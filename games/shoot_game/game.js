@@ -1,9 +1,9 @@
-import { Cowboy } from './cowboy.js?v=131';
-import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=131';
-import { audio } from './audio.js?v=131';
-import { TRANSLATIONS } from './translations.js?v=131';
+import { Cowboy } from './cowboy.js?v=132';
+import { Obstacle, Tumbleweed, GroundSpike } from './obstacle.js?v=132';
+import { audio } from './audio.js?v=132';
+import { TRANSLATIONS } from './translations.js?v=132';
 
-const GAME_VERSION = '131';
+const GAME_VERSION = '132';
 console.log(`Wild West Duel - Loaded version ${GAME_VERSION}`);
 
 class Game {
@@ -118,6 +118,11 @@ class Game {
         this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
         this.moveTouchId = null;
         this.aimTouchId = null;
+
+        this.joystickP2Move = { x: 0, y: 0, active: false };
+        this.joystickP2Aim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+        this.p2MoveTouchId = null;
+        this.p2AimTouchId = null;
 
         this.lastCoinsEarned = 0;
         this.toastTimeout = null;
@@ -431,29 +436,6 @@ class Game {
                 this.isTouchDevice = true;
                 document.body.classList.add('touch-device');
                 document.documentElement.classList.add('touch-device');
-
-                // If PvP mode was selected, fall back to PvE on touch device transition
-                // ONLY fall back if this is a mobile device (no physical keyboard)
-                if (this.mode === 'pvp' && this.isMobileDevice) {
-                    this.mode = 'pve';
-                    const pveBtn = document.querySelector('.mode-btn[data-mode="pve"]');
-                    const pvpBtn = document.querySelector('.mode-btn[data-mode="pvp"]');
-                    if (pveBtn && pvpBtn) {
-                        pvpBtn.classList.remove('selected');
-                        pveBtn.classList.add('selected');
-
-                        // Update P2 labels for PvE (Bandit/KI)
-                        const p2Label = document.getElementById('p2-label-text');
-                        const p2WepTitle = document.getElementById('p2-weapon-title');
-                        const p2NameLabel = document.getElementById('p2-name-label');
-                        const p2Input = document.getElementById('p2-name-input');
-                        if (p2Label) p2Label.textContent = `${this.p2NamePvE}${this.t('suffix-ki')}`;
-                        if (p2WepTitle) p2WepTitle.textContent = this.t('weapon-p2-label-ki');
-                        if (p2NameLabel) p2NameLabel.textContent = this.t('label-p2-name-ki');
-                        if (p2Input) p2Input.value = this.p2NamePvE;
-                    }
-                    this.updateModeVisibility();
-                }
             }
         }, { passive: true });
 
@@ -1533,6 +1515,38 @@ class Game {
         // Touch events for mobile/touch screen joysticks
         const gameScreen = document.getElementById('game-screen');
         
+        this.activateJoystickDOM = (id, x, y) => {
+            const joy = document.getElementById(id);
+            if (joy) {
+                joy.style.left = `${x}px`;
+                joy.style.top = `${y}px`;
+                joy.style.display = 'block';
+                const knob = joy.querySelector('.joystick-knob');
+                if (knob) knob.style.transform = 'translate(-50%, -50%)';
+                setTimeout(() => joy.classList.add('active'), 10);
+            }
+        };
+
+        this.updateJoystickKnobDOM = (id, dx, dy) => {
+            const joy = document.getElementById(id);
+            if (joy) {
+                const knob = joy.querySelector('.joystick-knob');
+                if (knob) {
+                    knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+                }
+            }
+        };
+
+        this.deactivateJoystickDOM = (id) => {
+            const joy = document.getElementById(id);
+            if (joy) {
+                joy.classList.remove('active');
+                setTimeout(() => {
+                    joy.style.display = 'none';
+                }, 150);
+            }
+        };
+
         gameScreen.addEventListener('touchstart', (e) => {
             if (this.state !== 'playing') return;
             
@@ -1546,39 +1560,54 @@ class Game {
                 const touchX = touch.clientX - rect.left;
                 const touchY = touch.clientY - rect.top;
 
-                // Left half of screen: Movement Joystick
-                if (touchX < rect.width / 2 && this.moveTouchId === null) {
-                    this.moveTouchId = touch.identifier;
-                    this.moveBaseX = touchX;
-                    this.moveBaseY = touchY;
-                    
-                    const moveJoy = document.getElementById('joystick-move');
-                    if (moveJoy) {
-                        moveJoy.style.left = `${touchX}px`;
-                        moveJoy.style.top = `${touchY}px`;
-                        moveJoy.style.display = 'block';
-                        const knob = moveJoy.querySelector('.joystick-knob');
-                        if (knob) knob.style.transform = 'translate(-50%, -50%)';
-                        setTimeout(() => moveJoy.classList.add('active'), 10);
+                if (this.mode === 'pvp') {
+                    // PVP Mode: Left half for Player 1, Right half for Player 2
+                    if (touchX < rect.width / 2) {
+                        // Player 1 controls (left half of screen)
+                        if (this.moveTouchId === null && (touchX < rect.width / 4 || this.aimTouchId !== null)) {
+                            this.moveTouchId = touch.identifier;
+                            this.moveBaseX = touchX;
+                            this.moveBaseY = touchY;
+                            this.activateJoystickDOM('joystick-move', touchX, touchY);
+                            this.joystickMove = { x: 0, y: 0, active: true };
+                        } else if (this.aimTouchId === null) {
+                            this.aimTouchId = touch.identifier;
+                            this.aimBaseX = touchX;
+                            this.aimBaseY = touchY;
+                            this.activateJoystickDOM('joystick-aim', touchX, touchY);
+                            this.joystickAim = { x: 0, y: 0, angle: this.player1 ? this.player1.angle : 0, dist: 0, active: true };
+                        }
+                    } else {
+                        // Player 2 controls (right half of screen)
+                        if (this.p2MoveTouchId === null && (touchX < rect.width * 3 / 4 || this.p2AimTouchId !== null)) {
+                            this.p2MoveTouchId = touch.identifier;
+                            this.p2MoveBaseX = touchX;
+                            this.p2MoveBaseY = touchY;
+                            this.activateJoystickDOM('joystick-p2-move', touchX, touchY);
+                            this.joystickP2Move = { x: 0, y: 0, active: true };
+                        } else if (this.p2AimTouchId === null) {
+                            this.p2AimTouchId = touch.identifier;
+                            this.p2AimBaseX = touchX;
+                            this.p2AimBaseY = touchY;
+                            this.activateJoystickDOM('joystick-p2-aim', touchX, touchY);
+                            this.joystickP2Aim = { x: 0, y: 0, angle: this.player2 ? this.player2.angle : 0, dist: 0, active: true };
+                        }
                     }
-                    this.joystickMove = { x: 0, y: 0, active: true };
-                }
-                // Right half of screen: Aiming/Shooting Joystick
-                else if (touchX >= rect.width / 2 && this.aimTouchId === null) {
-                    this.aimTouchId = touch.identifier;
-                    this.aimBaseX = touchX;
-                    this.aimBaseY = touchY;
-                    
-                    const aimJoy = document.getElementById('joystick-aim');
-                    if (aimJoy) {
-                        aimJoy.style.left = `${touchX}px`;
-                        aimJoy.style.top = `${touchY}px`;
-                        aimJoy.style.display = 'block';
-                        const knob = aimJoy.querySelector('.joystick-knob');
-                        if (knob) knob.style.transform = 'translate(-50%, -50%)';
-                        setTimeout(() => aimJoy.classList.add('active'), 10);
+                } else {
+                    // PVE Mode: Left half for P1 Move, Right half for P1 Aim
+                    if (touchX < rect.width / 2 && this.moveTouchId === null) {
+                        this.moveTouchId = touch.identifier;
+                        this.moveBaseX = touchX;
+                        this.moveBaseY = touchY;
+                        this.activateJoystickDOM('joystick-move', touchX, touchY);
+                        this.joystickMove = { x: 0, y: 0, active: true };
+                    } else if (touchX >= rect.width / 2 && this.aimTouchId === null) {
+                        this.aimTouchId = touch.identifier;
+                        this.aimBaseX = touchX;
+                        this.aimBaseY = touchY;
+                        this.activateJoystickDOM('joystick-aim', touchX, touchY);
+                        this.joystickAim = { x: 0, y: 0, angle: this.player1 ? this.player1.angle : 0, dist: 0, active: true };
                     }
-                    this.joystickAim = { x: 0, y: 0, angle: this.player1 ? this.player1.angle : 0, dist: 0, active: true };
                 }
             }
         }, { passive: false });
@@ -1588,16 +1617,15 @@ class Game {
             if (this.state !== 'playing') return;
             
             // Only prevent default if we are actively tracking a joystick touch
-            if (this.moveTouchId !== null || this.aimTouchId !== null) {
+            if (this.moveTouchId !== null || this.aimTouchId !== null || this.p2MoveTouchId !== null || this.p2AimTouchId !== null) {
                 e.preventDefault();
             }
 
             const rect = gameScreen.getBoundingClientRect();
+            const maxR = 50; // Max drag radius in pixels
 
             for (let i = 0; i < e.changedTouches.length; i++) {
                 const touch = e.changedTouches[i];
-                const maxR = 50; // Max drag radius in pixels
-
                 const touchX = touch.clientX - rect.left;
                 const touchY = touch.clientY - rect.top;
 
@@ -1609,16 +1637,9 @@ class Game {
                     if (dist > maxR) {
                         dx = (dx / dist) * maxR;
                         dy = (dy / dist) * maxR;
-                        dist = maxR;
                     }
                     
-                    const moveJoy = document.getElementById('joystick-move');
-                    if (moveJoy) {
-                        const knob = moveJoy.querySelector('.joystick-knob');
-                        if (knob) {
-                            knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-                        }
-                    }
+                    this.updateJoystickKnobDOM('joystick-move', dx, dy);
                     this.joystickMove = { x: dx / maxR, y: dy / maxR, active: true };
                 }
                 else if (touch.identifier === this.aimTouchId) {
@@ -1632,20 +1653,44 @@ class Game {
                         dist = maxR;
                     }
                     
-                    const aimJoy = document.getElementById('joystick-aim');
-                    if (aimJoy) {
-                        const knob = aimJoy.querySelector('.joystick-knob');
-                        if (knob) {
-                            knob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
-                        }
-                    }
-                    
+                    this.updateJoystickKnobDOM('joystick-aim', dx, dy);
                     const angle = Math.atan2(dy, dx);
                     this.joystickAim = { x: dx / maxR, y: dy / maxR, angle: angle, dist: dist / maxR, active: true };
                     
-                    // Update player aiming angle immediately
                     if (this.player1 && this.player1.health > 0) {
                         this.player1.angle = angle;
+                    }
+                }
+                else if (touch.identifier === this.p2MoveTouchId) {
+                    let dx = touchX - this.p2MoveBaseX;
+                    let dy = touchY - this.p2MoveBaseY;
+                    let dist = Math.hypot(dx, dy);
+                    
+                    if (dist > maxR) {
+                        dx = (dx / dist) * maxR;
+                        dy = (dy / dist) * maxR;
+                    }
+                    
+                    this.updateJoystickKnobDOM('joystick-p2-move', dx, dy);
+                    this.joystickP2Move = { x: dx / maxR, y: dy / maxR, active: true };
+                }
+                else if (touch.identifier === this.p2AimTouchId) {
+                    let dx = touchX - this.p2AimBaseX;
+                    let dy = touchY - this.p2AimBaseY;
+                    let dist = Math.hypot(dx, dy);
+                    
+                    if (dist > maxR) {
+                        dx = (dx / dist) * maxR;
+                        dy = (dy / dist) * maxR;
+                        dist = maxR;
+                    }
+                    
+                    this.updateJoystickKnobDOM('joystick-p2-aim', dx, dy);
+                    const angle = Math.atan2(dy, dx);
+                    this.joystickP2Aim = { x: dx / maxR, y: dy / maxR, angle: angle, dist: dist / maxR, active: true };
+                    
+                    if (this.player2 && this.player2.health > 0) {
+                        this.player2.angle = angle;
                     }
                 }
             }
@@ -1658,23 +1703,15 @@ class Game {
 
                 if (touch.identifier === this.moveTouchId) {
                     this.moveTouchId = null;
-                    const moveJoy = document.getElementById('joystick-move');
-                    if (moveJoy) {
-                        moveJoy.classList.remove('active');
-                        setTimeout(() => {
-                            if (this.moveTouchId === null) moveJoy.style.display = 'none';
-                        }, 150);
-                    }
+                    this.deactivateJoystickDOM('joystick-move');
                     this.joystickMove = { x: 0, y: 0, active: false };
                 }
                 else if (touch.identifier === this.aimTouchId) {
-                    // Shoot checking on release
+                    // Shoot checking on release for Player 1
                     if (this.joystickAim.active && this.player1 && this.player1.health > 0) {
                         if (this.joystickAim.dist > 0.2) {
-                            // Fired in drag direction
                             this.player1.shoot(this);
                         } else {
-                            // Quick tap: Auto-aim at the nearest active opponent (player2) if not inside tunnel
                             if (this.player2 && this.player2.health > 0 && !this.isInTunnel(this.player2.x, this.player2.y)) {
                                 const angle = Math.atan2(this.player2.y - this.player1.y, this.player2.x - this.player1.x);
                                 this.player1.angle = angle;
@@ -1682,16 +1719,31 @@ class Game {
                             }
                         }
                     }
-                    
                     this.aimTouchId = null;
-                    const aimJoy = document.getElementById('joystick-aim');
-                    if (aimJoy) {
-                        aimJoy.classList.remove('active');
-                        setTimeout(() => {
-                            if (this.aimTouchId === null) aimJoy.style.display = 'none';
-                        }, 150);
-                    }
+                    this.deactivateJoystickDOM('joystick-aim');
                     this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+                }
+                else if (touch.identifier === this.p2MoveTouchId) {
+                    this.p2MoveTouchId = null;
+                    this.deactivateJoystickDOM('joystick-p2-move');
+                    this.joystickP2Move = { x: 0, y: 0, active: false };
+                }
+                else if (touch.identifier === this.p2AimTouchId) {
+                    // Shoot checking on release for Player 2
+                    if (this.joystickP2Aim.active && this.player2 && this.player2.health > 0) {
+                        if (this.joystickP2Aim.dist > 0.2) {
+                            this.player2.shoot(this);
+                        } else {
+                            if (this.player1 && this.player1.health > 0 && !this.isInTunnel(this.player1.x, this.player1.y)) {
+                                const angle = Math.atan2(this.player1.y - this.player2.y, this.player1.x - this.player2.x);
+                                this.player2.angle = angle;
+                                this.player2.shoot(this);
+                            }
+                        }
+                    }
+                    this.p2AimTouchId = null;
+                    this.deactivateJoystickDOM('joystick-p2-aim');
+                    this.joystickP2Aim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
                 }
             }
         };
@@ -1739,19 +1791,21 @@ class Game {
     resetJoystickState() {
         this.moveTouchId = null;
         this.aimTouchId = null;
+        this.p2MoveTouchId = null;
+        this.p2AimTouchId = null;
+
         this.joystickMove = { x: 0, y: 0, active: false };
         this.joystickAim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
-        
-        const moveJoy = document.getElementById('joystick-move');
-        const aimJoy = document.getElementById('joystick-aim');
-        if (moveJoy) {
-            moveJoy.classList.remove('active');
-            moveJoy.style.display = 'none';
-        }
-        if (aimJoy) {
-            aimJoy.classList.remove('active');
-            aimJoy.style.display = 'none';
-        }
+        this.joystickP2Move = { x: 0, y: 0, active: false };
+        this.joystickP2Aim = { x: 0, y: 0, angle: 0, dist: 0, active: false };
+
+        ['joystick-move', 'joystick-aim', 'joystick-p2-move', 'joystick-p2-aim'].forEach(id => {
+            const joy = document.getElementById(id);
+            if (joy) {
+                joy.classList.remove('active');
+                joy.style.display = 'none';
+            }
+        });
     }
 
     createMenuDust() {

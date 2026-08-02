@@ -1162,14 +1162,18 @@ body.touch-device #mobile-controls {
     box-shadow: 0 0 15px rgba(255, 59, 48, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
-/* Hide PvP mode button and keyboard cheat sheet on mobile devices (smartphones/tablets without default physical keyboards) */
-body.mobile-device .controls-cheat-sheet-compact,
-body.mobile-device .mode-btn[data-mode="pvp"] {
-    display: none !important;
+.joystick-knob.green {
+    background: radial-gradient(circle at 35% 35%, #34c759 0%, #28a745 70%, #1e7e34 100%);
+    box-shadow: 0 0 15px rgba(52, 199, 89, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
 }
 
-/* Hide joysticks in PvP mode since P2 requires keyboard and touch screen has no P2 joystick */
-body.mode-pvp #mobile-controls {
+.joystick-knob.orange {
+    background: radial-gradient(circle at 35% 35%, #ff9500 0%, #ff8c00 70%, #d97706 100%);
+    box-shadow: 0 0 15px rgba(255, 149, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+}
+
+/* Hide keyboard cheat sheet on mobile devices */
+body.mobile-device .controls-cheat-sheet-compact {
     display: none !important;
 }
 

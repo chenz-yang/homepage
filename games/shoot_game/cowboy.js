@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=131';
-import { audio } from './audio.js?v=131';
+import { Bullet } from './bullet.js?v=132';
+import { audio } from './audio.js?v=132';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -253,17 +253,22 @@ export class Cowboy {
         let dx = 0;
         let dy = 0;
 
-        if (keys['ArrowUp']) dy -= this.speed * dt;
-        if (keys['ArrowDown']) dy += this.speed * dt;
-        if (keys['ArrowLeft']) dx -= this.speed * dt;
-        if (keys['ArrowRight']) dx += this.speed * dt;
+        if (game.joystickP2Move && game.joystickP2Move.active) {
+            dx = game.joystickP2Move.x * this.speed * dt;
+            dy = game.joystickP2Move.y * this.speed * dt;
+        } else {
+            if (keys['ArrowUp']) dy -= this.speed * dt;
+            if (keys['ArrowDown']) dy += this.speed * dt;
+            if (keys['ArrowLeft']) dx -= this.speed * dt;
+            if (keys['ArrowRight']) dx += this.speed * dt;
 
-        if (dx !== 0 || dy !== 0) {
             if (dx !== 0 && dy !== 0) {
                 dx *= 0.7071;
                 dy *= 0.7071;
             }
-            
+        }
+
+        if (dx !== 0 || dy !== 0) {
             if (!this.checkObstacleCollision(this.x + dx, this.y, game)) {
                 this.x += dx;
                 this.isMoving = true;
@@ -275,9 +280,13 @@ export class Cowboy {
         }
 
         // Aiming Gun rotation
-        const rotSpeed = 0.05 * dt;
-        if (keys['u'] || keys['U']) this.angle -= rotSpeed;
-        if (keys['o'] || keys['O']) this.angle += rotSpeed;
+        if (game.joystickP2Aim && game.joystickP2Aim.active) {
+            this.angle = game.joystickP2Aim.angle;
+        } else {
+            const rotSpeed = 0.05 * dt;
+            if (keys['u'] || keys['U']) this.angle -= rotSpeed;
+            if (keys['o'] || keys['O']) this.angle += rotSpeed;
+        }
 
         // Shoot
         if (keys['i'] || keys['I']) {
