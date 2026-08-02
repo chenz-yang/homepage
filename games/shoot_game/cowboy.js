@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=133';
-import { audio } from './audio.js?v=133';
+import { Bullet } from './bullet.js?v=134';
+import { audio } from './audio.js?v=134';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -45,6 +45,7 @@ export class Cowboy {
         this.dodgeCooldown = 0;
         this.spacePressed = false;
         this.iPressed = false;
+        this.aimFlashTimer = 0;
     }
 
     setWeaponProperties(game = this.game) {
@@ -126,6 +127,7 @@ export class Cowboy {
         const now = Date.now();
         if (now - this.lastShotTime >= this.shootCooldown) {
             this.lastShotTime = now;
+            this.aimFlashTimer = 25; // Show laser line during shot flash
             
             // Spawn bullet at the tip of the gun barrel
             const barrelLen = 30;
@@ -176,6 +178,7 @@ export class Cowboy {
         if (this.health <= 0) return;
 
         if (this.hitFlash > 0) this.hitFlash = Math.max(0, this.hitFlash - dt);
+        if (this.aimFlashTimer > 0) this.aimFlashTimer = Math.max(0, this.aimFlashTimer - dt);
 
         this.isMoving = false;
 
@@ -768,37 +771,43 @@ export class Cowboy {
         ctx.save();
         
         const actualGame = this.game || window.game;
-        const isPvP = actualGame && actualGame.mode === 'pvp';
-        const isJoystickAiming = (this.role === 'player1' && actualGame && actualGame.joystickAim && actualGame.joystickAim.active) ||
-                                (this.role === 'player2' && actualGame && actualGame.joystickP2Aim && actualGame.joystickP2Aim.active);
-        
-        if (isJoystickAiming || (isPvP && (this.role === 'player1' || this.role === 'player2'))) {
-            // Draw a prominent, glowing red laser guide line
-            ctx.strokeStyle = 'rgba(255, 59, 48, 0.85)';
-            ctx.lineWidth = 3;
-            ctx.setLineDash([8, 8]);
-            
-            // Add shadow glow
-            ctx.shadowColor = 'rgba(255, 59, 48, 0.9)';
-            ctx.shadowBlur = 8;
-            
-            const lineLen = 600; // Longer line for better aiming visibility
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
-            ctx.stroke();
-        } else {
-            // Standard guide line
-            ctx.strokeStyle = (this.role === 'player1' || this.role === 'helper_ai') ? 'rgba(212, 175, 55, 0.45)' : 'rgba(255, 255, 255, 0.45)';
-            ctx.lineWidth = 1.5;
-            ctx.setLineDash([4, 6]);
+        const keys = actualGame ? (actualGame.keys || {}) : {};
 
-            const lineLen = 220;
-            ctx.beginPath();
-            ctx.moveTo(this.x, this.y);
-            ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
-            ctx.stroke();
+        let isAimingOrShooting = false;
+
+        if (this.role === 'player1') {
+            const isTouchAim = actualGame && actualGame.joystickAim && actualGame.joystickAim.active;
+            const isKbdAim = !!(keys['q'] || keys['Q'] || keys['e'] || keys['E'] || keys[' ']);
+            isAimingOrShooting = isTouchAim || isKbdAim || (this.aimFlashTimer > 0);
+        } else if (this.role === 'player2') {
+            const isTouchAim = actualGame && actualGame.joystickP2Aim && actualGame.joystickP2Aim.active;
+            const isKbdAim = !!(keys['u'] || keys['U'] || keys['o'] || keys['O'] || keys['i'] || keys['I'] || keys['ArrowUp'] || keys['ArrowDown'] || keys['ArrowLeft'] || keys['ArrowRight']);
+            isAimingOrShooting = isTouchAim || isKbdAim || (this.aimFlashTimer > 0);
+        } else if (this.role === 'ai' || this.role === 'helper_ai') {
+            isAimingOrShooting = (this.aimFlashTimer > 0);
         }
+
+        // Only show line when actively aiming or shooting
+        if (!isAimingOrShooting) {
+            ctx.restore();
+            return;
+        }
+
+        // Draw a prominent, glowing red laser guide line
+        ctx.strokeStyle = 'rgba(255, 59, 48, 0.85)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 8]);
+        
+        // Add shadow glow
+        ctx.shadowColor = 'rgba(255, 59, 48, 0.9)';
+        ctx.shadowBlur = 8;
+        
+        const lineLen = 600; // Longer line for better aiming visibility
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x + Math.cos(this.angle) * lineLen, this.y + Math.sin(this.angle) * lineLen);
+        ctx.stroke();
+
         ctx.restore();
     }
 
