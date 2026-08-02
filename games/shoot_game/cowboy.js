@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=132';
-import { audio } from './audio.js?v=132';
+import { Bullet } from './bullet.js?v=133';
+import { audio } from './audio.js?v=133';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -768,16 +768,18 @@ export class Cowboy {
         ctx.save();
         
         const actualGame = this.game || window.game;
-        const isJoystickAiming = (this.role === 'player1' && actualGame && actualGame.joystickAim && actualGame.joystickAim.active);
+        const isPvP = actualGame && actualGame.mode === 'pvp';
+        const isJoystickAiming = (this.role === 'player1' && actualGame && actualGame.joystickAim && actualGame.joystickAim.active) ||
+                                (this.role === 'player2' && actualGame && actualGame.joystickP2Aim && actualGame.joystickP2Aim.active);
         
-        if (isJoystickAiming) {
-            // Draw a prominent, glowing red laser guide line matching the red joystick
-            ctx.strokeStyle = 'rgba(255, 59, 48, 0.75)';
+        if (isJoystickAiming || (isPvP && (this.role === 'player1' || this.role === 'player2'))) {
+            // Draw a prominent, glowing red laser guide line
+            ctx.strokeStyle = 'rgba(255, 59, 48, 0.85)';
             ctx.lineWidth = 3;
             ctx.setLineDash([8, 8]);
             
             // Add shadow glow
-            ctx.shadowColor = 'rgba(255, 59, 48, 0.8)';
+            ctx.shadowColor = 'rgba(255, 59, 48, 0.9)';
             ctx.shadowBlur = 8;
             
             const lineLen = 600; // Longer line for better aiming visibility
