@@ -1,6 +1,6 @@
 // Cowboy player class, procedural canvas rendering, and AI decision tree
-import { Bullet } from './bullet.js?v=134';
-import { audio } from './audio.js?v=134';
+import { Bullet } from './bullet.js?v=135';
+import { audio } from './audio.js?v=135';
 
 export class Cowboy {
     constructor(x, y, role, weaponType = 'rapid', game = null) {
@@ -771,20 +771,24 @@ export class Cowboy {
         ctx.save();
         
         const actualGame = this.game || window.game;
-        const keys = actualGame ? (actualGame.keys || {}) : {};
+        
+        // AI entities (and P2 in PvE mode) should NEVER have an aim guide line
+        if (this.role === 'ai' || this.role === 'helper_ai' || (this.role === 'player2' && actualGame && actualGame.mode === 'pve')) {
+            ctx.restore();
+            return;
+        }
 
+        const keys = actualGame ? (actualGame.keys || {}) : {};
         let isAimingOrShooting = false;
 
         if (this.role === 'player1') {
             const isTouchAim = actualGame && actualGame.joystickAim && actualGame.joystickAim.active;
             const isKbdAim = !!(keys['q'] || keys['Q'] || keys['e'] || keys['E'] || keys[' ']);
             isAimingOrShooting = isTouchAim || isKbdAim || (this.aimFlashTimer > 0);
-        } else if (this.role === 'player2') {
+        } else if (this.role === 'player2' && actualGame && actualGame.mode === 'pvp') {
             const isTouchAim = actualGame && actualGame.joystickP2Aim && actualGame.joystickP2Aim.active;
-            const isKbdAim = !!(keys['u'] || keys['U'] || keys['o'] || keys['O'] || keys['i'] || keys['I'] || keys['ArrowUp'] || keys['ArrowDown'] || keys['ArrowLeft'] || keys['ArrowRight']);
+            const isKbdAim = !!(keys['u'] || keys['U'] || keys['o'] || keys['O'] || keys['i'] || keys['I']);
             isAimingOrShooting = isTouchAim || isKbdAim || (this.aimFlashTimer > 0);
-        } else if (this.role === 'ai' || this.role === 'helper_ai') {
-            isAimingOrShooting = (this.aimFlashTimer > 0);
         }
 
         // Only show line when actively aiming or shooting
